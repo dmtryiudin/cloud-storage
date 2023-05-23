@@ -28,8 +28,7 @@ export const Header = () => {
       <TouchableOpacity onPress={() => navigation.navigate("Trash")}>
         <FontAwesome name="trash-o" size={40} color="black" />
       </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+      <TouchableOpacity onPress={() => navigation.navigate("PublicFiles")}>
         <Entypo name="home" size={40} color="black" />
       </TouchableOpacity>
     </View>

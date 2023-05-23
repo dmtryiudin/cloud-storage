@@ -7,6 +7,7 @@ import { API_URL } from "@env";
 import * as FileSystem from "expo-file-system";
 import { shareAsync } from "expo-sharing";
 import { getFileName } from "../utils/getFileName";
+import { addQueryParams } from "../utils/addQueryParams";
 
 export default class FileService {
   static async uploadFile(
@@ -170,19 +171,19 @@ export default class FileService {
   static async getPublicFiles(
     page?: string,
     limit?: string,
-    extensions?: string[],
-    substr?: string
+    substr?: string,
+    extensions?: string[]
   ) {
     const extensionsStr = extensions?.join("~");
-    return await axiosInstance.get("/folder/public", {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        extensions: extensionsStr,
-        page,
-        limit,
-        substr,
-      },
-    });
+    return await axiosInstance.get(
+      "/file/public" +
+        addQueryParams({ page, limit, substr, extensions: extensionsStr }),
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
   }
 }

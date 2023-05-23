@@ -1,12 +1,12 @@
 import { StyleSheet } from "react-native";
 
-export const HomeStyles = StyleSheet.create({
+export const PublicFilesStyles = StyleSheet.create({
   wrapper: {
     display: "flex",
     alignItems: "center",
     flexDirection: "column",
-    justifyContent: "space-between",
     padding: 14,
+    gap: 20,
     backgroundColor: "white",
   },
 
@@ -18,5 +18,16 @@ export const HomeStyles = StyleSheet.create({
   },
   fileItem: {
     margin: 4,
+  },
+  linkText: {
+    fontFamily: "Manrope-Regular",
+    fontSize: 14,
+    lineHeight: 19,
+    color: "#047857",
+    textAlign: "center",
+  },
+  loader: {
+    marginVertical: 16,
+    alignItems: "center",
   },
 });

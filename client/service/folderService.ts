@@ -1,5 +1,6 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import axiosInstance from "../http";
+import { addQueryParams } from "../utils/addQueryParams";
 
 export default class FoldersService {
   static async getFoldersForUser() {
@@ -101,14 +102,19 @@ export default class FoldersService {
     limit?: string,
     substr?: string
   ) {
-    return await axiosInstance.get("/file/public", {
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json",
-        page,
-        limit,
-        substr,
-      },
-    });
+    return await axiosInstance.get(
+      "/folder/public" +
+        addQueryParams({
+          page,
+          limit,
+          substr,
+        }),
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      }
+    );
   }
 }

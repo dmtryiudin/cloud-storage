@@ -3,7 +3,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import React, { useContext } from "react";
 import { Auth } from "./Auth";
 import { Header } from "./Header";
-import { Home } from "./Home";
+import { PublicFiles } from "./PublicFiles";
 import { Profile } from "./Profile";
 import { RootStackParamList } from "./types";
 import { ProfileSettings } from "./ProfileSettings";
@@ -17,6 +17,7 @@ import { FileSettings } from "./FileSettings";
 import { Folder } from "./Folder";
 import { FolderSettings } from "./FolderSettings";
 import { Trash } from "./Trash";
+import { PublicFolders } from "./PublicFolders";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 export const Navigation = observer(() => {
@@ -30,7 +31,16 @@ export const Navigation = observer(() => {
     <>
       <NavigationContainer>
         <Stack.Navigator>
-          <Stack.Screen name="Home" component={Home} options={options} />
+          <Stack.Screen
+            name="PublicFiles"
+            component={PublicFiles}
+            options={options}
+          />
+          <Stack.Screen
+            name="PublicFolders"
+            component={PublicFolders}
+            options={options}
+          />
           <Stack.Screen name="Auth" component={Auth} options={options} />
           <Stack.Screen name="Profile" component={Profile} options={options} />
           <Stack.Screen

@@ -1,4 +1,6 @@
-export const addQueryParams = (obj: { [param: string]: string }) => {
+export const addQueryParams = (obj: {
+  [param: string]: string | undefined;
+}) => {
   let res = "";
   for (let el in obj) {
     if (obj[el]) {

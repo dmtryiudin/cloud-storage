@@ -219,11 +219,20 @@ class FileService {
         })
       : allFilesFiltered;
 
+    const fileExtensions = Array.from(
+      new Set(
+        allFiles.map((file) => {
+          const fileName = file.href.split("/")[3];
+          return fileName.split(".")[fileName.split(".").length - 1];
+        })
+      )
+    );
     return {
       page,
       limit,
       response: allFilesFiltered.slice(page * limit, (page + 1) * limit),
       maxCount: allFilesFiltered.length,
+      fileExtensions,
     };
   }
 

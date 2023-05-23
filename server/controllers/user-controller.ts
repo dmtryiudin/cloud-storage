@@ -3,7 +3,6 @@ import { UpdateUserDto } from "../dtos/update-user-dto";
 import userService from "../service/user-service";
 import authService from "../service/auth-service";
 import { ApiError } from "../exceptions/api-error";
-import { ObjectId } from "mongodb";
 import { IRequestAuth } from "../types/express";
 
 class UserController {

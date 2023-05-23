@@ -2,9 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import authService from "../service/auth-service";
 import { validationResult } from "express-validator";
 import { ApiError } from "../exceptions/api-error";
-import mailService from "../service/mail-service";
 import { IRequestAuth } from "../types/express";
-import userModel from "../models/user-model";
 
 class AuthController {
   async registration(req: Request, res: Response, next: NextFunction) {

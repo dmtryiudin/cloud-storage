@@ -15,11 +15,6 @@ class UserService {
     return { ...new UserDto(user) };
   }
 
-  async getOneById(id: string) {
-    const user = await userModel.findById(id);
-    return { ...new UserDto(user) };
-  }
-
   async getAll(page = 0, limit = 100) {
     if (limit > 100) {
       limit = 100;
@@ -40,8 +35,15 @@ class UserService {
       throw ApiError.BadRequest("Invalid country code");
     }
 
-    await userModel.findByIdAndUpdate(id, body);
-    return this.getOneById(id);
+    let user = await userModel.findById(id);
+    if (!user) {
+      return null;
+    }
+    const { name, country } = body;
+    user.name = name;
+    user.country = country;
+    await user.save();
+    return user;
   }
 
   async deleteOne(id: string) {
@@ -49,7 +51,10 @@ class UserService {
   }
 
   async updateAvatar(id: string, fileName: string) {
-    const currentUser = await this.getOneById(id);
+    const currentUser = await userModel.findById(id);
+    if (!currentUser) {
+      return null;
+    }
     const currentAvatar = currentUser.avatar;
 
     if (currentAvatar) {
@@ -62,10 +67,9 @@ class UserService {
       );
     }
 
-    await userModel.findByIdAndUpdate(id, {
-      avatar: `/file/avatar/${fileName}`,
-    });
-    return this.getOneById(id);
+    currentUser.avatar = `/file/avatar/${fileName}`;
+    await currentUser.save();
+    return currentUser;
   }
 }
 

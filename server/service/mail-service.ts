@@ -28,6 +28,15 @@ class TokenService {
         `,
     });
   }
+
+  async sendBanMail(to: string, reason: string, userName: string) {
+    await this.transporter.sendMail({
+      from: process.env.EMAIL,
+      to,
+      subject: "Your Cloud Storage account was banned",
+      text: `Hello ${userName}, your account was banned because of ${reason}`,
+    });
+  }
 }
 
 export default new TokenService();

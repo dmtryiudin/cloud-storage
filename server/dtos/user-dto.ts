@@ -6,9 +6,20 @@ export class UserDto {
   country: string;
   avatar: string;
   registrationDate: string;
+  roles: string[];
+  isBanned: boolean;
   constructor(model: any) {
-    const { login, _id, name, country, avatar, registrationDate, email } =
-      model;
+    const {
+      login,
+      _id,
+      name,
+      country,
+      avatar,
+      registrationDate,
+      email,
+      roles,
+      isBanned,
+    } = model;
     this.login = login;
     this.id = _id;
     this.name = name;
@@ -16,5 +27,7 @@ export class UserDto {
     this.avatar = avatar;
     this.registrationDate = registrationDate;
     this.email = email;
+    this.roles = roles;
+    this.isBanned = isBanned;
   }
 }

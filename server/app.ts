@@ -11,6 +11,7 @@ import swaggerUi from "swagger-ui-express";
 import * as swaggerDocument from "./swagger/docs.json";
 import { fileRouter } from "./router/file";
 import notFoundMiddleware from "./middlewares/not-found-middleware";
+import { modRouter } from "./router/mod";
 
 const app: Express = express();
 const port = process.env.PORT;
@@ -22,6 +23,7 @@ app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/auth", authRouter);
 app.use("/users", usersRouter);
 app.use("/file", fileRouter);
+app.use("/mod", modRouter);
 app.use("/", notFoundMiddleware);
 app.use(errorMiddleware);
 

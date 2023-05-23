@@ -8,6 +8,7 @@ import { uuid } from "uuidv4";
 import mailService from "./mail-service";
 import userModel from "../models/user-model";
 import userService from "./user-service";
+import roleModel from "../models/role-model";
 
 class AuthService {
   async registration(
@@ -28,6 +29,7 @@ class AuthService {
 
     const hashPassword = await bcrypt.hash(password, 10);
     const activationLink = uuid();
+    const userRole = await roleModel.findOne({ value: "USER" });
     const user = await UserModel.create({
       login,
       password: hashPassword,
@@ -35,6 +37,7 @@ class AuthService {
       name,
       country,
       activationLink,
+      roles: [userRole?.value],
     });
 
     const userDto = new UserDto(user);
@@ -91,13 +94,14 @@ class AuthService {
   }
 
   async setEmail(email: string, id: string) {
-    const user = await userModel.findByIdAndUpdate(id, { email });
-
+    const user = await userModel.findById(id);
+    user!.email = email;
+    await user!.save();
     await mailService.sendActivationMail(
       email,
       `${process.env.API_URL}/auth/activate/${user!.activationLink}`
     );
-    return await userService.getOneById(id);
+    return user;
   }
 }
 

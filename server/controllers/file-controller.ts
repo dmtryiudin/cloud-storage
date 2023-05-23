@@ -82,6 +82,18 @@ class FileController {
       next(e);
     }
   }
+
+  async setFolder(req: IRequestAuth, res: Response, next: NextFunction) {
+    try {
+      const { file } = req.params;
+      const { id } = req.user;
+      const { folder } = req.body;
+      const fileData = await fileService.setFolder(file, id, folder);
+      res.json(fileData);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export default new FileController();

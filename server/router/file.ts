@@ -18,4 +18,5 @@ fileRouter.post(
   fileUpload.single("file"),
   fileController.createFile
 );
-fileRouter.post("/set-public/:file", authMiddleware, fileController.setPublic);
+fileRouter.put("/set-public/:file", authMiddleware, fileController.setPublic);
+fileRouter.put("/set-folder/:file", authMiddleware, fileController.setFolder);

@@ -46,7 +46,7 @@ export const getFileBelongsToUser = async (
     }
 
     if (!file.folder) {
-      throw ApiError.Forbidden();
+      throw ApiError.Forbidden("You don't own this file");
     }
 
     const fileFolder = await folderModel.findById(file.folder);
@@ -55,7 +55,7 @@ export const getFileBelongsToUser = async (
     }
   }
 
-  throw ApiError.Forbidden();
+  throw ApiError.Forbidden("You don't own this file");
 };
 
 export const setFileBelongsToUser = async (
@@ -80,7 +80,7 @@ export const setFileBelongsToUser = async (
     }
 
     if (!file.folder) {
-      throw ApiError.Forbidden();
+      throw ApiError.Forbidden("You don't own this file");
     }
 
     const fileFolder = await folderModel.findById(file.folder);
@@ -89,5 +89,5 @@ export const setFileBelongsToUser = async (
     }
   }
 
-  throw ApiError.Forbidden();
+  throw ApiError.Forbidden("You don't own this file");
 };

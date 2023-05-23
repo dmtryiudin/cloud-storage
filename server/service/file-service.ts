@@ -1,3 +1,4 @@
+import { ObjectId } from "mongodb";
 import { ApiError } from "../exceptions/api-error";
 import fileModel from "../models/file-model";
 import folderModel from "../models/folder-model";
@@ -58,6 +59,35 @@ class FileService {
     }
 
     file.href = fileHrefArr.join("/");
+    await file.save();
+    return file;
+  }
+
+  async setFolder(fileName: string, owner: string, folderId?: string) {
+    let file = await setFileBelongsToUser(fileName, owner);
+    if (folderId) {
+      if (!ObjectId.isValid(folderId)) {
+        throw ApiError.NotFound("Folder not found");
+      }
+      const existingFolder = await folderModel.findById(folderId);
+      if (!existingFolder) {
+        throw ApiError.NotFound("Folder not found");
+      }
+      if (existingFolder.owner !== owner) {
+        throw ApiError.Forbidden("You don't own this folder");
+      }
+
+      file.folder = existingFolder?._id.toString();
+      file.isPublic = undefined;
+      file.deleteDate = undefined;
+      file.owner = undefined;
+      await file.save();
+      return file;
+    }
+
+    file.folder = undefined;
+    file.isPublic = false;
+    file.owner = owner;
     await file.save();
     return file;
   }

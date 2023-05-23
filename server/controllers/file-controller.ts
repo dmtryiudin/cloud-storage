@@ -1,4 +1,5 @@
 import { NextFunction, Request, Response } from "express";
+import { validationResult } from "express-validator";
 import { unlink } from "fs";
 import path from "path";
 import { ApiError } from "../exceptions/api-error";
@@ -16,6 +17,7 @@ class FileController {
   }
 
   async createFile(req: IRequestAuth, res: Response, next: NextFunction) {
+    const fileSize = parseInt(req.headers["content-length"]!);
     const fileName = req.file?.filename;
     try {
       if (!fileName) {
@@ -36,6 +38,7 @@ class FileController {
         name,
         fileName,
         owner,
+        fileSize,
         folder
       );
       res.json(newFile).status(201);
@@ -146,6 +149,22 @@ class FileController {
       }
       const files = await fileService.getTrashForUser(id, extensions);
       res.json(files);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async rename(req: IRequestAuth, res: Response, next: NextFunction) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return next(ApiError.BadRequest("Validation error", errors.array()));
+      }
+      const { file } = req.params;
+      const { id } = req.user;
+      const { newName } = req.body;
+      const fileData = await fileService.rename(id, file, newName);
+      res.json(fileData);
     } catch (e) {
       next(e);
     }

@@ -5,6 +5,7 @@ const FolderSchema = new Schema({
   name: { type: String, required: true, unique: true },
   deleteDate: { type: Number },
   isPublic: { type: Boolean, default: false },
+  filesCapacity: { type: Number, default: 0 },
 });
 
 export default model("Folder", FolderSchema);

@@ -1,4 +1,5 @@
 import express from "express";
+import { body } from "express-validator";
 import fileController from "../controllers/file-controller";
 import authMiddleware from "../middlewares/auth-middleware";
 import banMiddleware from "../middlewares/ban-middleware";
@@ -29,6 +30,13 @@ fileRouter.put(
   fileController.setPublic
 );
 fileRouter.put("/set-folder/:file", authMiddleware, fileController.setFolder);
+fileRouter.put(
+  "/rename/:file",
+  body("newName").notEmpty().withMessage("Name of the file can't be empty"),
+  authMiddleware,
+  banMiddleware,
+  fileController.rename
+);
 fileRouter.delete("/:file", authMiddleware, fileController.moveToTrash);
 
 fileRouter.get("/public", fileController.getAllPublic);

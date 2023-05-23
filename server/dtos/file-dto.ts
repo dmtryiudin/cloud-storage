@@ -5,9 +5,10 @@ export class FileDto {
   href: string;
   isPublic?: boolean;
   folder?: string;
+  capacity: number;
 
   constructor(model: any) {
-    const { owner, name, deleteDate, href, isPublic, folder } = model;
+    const { owner, name, deleteDate, href, isPublic, folder, capacity } = model;
 
     this.owner = owner;
     this.name = name;
@@ -15,5 +16,6 @@ export class FileDto {
     this.href = href;
     this.isPublic = isPublic;
     this.folder = folder;
+    this.capacity = capacity;
   }
 }

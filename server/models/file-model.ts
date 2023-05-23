@@ -7,6 +7,7 @@ const FileSchema = new Schema({
   href: { type: String, required: true, unique: true },
   isPublic: { type: Boolean },
   folder: { type: String, ref: "Folder" },
+  capacity: { type: Number, required: true },
 });
 
 export default model("File", FileSchema);

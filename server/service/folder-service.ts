@@ -5,6 +5,7 @@ import { FolderDto } from "../dtos/folder-dto";
 import { ApiError } from "../exceptions/api-error";
 import fileModel from "../models/file-model";
 import folderModel from "../models/folder-model";
+import userModel from "../models/user-model";
 import { getFilesForFolder } from "../utils";
 
 class FolderService {
@@ -62,9 +63,16 @@ class FolderService {
       throw ApiError.Forbidden("You are not allowed to set this folder");
     }
 
+    const ownerData = await userModel.findById(userId);
+
     if (folder.deleteDate) {
       folder.deleteDate = undefined;
       await folder.save();
+
+      ownerData!.filesCapacity =
+        ownerData!.filesCapacity + folder.filesCapacity;
+      await ownerData!.save();
+
       return folder;
     }
 
@@ -72,11 +80,16 @@ class FolderService {
     folder.deleteDate = deleteDateTimestamp;
     folder.isPublic = false;
     await folder.save();
+
+    ownerData!.filesCapacity = ownerData!.filesCapacity - folder.filesCapacity;
+    await ownerData!.save();
+
     return folder;
   }
 
   async deleteAllForUser(owner: string) {
     const folders = await folderModel.find({ owner });
+    const ownerData = await userModel.findById(owner);
     for (let folder of folders) {
       const filesList = await getFilesForFolder(folder._id.toString());
       for (let file of filesList) {
@@ -89,10 +102,14 @@ class FolderService {
       await fileModel.deleteMany({
         folder: folder._id.toString(),
       });
+      ownerData!.filesCapacity =
+        ownerData!.filesCapacity - folder!.filesCapacity;
     }
+
     await folderModel.deleteMany({
       owner,
     });
+    await ownerData!.save();
   }
 
   async getAllPublic(page: number, limit: number) {
@@ -182,6 +199,30 @@ class FolderService {
     const folderData = { ...new FolderDto(folder) };
     folderData.files = await getFilesForFolder(folder._id.toString());
     return folderData;
+  }
+
+  async rename(owner: string, folder: string, newName: string) {
+    if (!ObjectId.isValid(folder)) {
+      throw ApiError.NotFound();
+    }
+
+    const currentFolder = await folderModel.findById(folder);
+
+    if (!currentFolder) {
+      throw ApiError.NotFound();
+    }
+
+    if (currentFolder.owner?.toString() !== owner) {
+      throw ApiError.Forbidden("You are not allowed to get this folder");
+    }
+
+    const folderWithSameName = await folderModel.findOne({ name: newName });
+    if (folderWithSameName) {
+      throw ApiError.BadRequest("Public folder with this name already exists");
+    }
+    currentFolder.name = newName;
+    await currentFolder.save();
+    return currentFolder;
   }
 }
 

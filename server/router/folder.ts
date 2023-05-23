@@ -20,6 +20,13 @@ folderRouter.put(
   folderController.setPublic
 );
 folderRouter.delete("/:id", authMiddleware, folderController.moveToTrash);
+folderRouter.put(
+  "/rename/:id",
+  body("newName").notEmpty().withMessage("Folder name is required"),
+  authMiddleware,
+  banMiddleware,
+  folderController.rename
+);
 
 folderRouter.get("/public/:id", folderController.getOnePublic);
 folderRouter.get(

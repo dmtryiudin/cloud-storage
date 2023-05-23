@@ -96,6 +96,14 @@ class FolderController {
       next(e);
     }
   }
+
+  async rename(req: IRequestAuth, res: Response, next: NextFunction) {
+    const folderId = req.params.id;
+    const { id } = req.user;
+    const { newName } = req.body;
+    const folder = await folderService.rename(id, folderId, newName);
+    res.json(folder);
+  }
 }
 
 export default new FolderController();

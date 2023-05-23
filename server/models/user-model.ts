@@ -12,6 +12,7 @@ const UserSchema = new Schema({
   registrationDate: { type: Date, require: true },
   roles: [{ type: String, ref: "Role" }],
   isBanned: { type: Boolean, default: false },
+  filesCapacity: { type: Number, default: 0 },
 });
 
 export default model("User", UserSchema);

@@ -24,8 +24,13 @@ fileRouter.post(
 );
 fileRouter.put(
   "/set-public/:file",
+  authMiddleware,
   confirmMailMiddleware,
   fileController.setPublic
 );
 fileRouter.put("/set-folder/:file", authMiddleware, fileController.setFolder);
 fileRouter.delete("/:file", authMiddleware, fileController.moveToTrash);
+
+fileRouter.get("/public", fileController.getAllPublic);
+fileRouter.get("/user", authMiddleware, fileController.getForUser);
+fileRouter.get("/trash", authMiddleware, fileController.getTrashForUser);

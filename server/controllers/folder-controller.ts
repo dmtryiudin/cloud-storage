@@ -1,9 +1,8 @@
 import { IRequestAuth } from "../types/express";
-import { Response, NextFunction } from "express";
+import { Response, NextFunction, Request } from "express";
 import folderService from "../service/folder-service";
 import { validationResult } from "express-validator";
 import { ApiError } from "../exceptions/api-error";
-import { json } from "stream/consumers";
 
 class FolderController {
   async createFolder(req: IRequestAuth, res: Response, next: NextFunction) {
@@ -24,9 +23,9 @@ class FolderController {
 
   async setPublic(req: IRequestAuth, res: Response, next: NextFunction) {
     try {
-      const { folder } = req.params;
+      const folderId = req.params.id;
       const { id } = req.user;
-      const folderData = await folderService.setPublic(folder, id);
+      const folderData = await folderService.setPublic(folderId, id);
       res.json(folderData);
     } catch (e) {
       next(e);
@@ -35,10 +34,60 @@ class FolderController {
 
   async moveToTrash(req: IRequestAuth, res: Response, next: NextFunction) {
     try {
-      const { folder } = req.params;
+      const folderId = req.params.id;
       const { id } = req.user;
-      const folderData = await folderService.moveToTrash(folder, id);
+      const folderData = await folderService.moveToTrash(folderId, id);
       res.json(folderData);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async getAllPublic(req: Request, res: Response, next: NextFunction) {
+    try {
+      const folders = await folderService.getAllPublic();
+      res.json(folders);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async getForUser(req: IRequestAuth, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.user;
+      const folders = await folderService.getForUser(id);
+      res.json(folders);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async getTrashForUser(req: IRequestAuth, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.user;
+      const folders = await folderService.getTrashForUser(id);
+      res.json(folders);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async getOnePublic(req: Request, res: Response, next: NextFunction) {
+    try {
+      const folderId = req.params.id;
+      const folder = await folderService.getOnePublic(folderId);
+      res.json(folder);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async getOnePrivate(req: IRequestAuth, res: Response, next: NextFunction) {
+    try {
+      const folderId = req.params.id;
+      const { id } = req.user;
+      const folder = await folderService.getOnePrivate(folderId, id);
+      res.json(folder);
     } catch (e) {
       next(e);
     }

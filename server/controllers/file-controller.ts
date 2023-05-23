@@ -105,6 +105,35 @@ class FileController {
       next(e);
     }
   }
+
+  async getAllPublic(req: Request, res: Response, next: NextFunction) {
+    try {
+      const files = await fileService.getAllPublic();
+      res.json(files);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async getForUser(req: IRequestAuth, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.user;
+      const files = await fileService.getForUser(id);
+      res.json(files);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async getTrashForUser(req: IRequestAuth, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.user;
+      const files = await fileService.getTrashForUser(id);
+      res.json(files);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export default new FileController();

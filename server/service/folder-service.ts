@@ -1,6 +1,8 @@
 import { ObjectId } from "mongodb";
+import { FolderDto } from "../dtos/folder-dto";
 import { ApiError } from "../exceptions/api-error";
 import folderModel from "../models/folder-model";
+import { getFilesForFolder } from "../utils";
 
 class FolderService {
   async createFolder(owner: string, name: string) {
@@ -71,8 +73,88 @@ class FolderService {
   }
 
   async deleteAllForUser(owner: string) {
-    console.log(typeof owner);
     await folderModel.deleteMany({ owner });
+  }
+
+  async getAllPublic() {
+    const folders = await folderModel.find({ isPublic: true });
+    const res = [];
+    for (let folder of folders) {
+      const folderData = { ...new FolderDto(folder) };
+      folderData.files = await getFilesForFolder(folder._id.toString());
+      res.push(folderData);
+    }
+    return res;
+  }
+
+  async getForUser(owner: string) {
+    const folders = await folderModel.find({
+      owner,
+      deleteDate: { $exists: false },
+    });
+
+    const res = [];
+    for (let folder of folders) {
+      const folderData = { ...new FolderDto(folder) };
+      folderData.files = await getFilesForFolder(folder._id.toString());
+      res.push(folderData);
+    }
+    return res;
+  }
+
+  async getTrashForUser(owner: string) {
+    const folders = await folderModel.find({
+      owner,
+      deleteDate: { $exists: true },
+    });
+
+    const res = [];
+    for (let folder of folders) {
+      const folderData = { ...new FolderDto(folder) };
+      folderData.files = await getFilesForFolder(folder._id.toString());
+      res.push(folderData);
+    }
+    return res;
+  }
+
+  async getOnePublic(id: string) {
+    if (!ObjectId.isValid(id)) {
+      throw ApiError.NotFound();
+    }
+
+    const folder = await folderModel.findById(id);
+
+    if (!folder) {
+      throw ApiError.NotFound();
+    }
+
+    if (!folder.isPublic) {
+      throw ApiError.Forbidden("This folder isn't public");
+    }
+
+    const folderData = { ...new FolderDto(folder) };
+    folderData.files = await getFilesForFolder(folder._id.toString());
+    return folderData;
+  }
+
+  async getOnePrivate(id: string, userId: string) {
+    if (!ObjectId.isValid(id)) {
+      throw ApiError.NotFound();
+    }
+
+    const folder = await folderModel.findById(id);
+
+    if (!folder) {
+      throw ApiError.NotFound();
+    }
+
+    if (folder.owner?.toString() !== userId) {
+      throw ApiError.Forbidden("You are not allowed to get this folder");
+    }
+
+    const folderData = { ...new FolderDto(folder) };
+    folderData.files = await getFilesForFolder(folder._id.toString());
+    return folderData;
   }
 }
 

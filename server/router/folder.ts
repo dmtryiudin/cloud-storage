@@ -14,9 +14,19 @@ folderRouter.post(
   folderController.createFolder
 );
 folderRouter.put(
-  "/set-public/:folder",
+  "/set-public/:id",
   authMiddleware,
   confirmMailMiddleware,
   folderController.setPublic
 );
-folderRouter.delete("/:folder", authMiddleware, folderController.moveToTrash);
+folderRouter.delete("/:id", authMiddleware, folderController.moveToTrash);
+
+folderRouter.get("/public/:id", folderController.getOnePublic);
+folderRouter.get(
+  "/private/:id",
+  authMiddleware,
+  folderController.getOnePrivate
+);
+folderRouter.get("/public", folderController.getAllPublic);
+folderRouter.get("/user", authMiddleware, folderController.getForUser);
+folderRouter.get("/trash", authMiddleware, folderController.getTrashForUser);

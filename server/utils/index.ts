@@ -91,3 +91,8 @@ export const setFileBelongsToUser = async (
 
   throw ApiError.Forbidden("You don't own this file");
 };
+
+export const getFilesForFolder = async (folderId: string) => {
+  const files = await fileModel.find({ folder: folderId });
+  return files;
+};

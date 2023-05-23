@@ -150,6 +150,31 @@ class FileService {
 
     await fileModel.deleteMany({ owner });
   }
+
+  async getAllPublic() {
+    const allFiles = await fileModel.find({
+      isPublic: true,
+    });
+    return allFiles;
+  }
+
+  async getForUser(owner: string) {
+    const allFiles = await fileModel.find({
+      owner,
+      deleteDate: { $exists: false },
+      folder: { $exists: false },
+    });
+    return allFiles;
+  }
+
+  async getTrashForUser(owner: string) {
+    const allFiles = await fileModel.find({
+      owner,
+      deleteDate: { $exists: true },
+      folder: { $exists: false },
+    });
+    return allFiles;
+  }
 }
 
 export default new FileService();

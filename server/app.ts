@@ -24,7 +24,7 @@ app.use(cookieParser());
 app.use(cors());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/v1/auth", authRouter);
-app.use("/api/v1/users", usersRouter);
+app.use("/api/v1/user", usersRouter);
 app.use("/api/v1/file", fileRouter);
 app.use("/api/v1/folder", folderRouter);
 app.use("/api/v1/mod", modRouter);

@@ -44,6 +44,7 @@
         }
       }
     },
+
     "/auth/registration": {
       "post": {
         "tags": ["Auth"],
@@ -108,6 +109,34 @@
           },
           "401": {
             "description": "Wrong refresh token",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/auth/logout": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Logout from your account",
+        "parameters": [
+          {
+            "name": "cookie",
+            "in": "header",
+            "description": "refresh token",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully logout",
             "schema": {
               "properties": {
                 "message": {
@@ -212,7 +241,7 @@
         }
       }
     },
-    "/users": {
+    "/user": {
       "get": {
         "tags": ["User"],
         "summary": "Get all users",
@@ -318,7 +347,7 @@
       }
     },
 
-    "users/:login": {
+    "/user/:login": {
       "get": {
         "tags": ["User"],
         "summary": "Get user by login",
@@ -332,7 +361,7 @@
         }
       }
     },
-    "/users/avatar": {
+    "/user/avatar": {
       "put": {
         "tags": ["User"],
         "summary": "Update avatar",
@@ -366,6 +395,281 @@
                 "message": {
                   "type": "string"
                 }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/file/upload": {
+      "put": {
+        "tags": ["File"],
+        "summary": "Upload file",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "avatar",
+            "type": "file",
+            "required": true,
+            "description": "New avatar"
+          },
+          {
+            "name": "name",
+            "in": "header",
+            "description": "file name",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "folder",
+            "in": "header",
+            "description": "folder name",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Successfully uploaded",
+            "schema": {
+              "$ref": "#/definitions/File"
+            }
+          },
+          "400": {
+            "description": "Invalid data",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "You don't have a permission",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/file/set-public/:file": {
+      "put": {
+        "tags": ["File"],
+        "summary": "Set file public",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully updated",
+            "schema": {
+              "$ref": "#/definitions/File"
+            }
+          },
+
+          "403": {
+            "description": "You don't have a permission",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "File not found",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/file/set-folder/:file": {
+      "put": {
+        "tags": ["File"],
+        "summary": "Set file public",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "folder",
+            "in": "body",
+            "description": "folder id",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully updated",
+            "schema": {
+              "$ref": "#/definitions/File"
+            }
+          },
+          "403": {
+            "description": "You don't have a permission",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+
+          "404": {
+            "description": "File not found",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/file/:file": {
+      "delete": {
+        "tags": ["File"],
+        "summary": "Delete file",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted",
+            "schema": {
+              "$ref": "#/definitions/File"
+            }
+          },
+
+          "403": {
+            "description": "You don't have a permission",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "File not found",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/file/public": {
+      "get": {
+        "tags": ["File"],
+        "summary": "Get all public files",
+        "responses": {
+          "200": {
+            "description": "Files",
+            "schema": {
+              "$ref": "#/definitions/PaginatedFiles"
+            }
+          }
+        }
+      }
+    },
+
+    "/file/user": {
+      "get": {
+        "tags": ["File"],
+        "summary": "Get all files for user",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Files",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/file/trash": {
+      "get": {
+        "tags": ["File"],
+        "summary": "Get all files is trash for user",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Files",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/User"
               }
             }
           }
@@ -429,6 +733,26 @@
         }
       }
     },
+    "PaginatedFiles": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "number"
+        },
+        "limit": {
+          "type": "number"
+        },
+        "maxCount": {
+          "type": "number"
+        },
+        "response": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/File"
+          }
+        }
+      }
+    },
     "AuthResponse": {
       "type": "object",
       "properties": {
@@ -467,6 +791,29 @@
           "type": "string"
         },
         "password": {
+          "type": "string"
+        }
+      }
+    },
+    "File": {
+      "type": "object",
+      "properties": {
+        "owner": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "deleteDate": {
+          "type": "number"
+        },
+        "href": {
+          "type": "string"
+        },
+        "isPublic": {
+          "type": "boolean"
+        },
+        "folder": {
           "type": "string"
         }
       }

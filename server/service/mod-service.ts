@@ -11,9 +11,9 @@ class ModService {
     }
     user.isBanned = true;
     await user.save();
-    const { email, name } = user;
-    if (email) {
-      await mailService.sendBanMail(email, reason, name || login);
+    const { email, name, isActivated } = user;
+    if (isActivated) {
+      await mailService.sendBanMail(email!, reason, name || login);
     }
 
     return { ...new UserDto(user) };

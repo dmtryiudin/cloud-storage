@@ -98,7 +98,7 @@ class AuthService {
     await user!.save();
     await mailService.sendActivationMail(
       email,
-      `${process.env.API_URL}/auth/activate/${user!.activationLink}`
+      `${process.env.API_URL}/api/v1/auth/activate/${user!.activationLink}`
     );
     return user;
   }

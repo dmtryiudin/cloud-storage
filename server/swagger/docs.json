@@ -61,7 +61,7 @@
           }
         ],
         "responses": {
-          "200": {
+          "201": {
             "description": "Successfully created account",
             "schema": {
               "$ref": "#/definitions/AuthResponse"
@@ -805,6 +805,78 @@
         }
       }
     },
+
+    "/file/rename/:file": {
+      "put": {
+        "tags": ["File"],
+        "summary": "Rename file",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "newName",
+            "in": "body",
+            "description": "new name of the file",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated successfully",
+            "schema": {
+              "$ref": "#/definitions/File"
+            }
+          },
+          "400": {
+            "description": "Invalid data",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden to access this file",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "File not found",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
     "/folder": {
       "post": {
         "tags": ["Folder"],
@@ -1083,6 +1155,77 @@
       }
     },
 
+    "/folder/rename/:id": {
+      "put": {
+        "tags": ["Folder"],
+        "summary": "Rename folder",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "newName",
+            "in": "body",
+            "description": "new name of the folder",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Folder"
+            }
+          },
+          "400": {
+            "description": "Invalid data",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden to access this folder",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Folder not found",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
     "/folder/public": {
       "get": {
         "tags": ["Folder"],
@@ -1184,6 +1327,98 @@
           }
         }
       }
+    },
+
+    "/settings": {
+      "get": {
+        "tags": ["Settings"],
+        "summary": "Get settings for user",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Settings for user",
+            "schema": {
+              "$ref": "#/definitions/Settings"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "put": {
+        "tags": ["Settings"],
+        "summary": "Set settings for user",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Updated settings",
+            "schema": {
+              "properties": {
+                "isDarkTheme": {
+                  "type": "boolean"
+                },
+                "tableFiles": {
+                  "type": "boolean"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Settings for user",
+            "schema": {
+              "$ref": "#/definitions/Settings"
+            }
+          },
+          "400": {
+            "description": "Invalid data",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -1210,6 +1445,9 @@
         },
         "registrationDate": {
           "type": "string"
+        },
+        "filesCapacity": {
+          "type": "number"
         },
         "roles": {
           "type": "array",
@@ -1342,6 +1580,9 @@
         "isPublic": {
           "type": "boolean"
         },
+        "capacity": {
+          "type": "number"
+        },
         "folder": {
           "type": "string"
         }
@@ -1362,11 +1603,28 @@
         "isPublic": {
           "type": "boolean"
         },
+        "filesCapacity": {
+          "type": "number"
+        },
         "files": {
           "type": "array",
           "items": {
             "type": "string"
           }
+        }
+      }
+    },
+    "Settings": {
+      "type": "object",
+      "properties": {
+        "user": {
+          "type": "string"
+        },
+        "isDarkTheme": {
+          "type": "boolean"
+        },
+        "tableFiles": {
+          "type": "boolean"
         }
       }
     }

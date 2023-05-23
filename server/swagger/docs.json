@@ -457,7 +457,7 @@
     },
 
     "/file/upload": {
-      "put": {
+      "post": {
         "tags": ["File"],
         "summary": "Upload file",
         "parameters": [
@@ -760,7 +760,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/User"
+                "$ref": "#/definitions/File"
               }
             }
           },
@@ -797,7 +797,7 @@
             "schema": {
               "type": "array",
               "items": {
-                "$ref": "#/definitions/User"
+                "$ref": "#/definitions/File"
               }
             }
           },

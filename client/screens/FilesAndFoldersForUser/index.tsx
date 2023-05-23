@@ -14,7 +14,12 @@ import { IFile } from "../../models/IFile";
 import { IResponse } from "../../models/response/IResponse";
 import { Error as ErrorType } from "../../models/IError";
 import FileService from "../../service/fileService";
-import { FileButton, UploadFileModal } from "../../components";
+import {
+  FileButton,
+  LoadingScreen,
+  UploadFileModal,
+  Error,
+} from "../../components";
 
 export const FilesAndFoldersForUser = () => {
   const { wrapper, wrapperWide, header, fileItem } =
@@ -34,6 +39,11 @@ export const FilesAndFoldersForUser = () => {
   });
 
   const loadFilesForUser = async () => {
+    setFilesForUser({
+      data: null,
+      isLoading: true,
+      error: null,
+    });
     try {
       const { data } = await FileService.getFilesForUser();
       setFilesForUser({
@@ -53,6 +63,14 @@ export const FilesAndFoldersForUser = () => {
   useEffect(() => {
     loadFilesForUser();
   }, []);
+
+  if (error) {
+    return <Error />;
+  }
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
 
   return (
     <>
@@ -75,24 +93,22 @@ export const FilesAndFoldersForUser = () => {
           </TouchableOpacity>
         </View>
 
-        {data && (
-          <FlatList
-            numColumns={3}
-            data={data}
-            renderItem={({ item }) => (
-              <View style={fileItem}>
-                <FileButton {...item} />
-              </View>
-            )}
-            keyExtractor={(item) => item.name}
-            refreshControl={
-              <RefreshControl
-                refreshing={isLoading}
-                onRefresh={loadFilesForUser}
-              />
-            }
-          />
-        )}
+        <FlatList
+          numColumns={3}
+          data={data}
+          renderItem={({ item }) => (
+            <View style={fileItem}>
+              <FileButton {...item} />
+            </View>
+          )}
+          keyExtractor={(item) => item.name}
+          refreshControl={
+            <RefreshControl
+              refreshing={isLoading}
+              onRefresh={loadFilesForUser}
+            />
+          }
+        />
       </View>
       <UploadFileModal showModal={showModal} setShowModal={setShowModal} />
     </>

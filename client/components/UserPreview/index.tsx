@@ -5,6 +5,7 @@ import { API_URL } from "@env";
 import { UserPreviewStyles } from "./style";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../screens/types";
+import { Colors } from "../../styles/colors";
 
 export const UserPreview: React.FC<IUser> = ({
   avatar,
@@ -29,17 +30,23 @@ export const UserPreview: React.FC<IUser> = ({
           }}
         />
       ) : (
-        <FontAwesome name="user-circle-o" size={50} color="black" />
+        <FontAwesome name="user-circle-o" size={50} color={Colors.black} />
       )}
       <View style={textWrapper}>
         <Text style={text}>{name || login}</Text>
         {isActivated && (
-          <MaterialIcons name="verified" size={18} color="#10B981" />
+          <MaterialIcons
+            name="verified"
+            size={18}
+            color={Colors.primaryGreen2}
+          />
         )}
         {roles.includes("MOD") && (
-          <FontAwesome5 name="crown" size={18} color="#F7CE46" />
+          <FontAwesome5 name="crown" size={18} color={Colors.warning} />
         )}
-        {isBanned && <FontAwesome5 name="ban" size={18} color="#EF4444" />}
+        {isBanned && (
+          <FontAwesome5 name="ban" size={18} color={Colors.danger} />
+        )}
       </View>
     </TouchableOpacity>
   );

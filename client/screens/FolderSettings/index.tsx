@@ -14,6 +14,7 @@ import FoldersService from "../../service/folderService";
 import { AxiosError } from "axios";
 import { StackNavigation } from "../types";
 import { convertUnixDate } from "../../utils/convertUnixDate";
+import { Colors } from "../../styles/colors";
 
 export const FolderSettings = () => {
   const { params } = useRoute<RouteProp<ProfileParamList>>();
@@ -109,7 +110,7 @@ export const FolderSettings = () => {
         }}
       >
         <View style={headerWrapper}>
-          <Entypo name="folder" size={70} color="#047857" />
+          <Entypo name="folder" size={70} color={Colors.primaryGreen} />
           <Heading label={`${updatedNewName || name}`} />
         </View>
         <Text style={text}>

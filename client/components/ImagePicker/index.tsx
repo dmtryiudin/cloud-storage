@@ -4,6 +4,7 @@ import * as DocumentPicker from "expo-document-picker";
 import { ImagePickerStyles } from "./styles";
 import { Button } from "../Button";
 import { AntDesign } from "@expo/vector-icons";
+import { Colors } from "../../styles/colors";
 
 export const ImagePicker: React.FC<IImagePickerProps> = ({
   avatar,
@@ -38,7 +39,7 @@ export const ImagePicker: React.FC<IImagePickerProps> = ({
               <Image source={{ uri: imageUri }} style={image} />
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setAvatar(null)}>
-              <AntDesign name="delete" size={50} color="#EF4444" />
+              <AntDesign name="delete" size={50} color={Colors.danger} />
             </TouchableOpacity>
           </View>
         )

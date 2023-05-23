@@ -1,13 +1,14 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const FilesAndFoldersForUserStyles = StyleSheet.create({
   wrapper: {
     display: "flex",
     alignItems: "center",
     flexDirection: "column",
-    justifyContent: "space-between",
     padding: 14,
-    backgroundColor: "white",
+    minHeight: "100%",
+    backgroundColor: Colors.white,
   },
 
   wrapperWide: {

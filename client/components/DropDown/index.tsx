@@ -14,6 +14,7 @@ import OutsidePressHandler from "react-native-outside-press";
 import React from "react";
 import { CountryListItem } from "../CountryListItem";
 import { Ionicons } from "@expo/vector-icons";
+import { Colors } from "../../styles/colors";
 
 export const DropDown: React.FC<IDropDown> = ({
   variants,
@@ -64,7 +65,12 @@ export const DropDown: React.FC<IDropDown> = ({
         style={{ ...field, ...conditionStyles(fieldFocused, isDropDownOpened) }}
       >
         <Text style={fieldText}>{currentValue}</Text>
-        <Ionicons name="close" size={24} color="black" onPress={clearHandler} />
+        <Ionicons
+          name="close"
+          size={24}
+          color={Colors.black}
+          onPress={clearHandler}
+        />
       </TouchableOpacity>
       <Animated.View style={{ maxHeight }}>
         <OutsidePressHandler
@@ -75,7 +81,7 @@ export const DropDown: React.FC<IDropDown> = ({
             style={{
               ...list,
               ...conditionStyles(
-                { borderColor: "transparent" },
+                { borderColor: Colors.transparent },
                 !isDropDownOpened
               ),
             }}

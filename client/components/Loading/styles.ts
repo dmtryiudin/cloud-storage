@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const LoadingStyles = StyleSheet.create({
   loading: {
@@ -12,10 +13,10 @@ export const LoadingStyles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 14,
     lineHeight: 19,
-    color: "white",
+    color: Colors.white,
   },
   modal: {
-    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    backgroundColor: Colors.modalBg,
     height: "100%",
     width: "100%",
     display: "flex",

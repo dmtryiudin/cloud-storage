@@ -22,12 +22,14 @@ import {
   FolderButton,
   UploadFolderModal,
   Heading,
+  EmptyList,
 } from "../../components";
 import { useIsFocused } from "@react-navigation/native";
 import { IFolder } from "../../models/IFolder";
 import FoldersService from "../../service/folderService";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { DraxProvider, DraxView } from "react-native-drax";
+import { Colors } from "../../styles/colors";
 
 export const FilesAndFoldersForUser = () => {
   const { wrapper, wrapperWide, header, fileItem, headerButtonsWrapper } =
@@ -150,76 +152,84 @@ export const FilesAndFoldersForUser = () => {
                 <Heading label="User's files and folders" />
                 <View style={headerButtonsWrapper}>
                   <TouchableOpacity onPress={() => setShowFileModal(true)}>
-                    <MaterialIcons name="file-upload" size={40} color="black" />
+                    <MaterialIcons
+                      name="file-upload"
+                      size={40}
+                      color={Colors.black}
+                    />
                   </TouchableOpacity>
                   <TouchableOpacity onPress={() => setShowFolderModal(true)}>
                     <MaterialCommunityIcons
                       name="folder-plus"
                       size={40}
-                      color="black"
+                      color={Colors.black}
                     />
                   </TouchableOpacity>
                 </View>
               </View>
 
-              <FlatList
-                numColumns={3}
-                data={filesAndFoldersData}
-                style={{ height: windowHeight - 120 }}
-                renderItem={({ item }) =>
-                  item.files ? (
-                    <DraxView
-                      style={fileItem}
-                      onReceiveDragEnter={() => {
-                        setChosenFolder(item.id);
+              {filesAndFoldersData.length ? (
+                <FlatList
+                  numColumns={3}
+                  data={filesAndFoldersData}
+                  style={{ height: windowHeight - 120 }}
+                  renderItem={({ item }) =>
+                    item.files ? (
+                      <DraxView
+                        style={fileItem}
+                        onReceiveDragEnter={() => {
+                          setChosenFolder(item.id);
+                        }}
+                        onReceiveDragExit={() => {
+                          setChosenFolder("");
+                        }}
+                        onReceiveDragDrop={({ dragged: { payload } }) => {
+                          setFolderForFile(payload, item.id);
+                        }}
+                      >
+                        <FolderButton
+                          folder={item}
+                          isChosen={item.id === chosenFolder}
+                        />
+                      </DraxView>
+                    ) : (
+                      <DraxView
+                        payload={item.href}
+                        longPressDelay={500}
+                        style={fileItem}
+                        onDragStart={() => {
+                          setDraggedFile(item.href);
+                        }}
+                        onDragEnd={() => {
+                          setDraggedFile("");
+                        }}
+                        onDragDrop={() => {
+                          setDraggedFile("");
+                        }}
+                      >
+                        <FileButton
+                          file={item}
+                          isDragging={item.href === draggedFile}
+                        />
+                      </DraxView>
+                    )
+                  }
+                  keyExtractor={(item) =>
+                    item.files ? item.name + item.owner : item.name
+                  }
+                  refreshControl={
+                    <RefreshControl
+                      refreshing={isFilesLoading}
+                      onRefresh={() => {
+                        loadFilesForUser();
+                        loadFoldersForUser();
                       }}
-                      onReceiveDragExit={() => {
-                        setChosenFolder("");
-                      }}
-                      onReceiveDragDrop={({ dragged: { payload } }) => {
-                        setFolderForFile(payload, item.id);
-                      }}
-                    >
-                      <FolderButton
-                        folder={item}
-                        isChosen={item.id === chosenFolder}
-                      />
-                    </DraxView>
-                  ) : (
-                    <DraxView
-                      payload={item.href}
-                      longPressDelay={500}
-                      style={fileItem}
-                      onDragStart={() => {
-                        setDraggedFile(item.href);
-                      }}
-                      onDragEnd={() => {
-                        setDraggedFile("");
-                      }}
-                      onDragDrop={() => {
-                        setDraggedFile("");
-                      }}
-                    >
-                      <FileButton
-                        file={item}
-                        isDragging={item.href === draggedFile}
-                      />
-                    </DraxView>
-                  )
-                }
-                keyExtractor={(item) =>
-                  item.files ? item.name + item.owner : item.name
-                }
-                refreshControl={
-                  <RefreshControl
-                    refreshing={isFilesLoading}
-                    onRefresh={() => {
-                      loadFilesForUser();
-                      loadFoldersForUser();
-                    }}
-                  />
-                }
-              />
+                    />
+                  }
+                />
+              ) : (
+                <EmptyList />
+              )}
             </View>
           </DraxProvider>
         </GestureHandlerRootView>

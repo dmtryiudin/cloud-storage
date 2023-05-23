@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const PublicFoldersStyles = StyleSheet.create({
   wrapper: {
@@ -7,7 +8,7 @@ export const PublicFoldersStyles = StyleSheet.create({
     flexDirection: "column",
     padding: 14,
     gap: 20,
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
   },
 
   wrapperWide: {
@@ -23,7 +24,7 @@ export const PublicFoldersStyles = StyleSheet.create({
     fontFamily: "Manrope-Regular",
     fontSize: 14,
     lineHeight: 19,
-    color: "#047857",
+    color: Colors.primaryGreen,
     textAlign: "center",
   },
   loader: {

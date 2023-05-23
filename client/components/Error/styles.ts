@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const ErrorStyles = StyleSheet.create({
   wrapper: {
@@ -6,7 +7,7 @@ export const ErrorStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     height: "100%",
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
   },
   textWrapper: {
     display: "flex",
@@ -19,6 +20,6 @@ export const ErrorStyles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 22,
     lineHeight: 30,
-    color: "#EF4444",
+    color: Colors.danger,
   },
 });

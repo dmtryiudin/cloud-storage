@@ -155,6 +155,7 @@ export default class Store {
       await AsyncStorage.setItem("refreshToken", refreshToken);
       this.setError();
     } catch (e: AxiosError | any) {
+      await this.logout();
       this.setError(e?.response?.status, e?.response?.data);
     } finally {
       this.setLoading(false);

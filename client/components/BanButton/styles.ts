@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const BanButtonStyles = StyleSheet.create({
   modalContentWrapper: {
@@ -8,7 +9,7 @@ export const BanButtonStyles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
     borderRadius: 5,
   },
 
@@ -25,7 +26,7 @@ export const BanButtonStyles = StyleSheet.create({
   },
 
   modal: {
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    backgroundColor: Colors.modalBg,
     width: "100%",
     height: "100%",
     display: "flex",

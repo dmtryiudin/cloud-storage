@@ -41,12 +41,14 @@ export default class FoldersService {
   }
 
   static async getPublicFolder(id: string) {
-    return axiosInstance.get("/folder/public/" + id, {
+    const data = await axiosInstance.get("/folder/public/" + id, {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",
       },
     });
+
+    return data;
   }
 
   static async renameFolder(id: string, newName: string) {

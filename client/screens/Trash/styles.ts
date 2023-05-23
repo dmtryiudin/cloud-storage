@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const TrashStyles = StyleSheet.create({
   wrapper: {
@@ -7,7 +8,7 @@ export const TrashStyles = StyleSheet.create({
     flexDirection: "column",
     justifyContent: "space-between",
     padding: 14,
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
   },
 
   wrapperWide: {

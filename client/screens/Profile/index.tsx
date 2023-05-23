@@ -40,6 +40,7 @@ import { Error as ErrorType } from "../../models/IError";
 import { StackNavigation } from "../types";
 import { API_URL } from "@env";
 import { fromBytesToMegabytes } from "../../utils/fromBytesToMegabytes";
+import { Colors } from "../../styles/colors";
 
 export const Profile = observer(() => {
   const isTabletOrMobileDevice = useMediaQuery({
@@ -141,7 +142,7 @@ export const Profile = observer(() => {
             onPress={() => navigation.navigate("ProfileSettings")}
           >
             {login === store.user.login ? (
-              <Feather name="settings" size={30} color="black" />
+              <Feather name="settings" size={30} color={Colors.black} />
             ) : null}
           </TouchableOpacity>
         </View>
@@ -154,17 +155,23 @@ export const Profile = observer(() => {
             }}
           />
         ) : (
-          <FontAwesome name="user-circle-o" size={100} color="black" />
+          <FontAwesome name="user-circle-o" size={100} color={Colors.black} />
         )}
         <View style={nameWrapper}>
           <Text style={nameText}>{name || login}</Text>
           {isActivated && (
-            <MaterialIcons name="verified" size={24} color="#10B981" />
+            <MaterialIcons
+              name="verified"
+              size={24}
+              color={Colors.primaryGreen2}
+            />
           )}
           {roles.includes("MOD") && (
-            <FontAwesome5 name="crown" size={24} color="#F7CE46" />
+            <FontAwesome5 name="crown" size={24} color={Colors.warning} />
           )}
-          {isBanned && <FontAwesome5 name="ban" size={24} color="#EF4444" />}
+          {isBanned && (
+            <FontAwesome5 name="ban" size={24} color={Colors.danger} />
+          )}
         </View>
         <View style={infoWrapper}>
           {email && <Text style={textInfo}>Email: {email}</Text>}

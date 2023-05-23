@@ -22,6 +22,7 @@ import {
   Heading,
   FolderButton,
   Input,
+  EmptyList,
 } from "../../components";
 import { conditionStyles } from "../../utils/conditionStyles";
 import { StackNavigation } from "../types";
@@ -143,28 +144,34 @@ export const PublicFolders = () => {
             onChangeText={(value: string) => setCurrentLogin(value)}
             onSubmitEditing={refresh}
           />
-          <FlatList
-            numColumns={3}
-            style={{ height: windowHeight - 258 }}
-            data={data.response}
-            renderItem={({ item }) => (
-              <View style={fileItem}>
-                <FolderButton folder={item} />
-              </View>
-            )}
-            keyExtractor={(item) => item.name}
-            ListFooterComponent={renderLoader}
-            onEndReached={loadMoreItems}
-            onEndReachedThreshold={0}
-            refreshControl={
-              <RefreshControl
-                refreshing={isLoading}
-                onRefresh={() => {
-                  refresh();
-                }}
-              />
-            }
-          />
+          {data.response.length ? (
+            <FlatList
+              numColumns={3}
+              style={{ height: windowHeight - 258 }}
+              data={data.response}
+              renderItem={({ item }) => (
+                <View style={fileItem}>
+                  <FolderButton folder={item} />
+                </View>
+              )}
+              keyExtractor={(item) => item.name}
+              ListFooterComponent={renderLoader}
+              onEndReached={loadMoreItems}
+              onEndReachedThreshold={0}
+              refreshControl={
+                <RefreshControl
+                  refreshing={isLoading}
+                  onRefresh={() => {
+                    refresh();
+                  }}
+                />
+              }
+            />
+          ) : (
+            <View style={{ height: windowHeight - 258 }}>
+              <EmptyList />
+            </View>
+          )}
           <TouchableOpacity onPress={() => navigation.navigate("PublicFiles")}>
             <Text style={linkText}>Public files</Text>
           </TouchableOpacity>

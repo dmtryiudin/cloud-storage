@@ -24,6 +24,7 @@ import {
   Error,
   UploadFileModal,
   FileButton,
+  EmptyList,
 } from "../../components";
 import FoldersService from "../../service/folderService";
 import { Error as ErrorType } from "../../models/IError";
@@ -32,6 +33,7 @@ import { StackNavigation } from "../types";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { DraxProvider, DraxView } from "react-native-drax";
 import FileService from "../../service/fileService";
+import { Colors } from "../../styles/colors";
 
 export const Folder = () => {
   const isTabletOrMobileDevice = useMediaQuery({
@@ -68,11 +70,12 @@ export const Folder = () => {
       data: null,
     });
     try {
+      console.log(params.isPublic);
       let data = null;
       if (params.isPublic) {
-        data = (await FoldersService.getPublicFolder(params.folderId)).data;
+        data = (await FoldersService.getPublicFolder(params.id)).data;
       } else {
-        data = (await FoldersService.getPrivateFolder(params.folderId)).data;
+        data = (await FoldersService.getPrivateFolder(params.id)).data;
       }
       setFolder({
         isLoading: false,
@@ -128,7 +131,11 @@ export const Folder = () => {
                 <Heading label={data.name} />
                 <View style={headerButtonsWrapper}>
                   <TouchableOpacity onPress={() => setShowFileModal(true)}>
-                    <MaterialIcons name="file-upload" size={40} color="black" />
+                    <MaterialIcons
+                      name="file-upload"
+                      size={40}
+                      color={Colors.black}
+                    />
                   </TouchableOpacity>
                   <TouchableOpacity
                     onPress={() =>
@@ -136,71 +143,78 @@ export const Folder = () => {
                       navigation.navigate("FolderSettings", { folder: data })
                     }
                   >
-                    <Feather name="settings" size={40} color="black" />
+                    <Feather name="settings" size={40} color={Colors.black} />
                   </TouchableOpacity>
                 </View>
               </View>
-              <FlatList
-                numColumns={3}
-                data={data.files}
-                renderItem={({ item }) => (
-                  <DraxView
-                    longPressDelay={500}
-                    style={fileItem}
-                    payload={item.href}
-                    onDragStart={() => {
-                      setDraggedFile(item.href);
-                      setShowDragArea(true);
-                    }}
-                    onDragEnd={() => {
-                      setDraggedFile("");
-                      setShowDragArea(false);
-                    }}
-                    onDragDrop={() => {
-                      setDraggedFile("");
-                    }}
-                  >
-                    <FileButton
-                      file={item}
-                      isDragging={item.href === draggedFile}
-                    />
-                  </DraxView>
-                )}
-                keyExtractor={(item) => item.href}
-                refreshControl={
-                  <RefreshControl
-                    refreshing={isLoading}
-                    onRefresh={() => {
-                      getFolderData();
-                    }}
+
+              {data.files.length ? (
+                <>
+                  <FlatList
+                    numColumns={3}
+                    data={data.files}
+                    renderItem={({ item }) => (
+                      <DraxView
+                        longPressDelay={500}
+                        style={fileItem}
+                        payload={item.href}
+                        onDragStart={() => {
+                          setDraggedFile(item.href);
+                          setShowDragArea(true);
+                        }}
+                        onDragEnd={() => {
+                          setDraggedFile("");
+                          setShowDragArea(false);
+                        }}
+                        onDragDrop={() => {
+                          setDraggedFile("");
+                        }}
+                      >
+                        <FileButton
+                          file={item}
+                          isDragging={item.href === draggedFile}
+                        />
+                      </DraxView>
+                    )}
+                    keyExtractor={(item) => item.href}
+                    refreshControl={
+                      <RefreshControl
+                        refreshing={isLoading}
+                        onRefresh={() => {
+                          getFolderData();
+                        }}
+                      />
+                    }
                   />
-                }
-              />
-              {showDragArea && (
-                <DraxView
-                  style={{
-                    ...moveFileFromFolderArea,
-                    ...(isMoved ? moveFileDanger : {}),
-                  }}
-                  onReceiveDragEnter={() => {
-                    setIsMoved(true);
-                  }}
-                  onReceiveDragExit={() => {
-                    setIsMoved(false);
-                  }}
-                  onReceiveDragDrop={({ dragged: { payload } }) => {
-                    removeFolderForFile(payload);
-                    setIsMoved(false);
-                  }}
-                >
-                  <Text style={text}>Drop here to move from folder</Text>
-                </DraxView>
+                  {showDragArea && (
+                    <DraxView
+                      style={{
+                        ...moveFileFromFolderArea,
+                        ...(isMoved ? moveFileDanger : {}),
+                      }}
+                      onReceiveDragEnter={() => {
+                        setIsMoved(true);
+                      }}
+                      onReceiveDragExit={() => {
+                        setIsMoved(false);
+                      }}
+                      onReceiveDragDrop={({ dragged: { payload } }) => {
+                        removeFolderForFile(payload);
+                        setIsMoved(false);
+                      }}
+                    >
+                      <Text style={text}>Drop here to move from folder</Text>
+                    </DraxView>
+                  )}
+                </>
+              ) : (
+                <EmptyList />
               )}
             </View>
           </DraxProvider>
         </GestureHandlerRootView>
         <UploadFileModal
-          folder={params.folderId}
+          folder={params.id}
           showModal={showFileModal}
           setShowModal={setShowFileModal}
           finishedLoading={getFolderData}

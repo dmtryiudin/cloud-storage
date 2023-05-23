@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const ProfileStyles = StyleSheet.create({
   wrapper: {
@@ -37,14 +38,14 @@ export const ProfileStyles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 20,
     lineHeight: 27,
-    color: "#191D23",
+    color: Colors.textGray,
   },
   textInfo: {
     fontFamily: "Manrope-Regular",
     fontStyle: "normal",
     fontSize: 16,
     lineHeight: 22,
-    color: "#191D23",
+    color: Colors.textGray,
   },
   infoWrapper: {
     display: "flex",
@@ -52,7 +53,7 @@ export const ProfileStyles = StyleSheet.create({
     gap: 4,
   },
   scrollView: {
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
   },
   buttonsWrapper: {
     justifyContent: "space-between",

@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const ProfileSettingsStyles = StyleSheet.create({
   wrapper: {
@@ -7,7 +8,7 @@ export const ProfileSettingsStyles = StyleSheet.create({
     flexDirection: "column",
 
     padding: 14,
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
   },
 
   wrapperWide: {
@@ -21,7 +22,7 @@ export const ProfileSettingsStyles = StyleSheet.create({
     marginBottom: 24,
   },
   modal: {
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    backgroundColor: Colors.modalBg,
     width: "100%",
     height: "100%",
     display: "flex",
@@ -32,7 +33,7 @@ export const ProfileSettingsStyles = StyleSheet.create({
     width: 300,
     height: 200,
     padding: 10,
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
     borderRadius: 5,
   },
   modalTextWrapper: {
@@ -47,7 +48,7 @@ export const ProfileSettingsStyles = StyleSheet.create({
     fontFamily: "Manrope-Regular",
     fontSize: 14,
     lineHeight: 19,
-    color: "#191D23",
+    color: Colors.textGray,
     textAlign: "center",
   },
   deleteButton: {

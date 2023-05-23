@@ -1,6 +1,7 @@
 import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 import { ButtonStyles } from "./styles";
 import { IButtonProps } from "./types";
+import { Colors } from "../../styles/colors";
 
 export const Button: React.FC<IButtonProps> = ({
   title,
@@ -25,7 +26,9 @@ export const Button: React.FC<IButtonProps> = ({
       {...rest}
     >
       {isLoading ? (
-        <ActivityIndicator color={type === "secondary" ? "black" : "white"} />
+        <ActivityIndicator
+          color={type === "secondary" ? Colors.black : Colors.white}
+        />
       ) : (
         <Text
           style={{

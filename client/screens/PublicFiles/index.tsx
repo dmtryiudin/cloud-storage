@@ -12,6 +12,7 @@ import {
   Heading,
   FileButton,
   Input,
+  EmptyList,
 } from "../../components";
 import { AntDesign } from "@expo/vector-icons";
 import { IPaginated } from "../../models/IPaginated";
@@ -29,6 +30,7 @@ import {
 import { conditionStyles } from "../../utils/conditionStyles";
 import { StackNavigation } from "../types";
 import OutsidePressHandler from "react-native-outside-press";
+import { Colors } from "../../styles/colors";
 
 export const PublicFiles = observer(() => {
   const navigation = useNavigation<StackNavigation>();
@@ -196,7 +198,7 @@ export const PublicFiles = observer(() => {
                 }
               }}
             >
-              <AntDesign name="filter" size={30} color="black" />
+              <AntDesign name="filter" size={30} color={Colors.black} />
             </TouchableOpacity>
           </View>
           <Animated.View
@@ -213,7 +215,7 @@ export const PublicFiles = observer(() => {
                 style={{
                   ...animatedFilterList,
                   ...conditionStyles(
-                    { borderColor: "transparent" },
+                    { borderColor: Colors.transparent },
                     !isDropDownOpened
                   ),
                 }}
@@ -256,28 +258,34 @@ export const PublicFiles = observer(() => {
             onChangeText={(value: string) => setCurrentName(value)}
             onSubmitEditing={refresh}
           />
-          <FlatList
-            numColumns={3}
-            style={{ height: windowHeight - 258 }}
-            data={data.response}
-            renderItem={({ item }) => (
-              <View style={fileItem}>
-                <FileButton file={item} />
-              </View>
-            )}
-            keyExtractor={(item) => item.name}
-            ListFooterComponent={renderLoader}
-            onEndReached={loadMoreItems}
-            onEndReachedThreshold={0}
-            refreshControl={
-              <RefreshControl
-                refreshing={isLoading}
-                onRefresh={() => {
-                  refresh();
-                }}
-              />
-            }
-          />
+          {data.response.length ? (
+            <FlatList
+              numColumns={3}
+              style={{ height: windowHeight - 258 }}
+              data={data.response}
+              renderItem={({ item }) => (
+                <View style={fileItem}>
+                  <FileButton file={item} />
+                </View>
+              )}
+              keyExtractor={(item) => item.name}
+              ListFooterComponent={renderLoader}
+              onEndReached={loadMoreItems}
+              onEndReachedThreshold={0}
+              refreshControl={
+                <RefreshControl
+                  refreshing={isLoading}
+                  onRefresh={() => {
+                    refresh();
+                  }}
+                />
+              }
+            />
+          ) : (
+            <View style={{ height: windowHeight - 258 }}>
+              <EmptyList />
+            </View>
+          )}
           <TouchableOpacity
             onPress={() => navigation.navigate("PublicFolders")}
           >

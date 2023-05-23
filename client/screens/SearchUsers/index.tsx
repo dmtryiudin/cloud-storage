@@ -15,6 +15,7 @@ import {
   Error,
   Input,
   Heading,
+  EmptyList,
 } from "../../components";
 import { SearchUsersStyles } from "./styles";
 import { AxiosError } from "axios";
@@ -134,17 +135,21 @@ export const SearchUsers = () => {
           onSubmitEditing={refresh}
         />
 
-        <FlatList
-          data={data.response}
-          renderItem={({ item }) => <UserPreview {...item} />}
-          keyExtractor={(item) => item.login}
-          refreshControl={
-            <RefreshControl refreshing={isLoading} onRefresh={refresh} />
-          }
-          ListFooterComponent={renderLoader}
-          onEndReached={loadMoreItems}
-          onEndReachedThreshold={0}
-        />
+        {data.response.length ? (
+          <FlatList
+            data={data.response}
+            renderItem={({ item }) => <UserPreview {...item} />}
+            keyExtractor={(item) => item.login}
+            refreshControl={
+              <RefreshControl refreshing={isLoading} onRefresh={refresh} />
+            }
+            ListFooterComponent={renderLoader}
+            onEndReached={loadMoreItems}
+            onEndReachedThreshold={0}
+          />
+        ) : (
+          <EmptyList />
+        )}
       </View>
     );
   }

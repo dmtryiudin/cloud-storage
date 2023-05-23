@@ -8,6 +8,7 @@ import { observer } from "mobx-react-lite";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../screens/types";
 import { API_URL } from "@env";
+import { Colors } from "../../styles/colors";
 
 export const UserIcon = observer(() => {
   const navigation = useNavigation<StackNavigation>();
@@ -32,7 +33,7 @@ export const UserIcon = observer(() => {
       <FontAwesome
         name="user-circle-o"
         size={40}
-        color="black"
+        color={Colors.primaryGray}
         onPress={() =>
           navigation.navigate("Profile", { login: store.user.login })
         }
@@ -42,7 +43,7 @@ export const UserIcon = observer(() => {
     <AntDesign
       name="login"
       size={40}
-      color="black"
+      color={Colors.primaryGray}
       onPress={() => navigation.navigate("Auth")}
     />
   );

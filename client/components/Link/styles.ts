@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const LinkStyles = StyleSheet.create({
   text: {
@@ -6,6 +7,6 @@ export const LinkStyles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 14,
     lineHeight: 19,
-    color: "#047857",
+    color: Colors.primaryGreen,
   },
 });

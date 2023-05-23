@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const FileButtonStyles = StyleSheet.create({
   text: {
@@ -6,7 +7,7 @@ export const FileButtonStyles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 14,
     lineHeight: 19,
-    color: "#191D23",
+    color: Colors.textGray,
     textAlign: "center",
   },
   wrapper: {

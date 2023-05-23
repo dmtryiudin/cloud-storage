@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const ClientSettingsStyles = StyleSheet.create({
   wrapper: {
@@ -6,7 +7,7 @@ export const ClientSettingsStyles = StyleSheet.create({
     display: "flex",
     flexDirection: "column",
     padding: 14,
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
   },
 
   wrapperWide: {
@@ -24,10 +25,10 @@ export const ClientSettingsStyles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 14,
     lineHeight: 19,
-    color: "#191D23",
+    color: Colors.textGray,
   },
   modal: {
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    backgroundColor: Colors.modalBg,
     width: "100%",
     height: "100%",
     display: "flex",
@@ -38,7 +39,7 @@ export const ClientSettingsStyles = StyleSheet.create({
     width: 300,
     height: 200,
     padding: 10,
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
     borderRadius: 5,
   },
   modalTextWrapper: {
@@ -53,7 +54,7 @@ export const ClientSettingsStyles = StyleSheet.create({
     fontFamily: "Manrope-Regular",
     fontSize: 14,
     lineHeight: 19,
-    color: "#191D23",
+    color: Colors.textGray,
     textAlign: "center",
   },
 });

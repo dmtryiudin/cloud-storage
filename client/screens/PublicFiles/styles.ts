@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const PublicFilesStyles = StyleSheet.create({
   wrapper: {
@@ -7,7 +8,7 @@ export const PublicFilesStyles = StyleSheet.create({
     flexDirection: "column",
     padding: 14,
     gap: 20,
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
   },
 
   wrapperWide: {
@@ -27,7 +28,7 @@ export const PublicFilesStyles = StyleSheet.create({
     fontFamily: "Manrope-Regular",
     fontSize: 14,
     lineHeight: 19,
-    color: "#047857",
+    color: Colors.primaryGreen,
     textAlign: "center",
   },
   loader: {
@@ -39,12 +40,12 @@ export const PublicFilesStyles = StyleSheet.create({
     position: "absolute",
     top: 60,
     zIndex: 100,
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
   },
   animatedFilterList: {
     borderRadius: 4,
     borderWidth: 1.5,
-    borderColor: "#A0ABBB",
+    borderColor: Colors.blueGray,
     paddingHorizontal: 10,
     overflow: "scroll",
   },
@@ -53,10 +54,10 @@ export const PublicFilesStyles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 14,
     lineHeight: 19,
-    color: "#191D23",
+    color: Colors.textGray,
   },
   textChosen: {
-    color: "#047857",
+    color: Colors.primaryGreen,
     textDecorationLine: "underline",
   },
   filterTitleText: {
@@ -64,14 +65,14 @@ export const PublicFilesStyles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 16,
     lineHeight: 22,
-    color: "#191D23",
+    color: Colors.textGray,
     marginVertical: 3,
   },
   filterSeparator: {
     width: "100%",
     marginVertical: 7,
     height: 1,
-    backgroundColor: "#191D23",
+    backgroundColor: Colors.textGray,
   },
   filterItem: {
     marginVertical: 3,

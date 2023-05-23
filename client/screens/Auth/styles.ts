@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const AuthStyles = StyleSheet.create({
   link: {
@@ -13,7 +14,7 @@ export const AuthStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     padding: 14,
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
   },
 
   wrapperWide: {
@@ -24,6 +25,6 @@ export const AuthStyles = StyleSheet.create({
     fontFamily: "Manrope-Regular",
     fontSize: 14,
     lineHeight: 19,
-    color: "#191D23",
+    color: Colors.textGray,
   },
 });

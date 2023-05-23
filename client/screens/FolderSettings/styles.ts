@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const FolderSettingsStyles = StyleSheet.create({
   wrapper: {
@@ -6,7 +7,7 @@ export const FolderSettingsStyles = StyleSheet.create({
     flexDirection: "column",
     padding: 14,
     gap: 20,
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
     minHeight: "100%",
   },
 
@@ -25,7 +26,7 @@ export const FolderSettingsStyles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 14,
     lineHeight: 19,
-    color: "#191D23",
+    color: Colors.textGray,
   },
 
   settingsWrapper: {
@@ -45,7 +46,7 @@ export const FolderSettingsStyles = StyleSheet.create({
     fontFamily: "Manrope-Regular",
     fontSize: 14,
     lineHeight: 19,
-    color: "#191D23",
+    color: Colors.textGray,
     textAlign: "center",
   },
 
@@ -62,11 +63,11 @@ export const FolderSettingsStyles = StyleSheet.create({
     width: 300,
     height: 200,
     padding: 10,
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
     borderRadius: 5,
   },
   modal: {
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    backgroundColor: Colors.modalBg,
     width: "100%",
     height: "100%",
     display: "flex",

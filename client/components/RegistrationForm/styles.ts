@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const RegistrationFormStyles = StyleSheet.create({
   wrapper: {
@@ -33,7 +34,7 @@ export const RegistrationFormStyles = StyleSheet.create({
     fontFamily: "Manrope-Regular",
     fontSize: 14,
     lineHeight: 19,
-    color: "#191D23",
+    color: Colors.textGray,
     textAlign: "center",
   },
 
@@ -50,11 +51,11 @@ export const RegistrationFormStyles = StyleSheet.create({
     width: 300,
     height: 200,
     padding: 10,
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
     borderRadius: 5,
   },
   modal: {
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    backgroundColor: Colors.modalBg,
     width: "100%",
     height: "100%",
     display: "flex",

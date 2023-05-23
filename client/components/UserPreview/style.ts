@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const UserPreviewStyles = StyleSheet.create({
   userAvatar: {
@@ -11,7 +12,7 @@ export const UserPreviewStyles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 14,
     lineHeight: 19,
-    color: "#191D23",
+    color: Colors.textGray,
   },
   wrapper: {
     display: "flex",

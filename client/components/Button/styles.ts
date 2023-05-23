@@ -1,9 +1,10 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const ButtonStyles = StyleSheet.create({
   button: {
     width: "100%",
-    backgroundColor: "#047857",
+    backgroundColor: Colors.primaryGreen,
     borderRadius: 4,
     paddingVertical: 6,
     paddingHorizontal: 8,
@@ -14,16 +15,16 @@ export const ButtonStyles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 22,
     textAlign: "center",
-    color: "white",
+    color: Colors.white,
   },
   buttonSecondary: {
-    backgroundColor: "#E7EAEE",
+    backgroundColor: Colors.primaryGray,
   },
   buttonDanger: {
-    backgroundColor: "#EF4444",
+    backgroundColor: Colors.danger,
   },
   buttonSecondaryText: {
     fontFamily: "Manrope-Medium",
-    color: "#4B5768",
+    color: Colors.blueGray2,
   },
 });

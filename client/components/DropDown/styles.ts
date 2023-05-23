@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const DropDownStyles = StyleSheet.create({
   fieldText: {
@@ -6,7 +7,7 @@ export const DropDownStyles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 14,
     lineHeight: 19,
-    color: "#191D23",
+    color: Colors.textGray,
   },
   field: {
     height: 40,
@@ -15,14 +16,14 @@ export const DropDownStyles = StyleSheet.create({
     paddingHorizontal: 12,
     borderRadius: 4,
     borderWidth: 1.5,
-    borderColor: "#A0ABBB",
+    borderColor: Colors.blueGray,
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     flexDirection: "row",
   },
   fieldFocused: {
-    borderColor: "#64748B",
+    borderColor: Colors.blueGray3,
   },
   wrapper: {
     display: "flex",
@@ -36,14 +37,14 @@ export const DropDownStyles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 14,
     lineHeight: 19,
-    color: "#191D23",
+    color: Colors.textGray,
   },
 
   list: {
     width: "100%",
     borderRadius: 4,
     borderWidth: 1.5,
-    borderColor: "#A0ABBB",
+    borderColor: Colors.blueGray,
     paddingHorizontal: 10,
     overflow: "scroll",
   },

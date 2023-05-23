@@ -15,6 +15,7 @@ import { StackNavigation } from "../types";
 import { FontAwesome } from "@expo/vector-icons";
 import { fromBytesToMegabytes } from "../../utils/fromBytesToMegabytes";
 import { convertUnixDate } from "../../utils/convertUnixDate";
+import { Colors } from "../../styles/colors";
 
 export const FileSettings = observer(() => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -133,7 +134,7 @@ export const FileSettings = observer(() => {
         }}
       >
         <View style={headerWrapper}>
-          <FontAwesome name="file" size={70} color="#047857" />
+          <FontAwesome name="file" size={70} color={Colors.primaryGreen} />
           <Heading
             label={`${
               updatedNewName || name + ` (${fromBytesToMegabytes(capacity)})MB`

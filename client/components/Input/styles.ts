@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const InputStyles = StyleSheet.create({
   wrapper: {
@@ -12,14 +13,14 @@ export const InputStyles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 14,
     lineHeight: 19,
-    color: "#191D23",
+    color: Colors.textGray,
   },
   errorText: {
     fontFamily: "Manrope-Light",
     fontStyle: "normal",
     fontSize: 14,
     lineHeight: 19,
-    color: "#DC2626",
+    color: Colors.danger,
   },
   input: {
     fontFamily: "Manrope-Regular",
@@ -28,19 +29,19 @@ export const InputStyles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 14,
     lineHeight: 19,
-    color: "#191D23",
+    color: Colors.textGray,
     paddingVertical: 8,
     paddingHorizontal: 12,
     borderRadius: 4,
     borderWidth: 1.5,
-    borderColor: "#A0ABBB",
+    borderColor: Colors.blueGray,
   },
 
   inputFocused: {
-    borderColor: "#64748B",
+    borderColor: Colors.blueGray3,
   },
 
   inputError: {
-    borderColor: "#EF4444",
+    borderColor: Colors.danger,
   },
 });

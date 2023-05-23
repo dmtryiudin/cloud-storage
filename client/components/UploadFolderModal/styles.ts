@@ -1,8 +1,9 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const UploadFolderModalStyles = StyleSheet.create({
   modal: {
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    backgroundColor: Colors.modalBg,
     width: "100%",
     height: "100%",
     display: "flex",
@@ -16,7 +17,7 @@ export const UploadFolderModalStyles = StyleSheet.create({
     display: "flex",
     alignItems: "center",
     justifyContent: "space-between",
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
     borderRadius: 5,
     gap: 14,
   },

@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { Colors } from "../../styles/colors";
 
 export const SearchUsersStyles = StyleSheet.create({
   loader: {
@@ -10,7 +11,7 @@ export const SearchUsersStyles = StyleSheet.create({
     flexDirection: "column",
     padding: 14,
     gap: 20,
-    backgroundColor: "white",
+    backgroundColor: Colors.white,
   },
 
   wrapperWide: {

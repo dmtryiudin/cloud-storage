@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
 import path from "path";
 import { uuid } from "uuidv4";
+import { ApiError } from "../exceptions/api-error";
 import fileService from "../service/file-service";
 import { IRequestAuth } from "../types/express";
 
@@ -29,7 +30,15 @@ class FileController {
     try {
       const owner = req.user.id;
       const href = uuid() + ".test";
-      const { name, folder } = req.body;
+      const { name, folder } = req.headers;
+
+      if (typeof name !== "string") {
+        throw ApiError.BadRequest("You should specify a file name");
+      }
+
+      if (typeof folder === "object") {
+        throw ApiError.BadRequest("You should specify a folder id correctly");
+      }
       const newFile = await fileService.createFileSignature(
         name,
         href,

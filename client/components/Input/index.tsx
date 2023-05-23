@@ -8,6 +8,7 @@ export const Input: React.FC<IInputProps> = ({
   labelText,
   error,
   required = false,
+  noError,
   ...rest
 }) => {
   const { wrapper, label, input, inputFocused, inputError, errorText } =
@@ -34,7 +35,7 @@ export const Input: React.FC<IInputProps> = ({
         onBlur={setFocus}
         {...rest}
       />
-      <Text style={errorText}>{error ? error : " "}</Text>
+      {!noError && <Text style={errorText}>{error ? error : " "}</Text>}
     </View>
   );
 };

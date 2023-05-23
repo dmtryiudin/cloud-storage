@@ -9,9 +9,10 @@ import * as DocumentPicker from "expo-document-picker";
 export default class UserService {
   static async getUsers(
     page: string,
-    limit: string
+    limit: string,
+    substr: string
   ): Promise<AxiosResponse<IPaginatedUsers>> {
-    const url = "/user" + addQueryParams({ page, limit });
+    const url = "/user" + addQueryParams({ page, limit, substr });
     return await axiosInstance.get<IPaginatedUsers>(url, {
       headers: {
         Accept: "application/json",

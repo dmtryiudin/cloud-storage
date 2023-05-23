@@ -5,4 +5,5 @@ export interface IInputProps
   labelText: string;
   error?: string;
   required?: boolean;
+  noError?: boolean;
 }

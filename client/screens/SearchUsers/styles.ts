@@ -10,6 +10,7 @@ export const SearchUsersStyles = StyleSheet.create({
     flexDirection: "column",
     padding: 14,
     gap: 20,
+    backgroundColor: "white",
   },
 
   wrapperWide: {

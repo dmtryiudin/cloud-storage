@@ -9,10 +9,17 @@ import {
   View,
   ActivityIndicator,
 } from "react-native";
-import { UserPreview } from "../../components";
+import {
+  LoadingScreen,
+  UserPreview,
+  Error,
+  Input,
+  Heading,
+} from "../../components";
 import { SearchUsersStyles } from "./styles";
 import { AxiosError } from "axios";
 import { conditionStyles } from "../../utils/conditionStyles";
+import { Dimensions } from "react-native";
 
 export const SearchUsers = () => {
   const isTabletOrMobileDevice = useMediaQuery({
@@ -27,19 +34,31 @@ export const SearchUsers = () => {
     error: null,
     data: null,
   });
-
+  const [currentLogin, setCurrentLogin] = useState<string>("");
   const fetchUsers = async () => {
-    if (data === null || data.response.length !== maxItems) {
+    if (
+      data === null ||
+      data.response.length !== maxItems ||
+      currentPage === 0
+    ) {
+      if (currentPage === 0) {
+        setUserData({
+          isLoading: true,
+          error: null,
+          data: null,
+        });
+      }
       try {
         const responseData = await UserService.getUsers(
           currentPage.toString(),
-          "15"
+          "15",
+          currentLogin
         );
         setUserData({
           isLoading: false,
           error: null,
           data:
-            data === null
+            data === null || currentPage === 0
               ? responseData.data
               : {
                   ...data,
@@ -58,24 +77,9 @@ export const SearchUsers = () => {
   };
 
   const refresh = async () => {
-    if (data) {
-      try {
-        const responseData = await UserService.getUsers(
-          "0",
-          data.response.length.toString()
-        );
-        setUserData({
-          isLoading: false,
-          error: null,
-          data: responseData.data,
-        });
-      } catch (e: any | AxiosError) {
-        setUserData({
-          isLoading: false,
-          error: e.response,
-          data: null,
-        });
-      }
+    setCurrentPage(0);
+    if (currentPage === 0) {
+      fetchUsers();
     }
   };
   useEffect(() => {
@@ -85,6 +89,8 @@ export const SearchUsers = () => {
   const loadMoreItems = () => {
     setCurrentPage((prev) => prev + 1);
   };
+
+  const windowHeight = Dimensions.get("window").height;
 
   const { loader, wrapper, wrapperWide } = SearchUsersStyles;
 
@@ -98,16 +104,33 @@ export const SearchUsers = () => {
     }
     return null;
   };
-  console.log(error);
-  console.log(data);
+
+  if (error) {
+    return <Error />;
+  }
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
   if (data) {
     return (
       <View
         style={{
           ...wrapper,
           ...conditionStyles(wrapperWide, isTabletOrMobileDevice),
+          height: windowHeight - 52,
         }}
       >
+        <Heading label="Search user" />
+
+        <Input
+          noError={true}
+          labelText="Login search"
+          defaultValue={currentLogin}
+          onChangeText={(value: string) => setCurrentLogin(value)}
+          onSubmitEditing={refresh}
+        />
+
         <FlatList
           data={data.response}
           renderItem={({ item }) => <UserPreview {...item} />}

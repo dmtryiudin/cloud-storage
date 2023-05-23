@@ -218,12 +218,12 @@ class FileService {
           return extensionsArr.includes(extension);
         })
       : allFilesFiltered;
-    const response = allFilesFiltered.slice(page * limit, (page + 1) * limit);
+
     return {
       page,
       limit,
-      response,
-      maxCount: response.length,
+      response: allFilesFiltered.slice(page * limit, (page + 1) * limit),
+      maxCount: allFilesFiltered.length,
     };
   }
 

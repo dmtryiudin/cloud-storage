@@ -1,6 +1,7 @@
 import express from "express";
 import authController from "../controllers/auth-controller";
 import { body } from "express-validator";
+import authMiddleware from "../middlewares/auth-middleware";
 
 export const authRouter = express.Router();
 
@@ -15,3 +16,14 @@ authRouter.post(
 authRouter.post("/login", authController.login);
 authRouter.post("/logout", authController.logout);
 authRouter.get("/refresh", authController.refresh);
+authRouter.post(
+  "/email",
+  body("email").isEmail().withMessage("Email is invalid"),
+  authMiddleware,
+  authController.setEmail
+);
+authRouter.get(
+  "/activate/:link",
+
+  authController.activate
+);

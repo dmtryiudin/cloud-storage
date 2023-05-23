@@ -2,6 +2,9 @@ import { Request, Response, NextFunction } from "express";
 import authService from "../service/auth-service";
 import { validationResult } from "express-validator";
 import { ApiError } from "../exceptions/api-error";
+import mailService from "../service/mail-service";
+import { IRequestAuth } from "../types/express";
+import userModel from "../models/user-model";
 
 class AuthController {
   async registration(req: Request, res: Response, next: NextFunction) {
@@ -62,6 +65,31 @@ class AuthController {
         maxAge: 14 * 24 * 60 * 60 * 1000,
       });
       return res.json(userData);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async activate(req: Request, res: Response, next: NextFunction) {
+    try {
+      const { link } = req.params;
+      await authService.activate(link);
+      return res.redirect(process.env.CLIENT_URL!);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async setEmail(req: IRequestAuth, res: Response, next: NextFunction) {
+    try {
+      const errors = validationResult(req);
+      if (!errors.isEmpty()) {
+        return next(ApiError.BadRequest("Validation error", errors.array()));
+      }
+      const { id } = req.user;
+      const { email } = req.body;
+      const updatedUser = await authService.setEmail(email, id);
+      return res.json(updatedUser);
     } catch (e) {
       next(e);
     }

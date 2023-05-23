@@ -1,14 +1,29 @@
 import jwt from "jsonwebtoken";
+import { UserDto } from "../dtos/user-dto";
 import tokenModel from "../models/token-model";
 
 class TokenService {
-  generateTokens(payload: any) {
-    const accessToken = jwt.sign(payload, process.env.JWT_SECRET_ACCESS!, {
-      expiresIn: "15m",
-    });
-    const refreshToken = jwt.sign(payload, process.env.JWT_SECRET_REFRESH!, {
-      expiresIn: "14d",
-    });
+  generateTokens(payload: UserDto) {
+    const { id, login, email } = payload;
+    const updatedPayload = {
+      id,
+      login,
+      email,
+    };
+    const accessToken = jwt.sign(
+      updatedPayload,
+      process.env.JWT_SECRET_ACCESS!,
+      {
+        expiresIn: "15m",
+      }
+    );
+    const refreshToken = jwt.sign(
+      updatedPayload,
+      process.env.JWT_SECRET_REFRESH!,
+      {
+        expiresIn: "14d",
+      }
+    );
 
     return {
       accessToken,

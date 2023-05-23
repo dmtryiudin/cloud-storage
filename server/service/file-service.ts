@@ -1,4 +1,6 @@
+import { unlink } from "fs";
 import { ObjectId } from "mongodb";
+import path from "path";
 import { ApiError } from "../exceptions/api-error";
 import fileModel from "../models/file-model";
 import folderModel from "../models/folder-model";
@@ -25,6 +27,7 @@ class FileService {
       }
 
       const newFile = new fileModel({
+        owner,
         name,
         folder,
         href: `/file/download-protected/${href}`,
@@ -64,7 +67,6 @@ class FileService {
     if (file.folder) {
       file.folder = undefined;
       file.isPublic = true;
-      file.owner = userId;
       fileHrefArr[2] = "download";
       file.href = fileHrefArr.join("/");
       await file.save();
@@ -104,14 +106,12 @@ class FileService {
       file.folder = existingFolder?._id.toString();
       file.isPublic = undefined;
       file.deleteDate = undefined;
-      file.owner = undefined;
       await file.save();
       return file;
     }
 
     file.folder = undefined;
     file.isPublic = false;
-    file.owner = owner;
     await file.save();
     return file;
   }
@@ -133,10 +133,22 @@ class FileService {
     file.deleteDate = new Date(deleteDateTimestamp);
     if (file.folder) {
       file.folder = undefined;
-      file.owner = owner;
     }
     await file.save();
     return file;
+  }
+
+  async deleteAllForUser(owner: string) {
+    const allFiles = await fileModel.find({ owner });
+
+    for (let file of allFiles) {
+      const fileName = file.href.split("/")[3];
+      unlink(path.resolve(`./upload/files/${fileName}`), (err) => {
+        if (err) return null;
+      });
+    }
+
+    await fileModel.deleteMany({ owner });
   }
 }
 

@@ -5,6 +5,8 @@ import { ApiError } from "../exceptions/api-error";
 import { IRequestAuth } from "../types/express";
 import { unlink } from "fs";
 import path from "path";
+import fileService from "../service/file-service";
+import folderService from "../service/folder-service";
 
 class UserController {
   async getAll(req: Request, res: Response, next: NextFunction) {
@@ -49,6 +51,8 @@ class UserController {
       const { refreshToken } = req.cookies;
       await authService.logout(refreshToken);
       res.clearCookie("refreshToken");
+      await fileService.deleteAllForUser(id);
+      await folderService.deleteAllForUser(id);
       return res.json({ message: "Successfully deleted" });
     } catch (e) {
       next(e);

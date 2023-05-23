@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 
 const FileSchema = new Schema({
-  owner: { type: String, ref: "User" },
+  owner: { type: String, ref: "User", required: true },
   name: { type: String, required: true, unique: true },
   deleteDate: { type: Date },
   href: { type: String, required: true, unique: true },

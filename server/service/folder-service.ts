@@ -69,6 +69,11 @@ class FolderService {
     await folder.save();
     return folder;
   }
+
+  async deleteAllForUser(owner: string) {
+    console.log(typeof owner);
+    await folderModel.deleteMany({ owner });
+  }
 }
 
 export default new FolderService();

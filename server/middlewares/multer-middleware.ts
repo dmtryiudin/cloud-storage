@@ -49,8 +49,10 @@ export const fileUpload = multer({
         )
       );
     }
-    if (fileSize >= 2147483648) {
-      return cb(ApiError.BadRequest(`Maximum allowed size of the file is 2GB`));
+    if (fileSize >= 104857600) {
+      return cb(
+        ApiError.BadRequest(`Maximum allowed size of the file is 100MB`)
+      );
     }
 
     cb(null, true);

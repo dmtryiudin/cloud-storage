@@ -16,7 +16,7 @@ authRouter.post(
 authRouter.post("/login", authController.login);
 authRouter.post("/logout", authController.logout);
 authRouter.get("/refresh", authController.refresh);
-authRouter.post(
+authRouter.put(
   "/email",
   body("email").isEmail().withMessage("Email is invalid"),
   authMiddleware,

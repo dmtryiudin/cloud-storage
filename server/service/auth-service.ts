@@ -7,7 +7,6 @@ import { isCountryCodeValid, saveToken } from "../utils";
 import { uuid } from "uuidv4";
 import mailService from "./mail-service";
 import userModel from "../models/user-model";
-import userService from "./user-service";
 import roleModel from "../models/role-model";
 
 class AuthService {
@@ -47,12 +46,12 @@ class AuthService {
   async login(login: string, password: string) {
     const user = await UserModel.findOne({ login });
     if (!user) {
-      throw ApiError.BadRequest("User wasn't found");
+      throw ApiError.UnauthorizedError();
     }
 
     const isPasswordEquals = await bcrypt.compare(password, user.password);
     if (!isPasswordEquals) {
-      throw ApiError.BadRequest("Wrong password");
+      throw ApiError.UnauthorizedError();
     }
     const userDto = new UserDto(user);
     return await saveToken(userDto);

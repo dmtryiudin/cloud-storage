@@ -5,7 +5,7 @@
     "title": "Cloud Storage",
     "description": "Cloud Storage app"
   },
-  "host": "localhost:5000",
+  "host": "localhost:5000/api/v1",
   "basePath": "/",
   "schemes": ["http", "https"],
   "paths": {
@@ -31,7 +31,7 @@
               "$ref": "#/definitions/AuthResponse"
             }
           },
-          "400": {
+          "401": {
             "description": "Wrong credentials",
             "schema": {
               "properties": {
@@ -114,7 +114,7 @@
           {
             "name": "cookie",
             "in": "header",
-            "description": "cookie",
+            "description": "refresh token",
             "type": "string",
             "required": true
           }
@@ -126,7 +126,7 @@
               "$ref": "#/definitions/AuthResponse"
             }
           },
-          "400": {
+          "401": {
             "description": "Wrong refresh token",
             "schema": {
               "properties": {
@@ -148,6 +148,71 @@
           }
         }
       }
+    },
+
+    "/auth/email": {
+      "put": {
+        "tags": ["Auth"],
+        "summary": "Set email and get conformational letter",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "New user's credentials",
+            "required": true,
+            "schema": {
+              "properties": {
+                "email": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully added email",
+            "schema": {
+              "$ref": "#/definitions/AuthResponse"
+            }
+          },
+          "400": {
+            "description": "Invalid email",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/activate/:link": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Activate your email",
+        "responses": {
+          "401": {
+            "description": "Wrong activation link",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -159,6 +224,30 @@
         },
         "login": {
           "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "country": {
+          "type": "string"
+        },
+        "avatar": {
+          "type": "string"
+        },
+        "registrationDate": {
+          "type": "string"
+        },
+        "roles": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "isBanned": {
+          "type": "boolean"
         }
       }
     },

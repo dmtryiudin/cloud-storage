@@ -35,12 +35,11 @@ class FileController {
       const newFile = await fileService.createFile(
         name,
         fileName,
-        folder,
-        owner
+        owner,
+        folder
       );
       res.json(newFile).status(201);
     } catch (e) {
-      console.log(fileName);
       unlink(path.resolve(`./upload/files/${fileName}`), (err) => {
         if (err) return null;
       });
@@ -53,6 +52,17 @@ class FileController {
       const { file } = req.params;
       const fileName = await fileService.downloadFile(file);
       res.download(path.resolve(`./upload/files/${fileName}`));
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async setPublic(req: IRequestAuth, res: Response, next: NextFunction) {
+    try {
+      const { file } = req.params;
+      const { id } = req.user;
+      const fileData = await fileService.setPublic(file, id);
+      res.json(fileData);
     } catch (e) {
       next(e);
     }

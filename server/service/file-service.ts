@@ -1,14 +1,10 @@
 import { ApiError } from "../exceptions/api-error";
 import fileModel from "../models/file-model";
 import folderModel from "../models/folder-model";
+import { getFileBelongsToUser, setFileBelongsToUser } from "../utils";
 
 class FileService {
-  async createFile(
-    name: string,
-    href: string,
-    folder?: string,
-    owner?: string
-  ) {
+  async createFile(name: string, href: string, owner: string, folder?: string) {
     const existingFileName = await fileModel.findOne({ name });
     if (existingFileName) {
       throw ApiError.BadRequest("Public file with this name already exists");
@@ -18,6 +14,10 @@ class FileService {
       const existingFolder = await folderModel.findById(folder);
       if (!existingFolder) {
         throw ApiError.NotFound("Folder not exists");
+      }
+
+      if (existingFolder.owner !== owner) {
+        throw ApiError.Forbidden("You don't own this folder");
       }
 
       const newFile = new fileModel({
@@ -42,33 +42,24 @@ class FileService {
   }
 
   async downloadFile(fileName: string, userId?: string) {
-    const file = await fileModel.findOne({
-      href: `/file/download-protected/${fileName}`,
-    });
-    if (!file) {
-      throw ApiError.NotFound("File not found");
-    }
-    if (userId) {
-      if (file.owner && file.owner.toString() === userId) {
-        return file.href.split("/")[3];
-      }
+    const file = await getFileBelongsToUser(fileName, userId);
+    return file.href.split("/")[3];
+  }
 
-      if (!file.folder) {
-        throw ApiError.Forbidden();
-      }
-
-      const fileFolder = await folderModel.findById(file.folder);
-      if (fileFolder!.owner !== userId) {
-        throw ApiError.Forbidden();
-      }
-
-      return file.href.split("/")[3];
-    }
-
+  async setPublic(fileName: string, userId: string) {
+    const file = await setFileBelongsToUser(fileName, userId);
+    const fileHrefArr = file.href.split("/");
     if (file.isPublic) {
-      return file.href.split("/")[3];
+      file.isPublic = false;
+      fileHrefArr[2] = "download-protected";
+    } else {
+      file.isPublic = true;
+      fileHrefArr[2] = "download";
     }
-    throw ApiError.Forbidden();
+
+    file.href = fileHrefArr.join("/");
+    await file.save();
+    return file;
   }
 }
 

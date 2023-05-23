@@ -3,7 +3,7 @@ import { FileDto } from "./file-dto";
 export class FolderDto {
   owner: string;
   name: string;
-  deleteDate: Date;
+  deleteDate: number;
   isPublic: boolean;
   files: Array<FileDto>;
 

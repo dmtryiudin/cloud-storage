@@ -13,6 +13,8 @@ import { fileRouter } from "./router/file";
 import notFoundMiddleware from "./middlewares/not-found-middleware";
 import { modRouter } from "./router/mod";
 import { folderRouter } from "./router/folder";
+import cron from "node-cron";
+import { removeExpiredFiles } from "./scripts/removeExpiredFiles";
 
 const app: Express = express();
 const port = process.env.PORT;
@@ -37,8 +39,10 @@ const start = async () => {
     } as ConnectOptions);
 
     app.listen(port, () => {
-      console.log(`⚡️[server]: Server is running at http://localhost:${port}`);
+      console.log(`Server is running at http://localhost:${port}`);
     });
+
+    cron.schedule("0 0 * * *", removeExpiredFiles);
   } catch (e) {
     console.log(e);
   }

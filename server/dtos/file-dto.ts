@@ -1,7 +1,7 @@
 export class FileDto {
-  owner: string;
+  owner?: string;
   name: string;
-  deleteDate?: Date;
+  deleteDate?: number;
   href: string;
   isPublic?: boolean;
   folder?: string;

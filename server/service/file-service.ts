@@ -27,7 +27,6 @@ class FileService {
       }
 
       const newFile = new fileModel({
-        owner,
         name,
         folder,
         href: `/file/download-protected/${href}`,
@@ -65,12 +64,9 @@ class FileService {
     }
     const fileHrefArr = file.href.split("/");
     if (file.folder) {
-      file.folder = undefined;
-      file.isPublic = true;
-      fileHrefArr[2] = "download";
-      file.href = fileHrefArr.join("/");
-      await file.save();
-      return file;
+      ApiError.BadRequest(
+        "You can't set this file's permission while it's in folder"
+      );
     }
 
     if (file.isPublic) {
@@ -105,6 +101,7 @@ class FileService {
 
       file.folder = existingFolder?._id.toString();
       file.isPublic = undefined;
+      file.owner = undefined;
       file.deleteDate = undefined;
       await file.save();
       return file;
@@ -112,6 +109,7 @@ class FileService {
 
     file.folder = undefined;
     file.isPublic = false;
+    file.owner = owner;
     await file.save();
     return file;
   }
@@ -129,11 +127,11 @@ class FileService {
     fileHrefArr[2] = "download-protected";
     file.href = fileHrefArr.join("/");
     file.isPublic = false;
+    file.owner = owner;
     const deleteDateTimestamp = new Date().getTime() + 10 * 24 * 60 * 60 * 1000;
-    file.deleteDate = new Date(deleteDateTimestamp);
-    if (file.folder) {
-      file.folder = undefined;
-    }
+    file.deleteDate = deleteDateTimestamp;
+    file.folder = undefined;
+
     await file.save();
     return file;
   }

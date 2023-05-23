@@ -1,6 +1,9 @@
+import { unlink } from "fs";
 import { ObjectId } from "mongodb";
+import path from "path";
 import { FolderDto } from "../dtos/folder-dto";
 import { ApiError } from "../exceptions/api-error";
+import fileModel from "../models/file-model";
 import folderModel from "../models/folder-model";
 import { getFilesForFolder } from "../utils";
 
@@ -66,14 +69,30 @@ class FolderService {
     }
 
     const deleteDateTimestamp = new Date().getTime() + 10 * 24 * 60 * 60 * 1000;
-    folder.deleteDate = new Date(deleteDateTimestamp);
+    folder.deleteDate = deleteDateTimestamp;
     folder.isPublic = false;
     await folder.save();
     return folder;
   }
 
   async deleteAllForUser(owner: string) {
-    await folderModel.deleteMany({ owner });
+    const folders = await folderModel.find({ owner });
+    for (let folder of folders) {
+      const filesList = await getFilesForFolder(folder._id.toString());
+      for (let file of filesList) {
+        const fileName = file.href.split("/")[3];
+        unlink(path.resolve(`./upload/files/${fileName}`), (err) => {
+          if (err) return null;
+        });
+      }
+
+      await fileModel.deleteMany({
+        folder: folder._id.toString(),
+      });
+    }
+    await folderModel.deleteMany({
+      owner,
+    });
   }
 
   async getAllPublic(page: number, limit: number) {

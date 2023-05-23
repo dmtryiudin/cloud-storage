@@ -1,6 +1,7 @@
 import express from "express";
 import fileController from "../controllers/file-controller";
 import authMiddleware from "../middlewares/auth-middleware";
+import confirmMailMiddleware from "../middlewares/confirm-mail-middleware";
 import { fileUpload } from "../middlewares/multer-middleware";
 
 export const fileRouter = express.Router();
@@ -18,5 +19,10 @@ fileRouter.post(
   fileUpload.single("file"),
   fileController.createFile
 );
-fileRouter.put("/set-public/:file", authMiddleware, fileController.setPublic);
+fileRouter.put(
+  "/set-public/:file",
+  authMiddleware,
+  confirmMailMiddleware,
+  fileController.setPublic
+);
 fileRouter.put("/set-folder/:file", authMiddleware, fileController.setFolder);

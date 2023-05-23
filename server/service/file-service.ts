@@ -12,9 +12,12 @@ class FileService {
     }
 
     if (folder) {
+      if (!ObjectId.isValid(folder)) {
+        throw ApiError.NotFound("Folder does not exist");
+      }
       const existingFolder = await folderModel.findById(folder);
       if (!existingFolder) {
-        throw ApiError.NotFound("Folder not exists");
+        throw ApiError.NotFound("Folder does not exist");
       }
 
       if (existingFolder.owner !== owner) {
@@ -50,6 +53,16 @@ class FileService {
   async setPublic(fileName: string, userId: string) {
     const file = await setFileBelongsToUser(fileName, userId);
     const fileHrefArr = file.href.split("/");
+    if (file.folder) {
+      file.folder = undefined;
+      file.isPublic = true;
+      file.owner = userId;
+      fileHrefArr[2] = "download";
+      file.href = fileHrefArr.join("/");
+      await file.save();
+      return file;
+    }
+
     if (file.isPublic) {
       file.isPublic = false;
       fileHrefArr[2] = "download-protected";

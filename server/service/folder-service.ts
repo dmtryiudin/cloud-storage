@@ -22,6 +22,9 @@ class FolderService {
   }
 
   async setPublic(id: string, userId: string) {
+    if (!ObjectId.isValid(id)) {
+      throw ApiError.NotFound();
+    }
     const folder = await folderModel.findById(id);
     if (!folder) {
       throw ApiError.NotFound();

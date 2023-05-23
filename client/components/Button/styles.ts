@@ -19,6 +19,9 @@ export const ButtonStyles = StyleSheet.create({
   buttonSecondary: {
     backgroundColor: "#E7EAEE",
   },
+  buttonDanger: {
+    backgroundColor: "#EF4444",
+  },
   buttonSecondaryText: {
     fontFamily: "Manrope-Medium",
     color: "#4B5768",

@@ -7,11 +7,20 @@ export const Button: React.FC<IButtonProps> = ({
   type = "primary",
   ...rest
 }) => {
-  const { button, buttonSecondary, buttonText, buttonSecondaryText } =
-    ButtonStyles;
+  const {
+    button,
+    buttonSecondary,
+    buttonText,
+    buttonSecondaryText,
+    buttonDanger,
+  } = ButtonStyles;
   return (
     <TouchableOpacity
-      style={{ ...button, ...(type === "secondary" ? buttonSecondary : {}) }}
+      style={{
+        ...button,
+        ...(type === "secondary" ? buttonSecondary : {}),
+        ...(type === "danger" ? buttonDanger : {}),
+      }}
       {...rest}
     >
       <Text

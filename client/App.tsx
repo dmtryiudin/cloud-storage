@@ -28,7 +28,6 @@ export default function App() {
   if (!loaded) {
     return null;
   }
-
   return (
     <EventProvider style={{ flex: 1 }}>
       <StoreContext.Provider

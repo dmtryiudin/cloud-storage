@@ -1,10 +1,12 @@
-import { useState } from "react";
+import { PropsWithChildren, useEffect, useRef, useState } from "react";
 import {
   TouchableOpacity,
   View,
   Text,
   FlatList,
   GestureResponderEvent,
+  ViewStyle,
+  Animated,
 } from "react-native";
 import { conditionStyles } from "../../utils/conditionStyles";
 import { DropDownStyles } from "./styles";
@@ -21,6 +23,7 @@ export const DropDown: React.FC<IDropDown> = ({
   labelText,
 }) => {
   const [isDropDownOpened, setIsDropDownOpened] = useState<boolean>(false);
+  const [height, setHeight] = useState(new Animated.Value(0));
   const { fieldText, field, fieldFocused, wrapper, label, list } =
     DropDownStyles;
 
@@ -28,24 +31,52 @@ export const DropDown: React.FC<IDropDown> = ({
     e.stopPropagation();
     setCurrentValue("");
   };
+
+  useEffect(() => {
+    if (isDropDownOpened) {
+      Animated.timing(height, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
+    } else {
+      Animated.timing(height, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
+    }
+  }, [isDropDownOpened]);
+
+  const maxHeight = height.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 200],
+  });
+
   return (
     <View style={wrapper}>
       <Text style={label}>{labelText}</Text>
       <TouchableOpacity
-        onPress={() => setIsDropDownOpened((prev) => !prev)}
+        onPress={() => {
+          if (!isDropDownOpened) {
+            setIsDropDownOpened(true);
+          }
+        }}
         style={{ ...field, ...conditionStyles(fieldFocused, isDropDownOpened) }}
       >
         <Text style={fieldText}>{currentValue}</Text>
         <Ionicons name="close" size={24} color="black" onPress={clearHandler} />
       </TouchableOpacity>
-
-      {isDropDownOpened && (
+      <Animated.View style={{ maxHeight }}>
         <OutsidePressHandler
           onOutsidePress={() => setIsDropDownOpened(false)}
-          disabled={false}
+          disabled={!isDropDownOpened}
         >
           <FlatList
-            style={list}
+            style={{
+              ...list,
+              ...conditionStyles({ borderWidth: 0 }, !isDropDownOpened),
+            }}
             data={variants}
             renderItem={({ item }) => {
               return (
@@ -58,7 +89,7 @@ export const DropDown: React.FC<IDropDown> = ({
             }}
           />
         </OutsidePressHandler>
-      )}
+      </Animated.View>
     </View>
   );
 };

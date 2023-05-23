@@ -5,3 +5,6 @@ export * from "./Link";
 export * from "./RegistrationForm";
 export * from "./DropDown";
 export * from "./CountryListItem";
+export * from "./Heading";
+export * from "./UserIcon";
+export * from "./Loading";

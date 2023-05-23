@@ -28,9 +28,10 @@ export default class AuthService {
     });
   }
 
-  static async logout(refreshToken: string): Promise<void> {
+  static async logout(): Promise<void> {
+    const REFRESH_TOKEN = await AsyncStorage.getItem("refreshToken");
     await axiosInstance.post<AuthResponse>("/auth/logout", {
-      refreshToken,
+      refreshToken: REFRESH_TOKEN,
     });
   }
 

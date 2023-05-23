@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { useContext, useEffect, useState } from "react";
-import { View } from "react-native";
+import { View, Text } from "react-native";
 import { StoreContext } from "../../context/store";
 import { IValidationError } from "../../models/IValidationError";
 import { Button } from "../Button";
@@ -13,8 +13,12 @@ import { Loading } from "../Loading";
 import "@expo/match-media";
 import { useMediaQuery } from "react-responsive";
 import { conditionStyles } from "../../utils/conditionStyles";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigation } from "../../screens/types";
+import Modal, { ModalContent, SlideAnimation } from "react-native-modals";
 
 export const RegistrationForm = observer(() => {
+  const navigation = useNavigation<StackNavigation>();
   const { store } = useContext(StoreContext);
 
   const [formData, setFormData] = useState({
@@ -31,22 +35,30 @@ export const RegistrationForm = observer(() => {
     country: "",
   });
 
+  const [showModal, setShowModal] = useState<boolean>(false);
+  const [errorText, setErrorText] = useState<string>("");
+
   useEffect(() => {
     if (store.error) {
       const { data, statusCode } = store.error;
       if (statusCode === 400) {
-        let errors: typeof formErrors = {
-          login: "",
-          password: "",
-          name: "",
-          country: "",
-        };
+        if (data.message !== "Validation error") {
+          setShowModal(true);
+          setErrorText(data.message);
+        } else {
+          let errors: typeof formErrors = {
+            login: "",
+            password: "",
+            name: "",
+            country: "",
+          };
 
-        data.errors.forEach((e: IValidationError) => {
-          errors = { ...errors, [e.param]: e.msg };
-        });
+          data.errors.forEach((e: IValidationError) => {
+            errors = { ...errors, [e.param]: e.msg };
+          });
 
-        setFormErrors(errors);
+          setFormErrors(errors);
+        }
       }
     }
   }, [store.error]);
@@ -62,6 +74,9 @@ export const RegistrationForm = observer(() => {
   const submitForm = async () => {
     const { login, password, name, country } = formData;
     await store.registration(login, password, name, country);
+    if (!store.error) {
+      navigation.navigate("Profile");
+    }
   };
 
   const resetForm = () => {
@@ -86,6 +101,9 @@ export const RegistrationForm = observer(() => {
     headingWrapper,
     buttonWrapperWide,
     buttonsWrapperWide,
+    modalContentWrapper,
+    modalTextWrapper,
+    modalText,
   } = RegistrationFormStyles;
 
   return (
@@ -146,6 +164,28 @@ export const RegistrationForm = observer(() => {
           <Button title="Submit" onPress={submitForm} />
         </View>
       </View>
+      <Modal
+        visible={showModal}
+        onTouchOutside={() => {
+          setShowModal(false);
+        }}
+        modalAnimation={
+          new SlideAnimation({
+            slideFrom: "top",
+          })
+        }
+      >
+        <ModalContent style={modalContentWrapper}>
+          <View style={modalTextWrapper}>
+            <Text style={modalText}>{errorText}</Text>
+            <Button
+              type="primary"
+              title="OK"
+              onPress={() => setShowModal(false)}
+            />
+          </View>
+        </ModalContent>
+      </Modal>
       <Loading show={store.isLoading} />
     </View>
   );

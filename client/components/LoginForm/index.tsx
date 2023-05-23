@@ -13,9 +13,12 @@ import { Loading } from "../Loading";
 import "@expo/match-media";
 import { useMediaQuery } from "react-responsive";
 import { conditionStyles } from "../../utils/conditionStyles";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigation } from "../../screens/types";
 
 export const LoginForm: React.FC<ILoginFormProps> = observer(
   ({ setSubPage }) => {
+    const navigation = useNavigation<StackNavigation>();
     const { store } = useContext(StoreContext);
     const [formData, setFormData] = useState({
       login: "",
@@ -35,6 +38,9 @@ export const LoginForm: React.FC<ILoginFormProps> = observer(
       setWasModalShown(false);
       const { login, password } = formData;
       await store.login(login, password);
+      if (!store.error) {
+        navigation.navigate("Profile");
+      }
     };
     const resetForm = () => {
       setFormData({

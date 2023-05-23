@@ -5,7 +5,7 @@ import AuthService from "../service/authService";
 import { API_URL } from "@env";
 import axios, { AxiosError } from "axios";
 import { AuthResponse } from "../models/response/AuthResponse";
-import { Error } from "../models/IError";
+import { Error, IError } from "../models/IError";
 
 export default class Store {
   user = {} as IUser;
@@ -34,6 +34,7 @@ export default class Store {
       await AsyncStorage.setItem("refreshToken", refreshToken);
       this.setAuth(true);
       this.setUser(user);
+      this.setError();
     } catch (e: AxiosError | any) {
       this.setError(e.response.status, e.response.data);
     } finally {
@@ -60,7 +61,9 @@ export default class Store {
       await AsyncStorage.setItem("refreshToken", refreshToken);
       this.setAuth(true);
       this.setUser(user);
+      this.setError();
     } catch (e: AxiosError | any) {
+      console.log(e);
       this.setError(e.response.status, e.response.data);
     } finally {
       this.setLoading(false);
@@ -69,17 +72,21 @@ export default class Store {
 
   async logout() {
     try {
+      this.setLoading(true);
       const refreshToken = await AsyncStorage.getItem("refreshToken");
       if (!refreshToken) {
         return;
       }
-      await AuthService.logout(refreshToken);
+      await AuthService.logout();
       await AsyncStorage.removeItem("refreshToken");
       await AsyncStorage.removeItem("accessToken");
       this.setAuth(false);
       this.setUser({} as IUser);
+      this.setError();
     } catch (e: AxiosError | any) {
       this.setError(e.response.status, e.response.data);
+    } finally {
+      this.setLoading(false);
     }
   }
 
@@ -103,6 +110,7 @@ export default class Store {
       this.setUser(user);
       await AsyncStorage.setItem("accessToken", accessToken);
       await AsyncStorage.setItem("refreshToken", refreshToken);
+      this.setError();
     } catch (e: AxiosError | any) {
       this.setError(e.response.status, e.response.data);
     } finally {
@@ -114,8 +122,14 @@ export default class Store {
     this.isLoading = value;
   }
 
-  setError(statusCode: number, data: any) {
-    this.error = { statusCode, data };
+  setError(): void;
+  setError(statusCode: number, data: any): void;
+  setError(statusCode?: number, data?: any) {
+    if (statusCode && data) {
+      this.error = { statusCode, data };
+    } else {
+      this.error = null;
+    }
   }
 }
 

@@ -191,6 +191,16 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       }
@@ -230,6 +240,16 @@
           },
           "400": {
             "description": "Invalid ban reason",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
             "schema": {
               "properties": {
                 "message": {
@@ -316,6 +336,16 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       },
@@ -335,6 +365,16 @@
         "responses": {
           "200": {
             "description": "Successfully deleted",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
             "schema": {
               "properties": {
                 "message": {
@@ -397,6 +437,16 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       }
@@ -452,6 +502,16 @@
               }
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "403": {
             "description": "You don't have a permission",
             "schema": {
@@ -486,7 +546,16 @@
               "$ref": "#/definitions/File"
             }
           },
-
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "403": {
             "description": "You don't have a permission",
             "schema": {
@@ -538,6 +607,16 @@
               "$ref": "#/definitions/File"
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
           "403": {
             "description": "You don't have a permission",
             "schema": {
@@ -583,6 +662,16 @@
               "$ref": "#/definitions/File"
             }
           },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
 
           "403": {
             "description": "You don't have a permission",
@@ -612,6 +701,26 @@
       "get": {
         "tags": ["File"],
         "summary": "Get all public files",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "number of page",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "limit of items per page",
+            "type": "string"
+          },
+          {
+            "name": "extensions",
+            "in": "header",
+            "description": "filter for extensions (separated with \"~\")",
+            "type": "string"
+          }
+        ],
         "responses": {
           "200": {
             "description": "Files",
@@ -645,6 +754,16 @@
                 "$ref": "#/definitions/User"
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
           }
         }
       }
@@ -670,6 +789,396 @@
               "type": "array",
               "items": {
                 "$ref": "#/definitions/User"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/folder": {
+      "post": {
+        "tags": ["Folder"],
+        "summary": "Create folder",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          },
+          {
+            "name": "name",
+            "in": "body",
+            "description": "folder name",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "Created",
+            "schema": {
+              "$ref": "#/definitions/Folder"
+            }
+          },
+          "400": {
+            "description": "Invalid data",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/folder/set-public/:id": {
+      "put": {
+        "tags": ["Folder"],
+        "summary": "Set folder public",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Folder"
+            }
+          },
+          "400": {
+            "description": "Invalid data",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/folder/:id": {
+      "delete": {
+        "tags": ["Folder"],
+        "summary": "Move folder to trash",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Updated successfully",
+            "schema": {
+              "$ref": "#/definitions/Folder"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/folder/public/:id": {
+      "get": {
+        "tags": ["Folder"],
+        "summary": "Get public folder",
+        "responses": {
+          "200": {
+            "description": "Public folder",
+            "schema": {
+              "$ref": "#/definitions/Folder"
+            }
+          },
+          "403": {
+            "description": "Forbidden to access this folder",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Folder not found",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/folder/private/:id": {
+      "get": {
+        "tags": ["Folder"],
+        "summary": "Get private folder",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Public folder",
+            "schema": {
+              "$ref": "#/definitions/Folder"
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Forbidden to access this folder",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Folder not found",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/folder/public": {
+      "get": {
+        "tags": ["Folder"],
+        "summary": "Get all public folders",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "header",
+            "description": "number of page",
+            "type": "string"
+          },
+          {
+            "name": "limit",
+            "in": "header",
+            "description": "limit of items per page",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Folders",
+            "schema": {
+              "$ref": "#/definitions/PaginatedFolders"
+            }
+          }
+        }
+      }
+    },
+
+    "/folder/user": {
+      "get": {
+        "tags": ["Folder"],
+        "summary": "Get all folders for user",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Folders",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Folder"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "/folder/trash": {
+      "get": {
+        "tags": ["Folder"],
+        "summary": "Get all folders in trash for user",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Folders",
+            "schema": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/Folder"
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
               }
             }
           }
@@ -753,6 +1262,26 @@
         }
       }
     },
+    "PaginatedFolders": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "number"
+        },
+        "limit": {
+          "type": "number"
+        },
+        "maxCount": {
+          "type": "number"
+        },
+        "response": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Folder"
+          }
+        }
+      }
+    },
     "AuthResponse": {
       "type": "object",
       "properties": {
@@ -815,6 +1344,29 @@
         },
         "folder": {
           "type": "string"
+        }
+      }
+    },
+    "Folder": {
+      "type": "object",
+      "properties": {
+        "owner": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "deleteDate": {
+          "type": "number"
+        },
+        "isPublic": {
+          "type": "boolean"
+        },
+        "files": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
         }
       }
     }

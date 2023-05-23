@@ -1,4 +1,3 @@
-import { UpdateUserDto } from "../dtos/update-user-dto";
 import userModel from "../models/user-model";
 import { ApiError } from "../exceptions/api-error";
 import { isCountryCodeValid } from "../utils";
@@ -30,8 +29,8 @@ class UserService {
     };
   }
 
-  async updateOne(id: string, body: UpdateUserDto) {
-    if (!isCountryCodeValid(body.country)) {
+  async updateOne(id: string, name: string, country: string) {
+    if (!isCountryCodeValid(country)) {
       throw ApiError.BadRequest("Invalid country code");
     }
 
@@ -39,7 +38,7 @@ class UserService {
     if (!user) {
       return null;
     }
-    const { name, country } = body;
+
     user.name = name;
     user.country = country;
     await user.save();

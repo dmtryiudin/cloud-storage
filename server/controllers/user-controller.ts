@@ -1,5 +1,4 @@
 import { NextFunction, Request, Response } from "express";
-import { UpdateUserDto } from "../dtos/update-user-dto";
 import userService from "../service/user-service";
 import authService from "../service/auth-service";
 import { ApiError } from "../exceptions/api-error";
@@ -39,9 +38,9 @@ class UserController {
   async updateOne(req: IRequestAuth, res: Response, next: NextFunction) {
     try {
       const { id } = req.user;
-      const userBody = { ...new UpdateUserDto(req.body) };
+      const { name, country } = req.body;
 
-      const user = await userService.updateOne(id, userBody);
+      const user = await userService.updateOne(id, name, country);
       return res.json(user);
     } catch (e) {
       next(e);

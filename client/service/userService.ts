@@ -29,6 +29,18 @@ export default class UserService {
     });
   }
 
+  static async deleteUser(): Promise<void> {
+    const ACCESS_TOKEN = await AsyncStorage.getItem("accessToken");
+
+    return await axiosInstance.delete("/user", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+    });
+  }
+
   static async updateUser(
     name: string,
     country: string,

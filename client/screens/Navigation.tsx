@@ -1,6 +1,6 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { NavigationContainer } from "@react-navigation/native";
-import React from "react";
+import React, { useContext } from "react";
 import { Auth } from "./Auth";
 import { Header } from "./Header";
 import { Home } from "./Home";
@@ -8,30 +8,38 @@ import { Profile } from "./Profile";
 import { RootStackParamList } from "./types";
 import { ProfileSettings } from "./ProfileSettings";
 import { ClientSettings } from "./ClientSettings";
+import { Loading } from "../components";
+import { StoreContext } from "../context/store";
+import { observer } from "mobx-react-lite";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
-export const Navigation = () => {
+export const Navigation = observer(() => {
   const options = {
     headerTitle: () => null,
     header: () => <Header />,
   };
+
+  const { store } = useContext(StoreContext);
   return (
-    <NavigationContainer>
-      <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} options={options} />
-        <Stack.Screen name="Auth" component={Auth} options={options} />
-        <Stack.Screen name="Profile" component={Profile} options={options} />
-        <Stack.Screen
-          name="ProfileSettings"
-          component={ProfileSettings}
-          options={options}
-        />
-        <Stack.Screen
-          name="ClientSettings"
-          component={ClientSettings}
-          options={options}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <>
+      <NavigationContainer>
+        <Stack.Navigator>
+          <Stack.Screen name="Home" component={Home} options={options} />
+          <Stack.Screen name="Auth" component={Auth} options={options} />
+          <Stack.Screen name="Profile" component={Profile} options={options} />
+          <Stack.Screen
+            name="ProfileSettings"
+            component={store.isAuth ? ProfileSettings : Auth}
+            options={options}
+          />
+          <Stack.Screen
+            name="ClientSettings"
+            component={ClientSettings}
+            options={options}
+          />
+        </Stack.Navigator>
+      </NavigationContainer>
+      <Loading show={store.isLoading} />
+    </>
   );
-};
+});

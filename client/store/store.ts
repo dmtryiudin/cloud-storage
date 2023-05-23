@@ -8,6 +8,7 @@ import { AuthResponse } from "../models/response/AuthResponse";
 import { Error } from "../models/IError";
 import { ISettings } from "../models/response/ISettings";
 import SettingsService from "../service/settingsService";
+import UserService from "../service/userService";
 
 export default class Store {
   user = {} as IUser;
@@ -89,6 +90,18 @@ export default class Store {
       this.setAuth(false);
       this.setUser({} as IUser);
       this.setError();
+    } catch (e: AxiosError | any) {
+      this.setError(e?.response?.status, e?.response?.data);
+    } finally {
+      this.setLoading(false);
+    }
+  }
+
+  async deleteUser() {
+    try {
+      this.setLoading(true);
+      await UserService.deleteUser();
+      await this.logout();
     } catch (e: AxiosError | any) {
       this.setError(e?.response?.status, e?.response?.data);
     } finally {

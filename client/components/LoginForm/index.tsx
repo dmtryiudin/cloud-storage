@@ -8,7 +8,6 @@ import { LoginFormStyles } from "./styles";
 import { ILoginFormProps } from "./types";
 import { Link } from "../Link";
 import { Heading } from "../Heading";
-import { Loading } from "../Loading";
 import "@expo/match-media";
 import { useMediaQuery } from "react-responsive";
 import { conditionStyles } from "../../utils/conditionStyles";
@@ -142,7 +141,6 @@ export const LoginForm: React.FC<ILoginFormProps> = observer(
             </View>
           </Pressable>
         </Modal>
-        <Loading show={store.isLoading} />
       </>
     );
   }

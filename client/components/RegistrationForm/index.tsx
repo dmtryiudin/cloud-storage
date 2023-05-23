@@ -191,7 +191,6 @@ export const RegistrationForm = observer(() => {
           </View>
         </Pressable>
       </Modal>
-      <Loading show={store.isLoading} />
     </View>
   );
 });

@@ -180,8 +180,8 @@ export const Profile = observer(() => {
               ...conditionStyles(buttonWrapperWide, isTabletOrMobileDevice),
             }}
           >
-            {store.user.roles?.includes("MOD") && !store.user?.isBanned && (
-              <BanButton login={login} />
+            {store.user.login === login && (
+              <Button type="danger" onPress={logoutHandler} title="Logout" />
             )}
           </View>
           <View
@@ -190,8 +190,8 @@ export const Profile = observer(() => {
               ...conditionStyles(buttonWrapperWide, isTabletOrMobileDevice),
             }}
           >
-            {store.user.login === login && (
-              <Button type="danger" onPress={logoutHandler} title="Logout" />
+            {store.user.roles?.includes("MOD") && !store.user?.isBanned && (
+              <BanButton login={login} />
             )}
           </View>
         </View>

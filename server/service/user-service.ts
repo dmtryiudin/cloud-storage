@@ -10,7 +10,7 @@ class UserService {
   async getOne(login: string) {
     const user = await userModel.findOne({ login });
     if (!user) {
-      return null;
+      throw ApiError.NotFound();
     }
     return { ...new UserDto(user) };
   }

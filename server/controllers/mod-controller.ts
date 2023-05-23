@@ -14,9 +14,6 @@ class ModController {
       const { login } = req.params;
       const { reason } = req.body;
       const user = await modService.banUser(login, reason);
-      if (!user) {
-        throw ApiError.NotFound();
-      }
       return res.json(user);
     } catch (e) {
       next(e);

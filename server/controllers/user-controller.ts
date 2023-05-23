@@ -23,9 +23,6 @@ class UserController {
     try {
       const { login } = req.params;
       const user = await userService.getOne(login);
-      if (!user) {
-        throw ApiError.NotFound();
-      }
       return res.json(user);
     } catch (e) {
       next(e);

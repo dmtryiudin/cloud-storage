@@ -1,4 +1,5 @@
 import { UserDto } from "../dtos/user-dto";
+import { ApiError } from "../exceptions/api-error";
 import userModel from "../models/user-model";
 import mailService from "./mail-service";
 
@@ -6,7 +7,7 @@ class ModService {
   async banUser(login: string, reason: string) {
     const user = await userModel.findOne({ login });
     if (!user) {
-      return null;
+      throw ApiError.NotFound();
     }
     user.isBanned = true;
     await user.save();

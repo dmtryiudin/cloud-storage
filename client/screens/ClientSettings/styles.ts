@@ -5,7 +5,6 @@ export const ClientSettingsStyles = StyleSheet.create({
     height: "100%",
     display: "flex",
     flexDirection: "column",
-
     padding: 14,
     backgroundColor: "white",
   },

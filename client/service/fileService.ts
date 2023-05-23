@@ -83,6 +83,49 @@ export default class FileService {
       API_URL + href,
       FileSystem.documentDirectory + fileName
     );
+
     await shareAsync(result.uri);
+  }
+
+  static async setFilePublic(href: string) {
+    const fileName = getFileName(href);
+    const ACCESS_TOKEN = await AsyncStorage.getItem("accessToken");
+    await axiosInstance.put(`/file/set-public/${fileName}`, undefined, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+    });
+  }
+
+  static async deleteFile(href: string) {
+    const fileName = getFileName(href);
+    const ACCESS_TOKEN = await AsyncStorage.getItem("accessToken");
+
+    await axiosInstance.delete(`/file/${fileName}`, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+    });
+  }
+
+  static async renameFile(href: string, newName: string) {
+    const fileName = getFileName(href);
+    const ACCESS_TOKEN = await AsyncStorage.getItem("accessToken");
+
+    await axiosInstance.put(
+      `/file/rename/${fileName}`,
+      { newName },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
+        },
+      }
+    );
   }
 }

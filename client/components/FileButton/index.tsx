@@ -5,7 +5,6 @@ import { fromBytesToMegabytes } from "../../utils/fromBytesToMegabytes";
 import { FileButtonStyles } from "./styles";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../screens/types";
-import { getFileName } from "../../utils/getFileName";
 
 export const FileButton: React.FC<IFile> = (file) => {
   const { name, capacity } = file;

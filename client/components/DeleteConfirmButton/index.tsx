@@ -1,20 +1,20 @@
-import { useContext, useState } from "react";
+import { useState } from "react";
 import { Button } from "../Button";
 import { Modal, Pressable, View, Text } from "react-native";
-import { StoreContext } from "../../context/store";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigation } from "../../screens/types";
-import { DeleteAccountButtonStyles } from "./styles";
+import { DeleteConfirmButtonStyles } from "./styles";
+import { IDeleteConfirmButtonProps } from "./types";
 
-export const DeleteAccountButton = () => {
-  const { store } = useContext(StoreContext);
+export const DeleteConfirmButton: React.FC<IDeleteConfirmButtonProps> = ({
+  deleteFunction,
+  buttonTitle,
+}) => {
   const [showModal, setShowModal] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  const navigation = useNavigation<StackNavigation>();
-
-  const deleteAccount = async () => {
-    await store.deleteUser();
-    navigation.navigate("Auth");
+  const deleteHandler = async () => {
+    setIsLoading(true);
+    await deleteFunction();
+    setIsLoading(false);
   };
 
   const {
@@ -23,12 +23,12 @@ export const DeleteAccountButton = () => {
     modalText,
     buttonWrapper,
     buttonsWrapper,
-  } = DeleteAccountButtonStyles;
+  } = DeleteConfirmButtonStyles;
 
   return (
     <>
       <Button
-        title="Delete account"
+        title={buttonTitle}
         onPress={() => setShowModal(true)}
         type="danger"
       />
@@ -57,7 +57,12 @@ export const DeleteAccountButton = () => {
                 />
               </View>
               <View style={buttonWrapper}>
-                <Button title="Yes" type="danger" onPress={deleteAccount} />
+                <Button
+                  title="Yes"
+                  type="danger"
+                  onPress={deleteHandler}
+                  isLoading={isLoading}
+                />
               </View>
             </View>
           </View>

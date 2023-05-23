@@ -1,10 +1,4 @@
-import {
-  TouchableOpacity,
-  View,
-  Text,
-  FlatList,
-  RefreshControl,
-} from "react-native";
+import { TouchableOpacity, View, FlatList, RefreshControl } from "react-native";
 import { MaterialIcons, MaterialCommunityIcons } from "@expo/vector-icons";
 import { FilesAndFoldersForUserStyles } from "./styles";
 import { useMediaQuery } from "react-responsive";
@@ -20,6 +14,7 @@ import {
   UploadFileModal,
   Error,
 } from "../../components";
+import { useIsFocused } from "@react-navigation/native";
 
 export const FilesAndFoldersForUser = () => {
   const { wrapper, wrapperWide, header, fileItem } =
@@ -30,6 +25,7 @@ export const FilesAndFoldersForUser = () => {
   });
 
   const [showModal, setShowModal] = useState<boolean>(false);
+  const isFocused = useIsFocused();
   const [{ isLoading, data, error }, setFilesForUser] = useState<
     IResponse<IFile[]>
   >({
@@ -62,7 +58,7 @@ export const FilesAndFoldersForUser = () => {
 
   useEffect(() => {
     loadFilesForUser();
-  }, []);
+  }, [isFocused]);
 
   if (error) {
     return <Error />;
@@ -97,9 +93,9 @@ export const FilesAndFoldersForUser = () => {
           numColumns={3}
           data={data}
           renderItem={({ item }) => (
-            <View style={fileItem}>
+            <TouchableOpacity style={fileItem}>
               <FileButton {...item} />
-            </View>
+            </TouchableOpacity>
           )}
           keyExtractor={(item) => item.name}
           refreshControl={
@@ -110,7 +106,11 @@ export const FilesAndFoldersForUser = () => {
           }
         />
       </View>
-      <UploadFileModal showModal={showModal} setShowModal={setShowModal} />
+      <UploadFileModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        finishedLoading={loadFilesForUser}
+      />
     </>
   );
 };

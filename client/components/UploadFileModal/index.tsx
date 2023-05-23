@@ -13,6 +13,7 @@ export const UploadFileModal: React.FC<IUploadFileModalProps> = ({
   showModal,
   setShowModal,
   folder,
+  finishedLoading,
 }) => {
   const { modal, modalContentWrapper, fileUpload } = UploadFileModalStyles;
   const [file, setFile] = useState<DocumentPicker.DocumentResult | null>(null);
@@ -40,6 +41,9 @@ export const UploadFileModal: React.FC<IUploadFileModalProps> = ({
       } else {
         await FileService.uploadFile(currentName, file, folder);
         setShowModal(false);
+        if (finishedLoading) {
+          finishedLoading();
+        }
       }
     } catch (e: any | AxiosError) {
       if (e?.response?.data) {

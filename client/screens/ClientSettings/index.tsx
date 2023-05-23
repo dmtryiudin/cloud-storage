@@ -19,18 +19,17 @@ export const ClientSettings = observer(() => {
   }, []);
 
   useEffect(() => {
-    if (store.settings.tableFiles !== tableFiles) {
-      store.updateSettings({
-        tableFiles,
-      });
-    }
-  }, [tableFiles]);
-
-  useEffect(() => {
     if (store.error) {
       setIsError(true);
     }
   }, [store.error]);
+
+  const setTablesHandler = () => {
+    setTableFiles((prev) => !prev);
+    store.updateSettings({
+      tableFiles: !tableFiles,
+    });
+  };
 
   const {
     wrapper,
@@ -53,10 +52,7 @@ export const ClientSettings = observer(() => {
         <Heading label="Client settings" />
         <View style={itemWrapper}>
           <Text style={text}>Table files and folders display</Text>
-          <Switch
-            onValueChange={() => setTableFiles((prev) => !prev)}
-            value={tableFiles}
-          />
+          <Switch onValueChange={setTablesHandler} value={tableFiles} />
         </View>
       </View>
       <Modal

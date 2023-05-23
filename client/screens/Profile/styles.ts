@@ -4,7 +4,6 @@ export const ProfileStyles = StyleSheet.create({
   wrapper: {
     display: "flex",
     flexDirection: "column",
-
     padding: 14,
     gap: 20,
   },
@@ -50,7 +49,7 @@ export const ProfileStyles = StyleSheet.create({
   infoWrapper: {
     display: "flex",
     flexDirection: "column",
-    gap: 5,
+    gap: 4,
   },
   scrollView: {
     backgroundColor: "white",

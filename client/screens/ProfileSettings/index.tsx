@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { Modal, Pressable, View, Text } from "react-native";
 import {
   Button,
-  DeleteAccountButton,
+  DeleteConfirmButton,
   DropDown,
   Heading,
   ImagePicker,
@@ -68,6 +68,11 @@ export const ProfileSettings = () => {
 
   const setFormDataHandler = (fieldName: string, value: string) => {
     setFormData({ ...formData, [fieldName]: value });
+  };
+
+  const deleteAccount = async () => {
+    await store.deleteUser();
+    navigation.navigate("Auth");
   };
 
   const setCountry = (name: string) => {
@@ -156,7 +161,10 @@ export const ProfileSettings = () => {
 
         <Button title="Submit" onPress={submitForm} />
         <View style={deleteButton}>
-          <DeleteAccountButton />
+          <DeleteConfirmButton
+            deleteFunction={deleteAccount}
+            buttonTitle="Delete account"
+          />
         </View>
       </View>
       <Modal

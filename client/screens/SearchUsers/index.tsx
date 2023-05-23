@@ -20,6 +20,7 @@ import { SearchUsersStyles } from "./styles";
 import { AxiosError } from "axios";
 import { conditionStyles } from "../../utils/conditionStyles";
 import { Dimensions } from "react-native";
+import { useIsFocused } from "@react-navigation/native";
 
 export const SearchUsers = () => {
   const isTabletOrMobileDevice = useMediaQuery({
@@ -35,6 +36,7 @@ export const SearchUsers = () => {
     data: null,
   });
   const [currentLogin, setCurrentLogin] = useState<string>("");
+  const isFocused = useIsFocused();
   const fetchUsers = async () => {
     if (
       data === null ||
@@ -84,7 +86,7 @@ export const SearchUsers = () => {
   };
   useEffect(() => {
     fetchUsers();
-  }, [currentPage]);
+  }, [currentPage, isFocused]);
 
   const loadMoreItems = () => {
     setCurrentPage((prev) => prev + 1);

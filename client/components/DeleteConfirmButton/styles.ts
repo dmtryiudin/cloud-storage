@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export const DeleteAccountButtonStyles = StyleSheet.create({
+export const DeleteConfirmButtonStyles = StyleSheet.create({
   modal: {
     backgroundColor: "rgba(0, 0, 0, 0.8)",
     width: "100%",

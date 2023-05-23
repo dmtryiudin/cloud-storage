@@ -12,7 +12,7 @@ export * from "./Error";
 export * from "./LoadingScreen";
 export * from "./BanButton";
 export * from "./ImagePicker";
-export * from "./DeleteAccountButton";
+export * from "./DeleteConfirmButton";
 export * from "./UserPreview";
 export * from "./FileButton";
 export * from "./UploadFileModal";

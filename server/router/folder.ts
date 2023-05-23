@@ -17,3 +17,4 @@ folderRouter.put(
   confirmMailMiddleware,
   folderController.setPublic
 );
+folderRouter.delete("/:folder", authMiddleware, folderController.moveToTrash);

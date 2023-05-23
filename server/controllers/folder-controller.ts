@@ -3,6 +3,7 @@ import { Response, NextFunction } from "express";
 import folderService from "../service/folder-service";
 import { validationResult } from "express-validator";
 import { ApiError } from "../exceptions/api-error";
+import { json } from "stream/consumers";
 
 class FolderController {
   async createFolder(req: IRequestAuth, res: Response, next: NextFunction) {
@@ -25,8 +26,18 @@ class FolderController {
     try {
       const { folder } = req.params;
       const { id } = req.user;
-      console.log(folder);
       const folderData = await folderService.setPublic(folder, id);
+      res.json(folderData);
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async moveToTrash(req: IRequestAuth, res: Response, next: NextFunction) {
+    try {
+      const { folder } = req.params;
+      const { id } = req.user;
+      const folderData = await folderService.moveToTrash(folder, id);
       res.json(folderData);
     } catch (e) {
       next(e);

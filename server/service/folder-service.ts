@@ -1,7 +1,6 @@
 import { ObjectId } from "mongodb";
 import { ApiError } from "../exceptions/api-error";
 import folderModel from "../models/folder-model";
-import userModel from "../models/user-model";
 
 class FolderService {
   async createFolder(owner: string, name: string) {
@@ -29,8 +28,15 @@ class FolderService {
     if (!folder) {
       throw ApiError.NotFound();
     }
+
     if (folder.owner?.toString() !== userId) {
       throw ApiError.Forbidden("You are not allowed to set this folder");
+    }
+
+    if (folder.deleteDate) {
+      throw ApiError.BadRequest(
+        "You can't set this folder while it's in trash"
+      );
     }
 
     folder.isPublic = !folder.isPublic;

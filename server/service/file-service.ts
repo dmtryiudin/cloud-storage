@@ -47,11 +47,19 @@ class FileService {
 
   async downloadFile(fileName: string, userId?: string) {
     const file = await getFileBelongsToUser(fileName, userId);
+    if (file.deleteDate) {
+      throw ApiError.BadRequest(
+        "You can't download this file while it's in trash"
+      );
+    }
     return file.href.split("/")[3];
   }
 
   async setPublic(fileName: string, userId: string) {
     const file = await setFileBelongsToUser(fileName, userId);
+    if (file.deleteDate) {
+      throw ApiError.BadRequest("You can't set this file while it's in trash");
+    }
     const fileHrefArr = file.href.split("/");
     if (file.folder) {
       file.folder = undefined;
@@ -78,6 +86,9 @@ class FileService {
 
   async setFolder(fileName: string, owner: string, folderId?: string) {
     let file = await setFileBelongsToUser(fileName, owner);
+    if (file.deleteDate) {
+      throw ApiError.BadRequest("You can't set this file while it's in trash");
+    }
     if (folderId) {
       if (!ObjectId.isValid(folderId)) {
         throw ApiError.NotFound("Folder not found");
@@ -101,6 +112,29 @@ class FileService {
     file.folder = undefined;
     file.isPublic = false;
     file.owner = owner;
+    await file.save();
+    return file;
+  }
+
+  async moveToTrash(fileName: string, owner: string) {
+    let file = await setFileBelongsToUser(fileName, owner);
+
+    if (file.deleteDate) {
+      file.deleteDate = undefined;
+      await file.save();
+      return file;
+    }
+
+    const fileHrefArr = file.href.split("/");
+    fileHrefArr[2] = "download-protected";
+    file.href = fileHrefArr.join("/");
+    file.isPublic = false;
+    const deleteDateTimestamp = new Date().getTime() + 10 * 24 * 60 * 60 * 1000;
+    file.deleteDate = new Date(deleteDateTimestamp);
+    if (file.folder) {
+      file.folder = undefined;
+      file.owner = owner;
+    }
     await file.save();
     return file;
   }

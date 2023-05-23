@@ -94,6 +94,17 @@ class FileController {
       next(e);
     }
   }
+
+  async moveToTrash(req: IRequestAuth, res: Response, next: NextFunction) {
+    try {
+      const { file } = req.params;
+      const { id } = req.user;
+      const fileData = await fileService.moveToTrash(file, id);
+      res.json(fileData);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export default new FileController();

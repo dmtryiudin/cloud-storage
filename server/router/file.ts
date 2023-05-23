@@ -26,3 +26,4 @@ fileRouter.put(
   fileController.setPublic
 );
 fileRouter.put("/set-folder/:file", authMiddleware, fileController.setFolder);
+fileRouter.delete("/:file", authMiddleware, fileController.moveToTrash);

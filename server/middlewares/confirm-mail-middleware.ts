@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from "express";
+import { Response, NextFunction } from "express";
 import { ApiError } from "../exceptions/api-error";
 import userModel from "../models/user-model";
 import { IRequestAuth } from "../types/express";

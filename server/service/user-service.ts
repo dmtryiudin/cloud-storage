@@ -35,13 +35,10 @@ class UserService {
     }
 
     let user = await userModel.findById(id);
-    if (!user) {
-      return null;
-    }
 
-    user.name = name;
-    user.country = country;
-    await user.save();
+    user!.name = name;
+    user!.country = country;
+    await user!.save();
     return user;
   }
 
@@ -51,10 +48,8 @@ class UserService {
 
   async updateAvatar(id: string, fileName: string) {
     const currentUser = await userModel.findById(id);
-    if (!currentUser) {
-      return null;
-    }
-    const currentAvatar = currentUser.avatar;
+
+    const currentAvatar = currentUser!.avatar;
 
     if (currentAvatar) {
       const currentAvatarName = currentAvatar.split("/")[3];
@@ -63,8 +58,8 @@ class UserService {
       });
     }
 
-    currentUser.avatar = `/file/avatar/${fileName}`;
-    await currentUser.save();
+    currentUser!.avatar = `/file/avatar/${fileName}`;
+    await currentUser!.save();
     return currentUser;
   }
 }

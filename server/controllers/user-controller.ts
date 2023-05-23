@@ -30,13 +30,6 @@ class UserController {
     }
   }
 
-  async getOneById(req: Request, res: Response, next: NextFunction) {
-    try {
-    } catch (e) {
-      next(e);
-    }
-  }
-
   async updateOne(req: IRequestAuth, res: Response, next: NextFunction) {
     try {
       const { id } = req.user;

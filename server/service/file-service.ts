@@ -1,4 +1,3 @@
-import { ObjectId } from "mongodb";
 import { ApiError } from "../exceptions/api-error";
 import fileModel from "../models/file-model";
 import folderModel from "../models/folder-model";
@@ -55,12 +54,12 @@ class FileService {
       }
 
       if (!file.folder) {
-        throw ApiError.Forbidden("You are not allowed to access this file");
+        throw ApiError.Forbidden();
       }
 
       const fileFolder = await folderModel.findById(file.folder);
       if (fileFolder!.owner !== userId) {
-        throw ApiError.Forbidden("You are not allowed to access this file");
+        throw ApiError.Forbidden();
       }
 
       return file.href.split("/")[3];
@@ -69,7 +68,7 @@ class FileService {
     if (file.isPublic) {
       return file.href.split("/")[3];
     }
-    throw ApiError.Forbidden("You are not allowed to access this file");
+    throw ApiError.Forbidden();
   }
 }
 

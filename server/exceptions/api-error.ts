@@ -22,7 +22,7 @@ export class ApiError extends Error {
     return new ApiError(404, message || "Not found");
   }
 
-  static Forbidden(message: string) {
-    return new ApiError(403, message);
+  static Forbidden(message?: string) {
+    return new ApiError(403, message || "Forbidden");
   }
 }

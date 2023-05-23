@@ -1,4 +1,3 @@
-import folderController from "../controllers/folder-controller";
 import { UserDto } from "../dtos/user-dto";
 import { ApiError } from "../exceptions/api-error";
 import userModel from "../models/user-model";

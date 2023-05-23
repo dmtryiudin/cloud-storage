@@ -89,7 +89,6 @@ class FolderService {
 
   async deleteAllForUser(owner: string) {
     const folders = await folderModel.find({ owner });
-    const ownerData = await userModel.findById(owner);
     for (let folder of folders) {
       const filesList = await getFilesForFolder(folder._id.toString());
       for (let file of filesList) {
@@ -102,14 +101,11 @@ class FolderService {
       await fileModel.deleteMany({
         folder: folder._id.toString(),
       });
-      ownerData!.filesCapacity =
-        ownerData!.filesCapacity - folder!.filesCapacity;
     }
 
     await folderModel.deleteMany({
       owner,
     });
-    await ownerData!.save();
   }
 
   async getAllPublic(page: number, limit: number) {

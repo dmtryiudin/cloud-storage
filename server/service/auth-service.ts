@@ -8,6 +8,7 @@ import { uuid } from "uuidv4";
 import mailService from "./mail-service";
 import userModel from "../models/user-model";
 import roleModel from "../models/role-model";
+import settingsModel from "../models/settings-model";
 
 class AuthService {
   async registration(
@@ -39,6 +40,7 @@ class AuthService {
       roles: [userRole?.value],
     });
 
+    await settingsModel.create({ user: user._id });
     const userDto = new UserDto(user);
     return await saveToken(userDto);
   }

@@ -15,6 +15,7 @@ import { modRouter } from "./router/mod";
 import { folderRouter } from "./router/folder";
 import cron from "node-cron";
 import { removeExpiredFiles } from "./scripts/removeExpiredFiles";
+import { settingsRouter } from "./router/settings";
 
 const app: Express = express();
 const port = process.env.PORT;
@@ -28,6 +29,7 @@ app.use("/api/v1/user", usersRouter);
 app.use("/api/v1/file", fileRouter);
 app.use("/api/v1/folder", folderRouter);
 app.use("/api/v1/mod", modRouter);
+app.use("/api/v1/settings", settingsRouter);
 app.use("/", notFoundMiddleware);
 app.use(errorMiddleware);
 

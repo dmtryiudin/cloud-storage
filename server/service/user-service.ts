@@ -4,6 +4,7 @@ import { isCountryCodeValid } from "../utils";
 import { UserDto } from "../dtos/user-dto";
 import { unlink } from "fs";
 import path from "path";
+import settingsModel from "../models/settings-model";
 
 class UserService {
   async getOne(login: string) {
@@ -43,6 +44,7 @@ class UserService {
   }
 
   async deleteOne(id: string) {
+    await settingsModel.deleteOne({ user: id });
     await userModel.findByIdAndDelete(id);
   }
 

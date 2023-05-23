@@ -1,5 +1,6 @@
 import { unlink } from "fs";
 import { ObjectId } from "mongodb";
+import { Types } from "mongoose";
 import path from "path";
 import { ApiError } from "../exceptions/api-error";
 import fileModel from "../models/file-model";
@@ -29,7 +30,7 @@ class FileService {
         throw ApiError.NotFound("Folder does not exist");
       }
 
-      if (existingFolder.owner !== owner) {
+      if (existingFolder.owner.toString() !== owner) {
         throw ApiError.Forbidden("You don't own this folder");
       }
 
@@ -116,7 +117,7 @@ class FileService {
       if (!existingFolder) {
         throw ApiError.NotFound("Folder not found");
       }
-      if (existingFolder.owner !== owner) {
+      if (existingFolder.owner.toString() !== owner) {
         throw ApiError.Forbidden("You don't own this folder");
       }
 
@@ -138,7 +139,7 @@ class FileService {
 
     file.folder = undefined;
     file.isPublic = false;
-    file.owner = owner;
+    file.owner = new ObjectId(owner) as Types.ObjectId;
     await file.save();
     return file;
   }
@@ -165,7 +166,7 @@ class FileService {
     fileHrefArr[2] = "download-protected";
     file.href = fileHrefArr.join("/");
     file.isPublic = false;
-    file.owner = owner;
+    file.owner = new ObjectId(owner) as Types.ObjectId;
     const deleteDateTimestamp = new Date().getTime() + 10 * 24 * 60 * 60 * 1000;
     file.deleteDate = deleteDateTimestamp;
     file.folder = undefined;
@@ -179,17 +180,14 @@ class FileService {
 
   async deleteAllForUser(owner: string) {
     const allFiles = await fileModel.find({ owner });
-    const ownerData = await userModel.findById(owner);
 
     for (let file of allFiles) {
       const fileName = file.href.split("/")[3];
       unlink(path.resolve(`./upload/files/${fileName}`), (err) => {
         if (err) return null;
       });
-      ownerData!.filesCapacity = ownerData!.filesCapacity - file.capacity;
     }
 
-    await ownerData!.save();
     await fileModel.deleteMany({ owner });
   }
 

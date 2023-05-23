@@ -1,7 +1,7 @@
 import { Schema, model } from "mongoose";
 
 const FolderSchema = new Schema({
-  owner: { type: String, ref: "User", required: true },
+  owner: { type: Schema.Types.ObjectId, ref: "User", required: true },
   name: { type: String, required: true, unique: true },
   deleteDate: { type: Number },
   isPublic: { type: Boolean, default: false },

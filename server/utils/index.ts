@@ -50,7 +50,7 @@ export const getFileBelongsToUser = async (
     }
 
     const fileFolder = await folderModel.findById(file.folder);
-    if (fileFolder!.owner === userId) {
+    if (fileFolder!.owner.toString() === userId) {
       return file;
     }
   }
@@ -84,7 +84,7 @@ export const setFileBelongsToUser = async (
     }
 
     const fileFolder = await folderModel.findById(file.folder);
-    if (fileFolder!.owner === userId) {
+    if (fileFolder!.owner.toString() === userId) {
       return file;
     }
   }

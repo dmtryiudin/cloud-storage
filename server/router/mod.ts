@@ -4,7 +4,6 @@ import authMiddleware from "../middlewares/auth-middleware";
 import roleMiddleware from "../middlewares/role-middleware";
 import { body } from "express-validator";
 import confirmMailMiddleware from "../middlewares/confirm-mail-middleware";
-import banMiddleware from "../middlewares/ban-middleware";
 
 export const modRouter = express.Router();
 

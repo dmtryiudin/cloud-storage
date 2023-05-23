@@ -1,5 +1,7 @@
+import { ObjectId } from "mongodb";
+
 export class FileDto {
-  owner?: string;
+  owner?: ObjectId;
   name: string;
   deleteDate?: number;
   href: string;

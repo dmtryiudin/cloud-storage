@@ -1,7 +1,8 @@
+import { ObjectId } from "mongodb";
 import { FileDto } from "./file-dto";
 
 export class FolderDto {
-  owner: string;
+  owner: ObjectId;
   name: string;
   deleteDate: number;
   isPublic: boolean;

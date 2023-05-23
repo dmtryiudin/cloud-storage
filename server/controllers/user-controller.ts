@@ -3,6 +3,8 @@ import userService from "../service/user-service";
 import authService from "../service/auth-service";
 import { ApiError } from "../exceptions/api-error";
 import { IRequestAuth } from "../types/express";
+import { unlink } from "fs";
+import path from "path";
 
 class UserController {
   async getAll(req: Request, res: Response, next: NextFunction) {
@@ -61,8 +63,8 @@ class UserController {
   }
 
   async updateAvatar(req: IRequestAuth, res: Response, next: NextFunction) {
+    const fileName = req.file?.filename;
     try {
-      const fileName = req.file?.filename;
       const { id } = req.user;
       if (!fileName) {
         throw ApiError.BadRequest("No image");
@@ -70,6 +72,9 @@ class UserController {
       const user = await userService.updateAvatar(id, fileName);
       return res.json(user);
     } catch (e) {
+      unlink(path.resolve(`./upload/avatar/${fileName}`), (err) => {
+        if (err) return null;
+      });
       next(e);
     }
   }

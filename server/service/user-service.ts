@@ -58,12 +58,9 @@ class UserService {
 
     if (currentAvatar) {
       const currentAvatarName = currentAvatar.split("/")[3];
-      await unlink(
-        path.resolve(`./upload/avatars/${currentAvatarName}`),
-        (err) => {
-          if (err) return null;
-        }
-      );
+      unlink(path.resolve(`./upload/avatars/${currentAvatarName}`), (err) => {
+        if (err) return null;
+      });
     }
 
     currentUser.avatar = `/file/avatar/${fileName}`;

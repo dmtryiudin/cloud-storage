@@ -7,7 +7,7 @@ class FolderController {
     try {
       const { name } = req.body;
       const owner = req.user.id;
-      const newFolder = await folderService.createFolderSignature(owner, name);
+      const newFolder = await folderService.createFolder(owner, name);
       res.json(newFolder).status(201);
     } catch (e) {
       next(e);

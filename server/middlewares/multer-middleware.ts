@@ -2,10 +2,9 @@ import multer from "multer";
 import { uuid } from "uuidv4";
 import path from "path";
 import { ApiError } from "../exceptions/api-error";
+import { filesBlacklist, imagesWhitelist } from "../consts";
 
-const whitelist = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
-
-const storage = multer.diskStorage({
+const avatarStorage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, path.resolve("./upload/avatars"));
   },
@@ -13,13 +12,45 @@ const storage = multer.diskStorage({
     cb(null, uuid() + ".png");
   },
 });
-export const upload = multer({
-  storage,
+
+const filesStorage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.resolve("./upload/files"));
+  },
+  filename: (req, file, cb) => {
+    cb(null, uuid() + path.extname(file.originalname));
+  },
+});
+
+export const avatarUpload = multer({
+  storage: avatarStorage,
   fileFilter: (req, file, cb) => {
-    if (!whitelist.includes(file.mimetype)) {
+    if (!imagesWhitelist.includes(file.mimetype)) {
       return cb(
-        ApiError.BadRequest(`Only images accepted (${whitelist.join(", ")})`)
+        ApiError.BadRequest(
+          `Only images accepted (${imagesWhitelist.join(", ")})`
+        )
       );
+    }
+
+    cb(null, true);
+  },
+});
+
+export const fileUpload = multer({
+  storage: filesStorage,
+  fileFilter: (req, file, cb) => {
+    const fileSize = parseInt(req.headers["content-length"]!);
+
+    if (filesBlacklist.includes(file.mimetype)) {
+      return cb(
+        ApiError.BadRequest(
+          `This file extension is denied, also ${filesBlacklist.join(", ")}`
+        )
+      );
+    }
+    if (fileSize >= 2147483648) {
+      return cb(ApiError.BadRequest(`Maximum allowed size of the file is 2GB`));
     }
 
     cb(null, true);

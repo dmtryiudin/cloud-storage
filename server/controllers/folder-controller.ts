@@ -13,6 +13,18 @@ class FolderController {
       next(e);
     }
   }
+
+  async setPublic(req: IRequestAuth, res: Response, next: NextFunction) {
+    try {
+      const { folder } = req.params;
+      const { id } = req.user;
+      console.log(folder);
+      const folderData = await folderService.setPublic(folder, id);
+      res.json(folderData);
+    } catch (e) {
+      next(e);
+    }
+  }
 }
 
 export default new FolderController();

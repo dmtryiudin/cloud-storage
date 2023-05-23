@@ -15,7 +15,11 @@ export const UserIcon = observer(() => {
   const { avatar } = UserIconStyles;
   return store.isAuth ? (
     store.user.avatar ? (
-      <TouchableOpacity onPress={() => navigation.navigate("Profile")}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.navigate("Profile", { login: store.user.login })
+        }
+      >
         <Image
           style={avatar}
           source={{
@@ -28,7 +32,9 @@ export const UserIcon = observer(() => {
         name="user-circle-o"
         size={40}
         color="black"
-        onPress={() => navigation.navigate("Profile")}
+        onPress={() =>
+          navigation.navigate("Profile", { login: store.user.login })
+        }
       />
     )
   ) : (

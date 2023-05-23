@@ -10,3 +10,10 @@ export interface IUser {
   roles: string[];
   isBanned: boolean;
 }
+
+export interface IPaginatedUsers {
+  page: number;
+  limit: number;
+  maxCount: number;
+  response: IUser[];
+}

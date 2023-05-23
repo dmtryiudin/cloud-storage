@@ -5,7 +5,6 @@ import { StoreContext } from "./context/store";
 import { store } from "./store/store";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Navigation } from "./screens/Navigation";
-import { ModalPortal } from "react-native-modals";
 import { EventProvider } from "react-native-outside-press";
 
 export default function App() {
@@ -36,7 +35,6 @@ export default function App() {
         }}
       >
         <Navigation />
-        <ModalPortal />
         <StatusBar />
       </StoreContext.Provider>
     </EventProvider>

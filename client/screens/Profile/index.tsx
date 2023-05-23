@@ -1,24 +1,131 @@
-import { View } from "react-native";
-import { Button, Heading } from "../../components";
-import { useContext } from "react";
+import { Image, View, Text, ScrollView, RefreshControl } from "react-native";
+import { BanButton, Error, Heading, LoadingScreen } from "../../components";
+import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "../../context/store";
-import { useNavigation } from "@react-navigation/native";
-import { StackNavigation } from "../types";
-import { Loading } from "../../components";
+import { RouteProp, useRoute } from "@react-navigation/native";
 import { observer } from "mobx-react-lite";
+import { ProfileParamList } from "./types";
+import { IUser } from "../../models/IUser";
+import UserService from "../../service/userService";
+import { IResponse } from "../../models/response/IResponse";
+import { FontAwesome, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
+import { ProfileStyles } from "./styles";
+import { useMediaQuery } from "react-responsive";
+import { conditionStyles } from "../../utils/conditionStyles";
+import { flag } from "country-emoji";
+import { Error as ErrorType } from "../../models/IError";
 
 export const Profile = observer(() => {
-  const navigation = useNavigation<StackNavigation>();
+  const isTabletOrMobileDevice = useMediaQuery({
+    minDeviceWidth: 600,
+  });
+  const [{ isLoading, data, error }, setUserData] = useState<IResponse<IUser>>({
+    isLoading: true,
+    error: null,
+    data: null,
+  });
+  const { params } = useRoute<RouteProp<ProfileParamList>>();
   const { store } = useContext(StoreContext);
-  const logout = async () => {
-    await store.logout();
-    navigation.navigate("Home");
+
+  const {
+    wrapper,
+    userAvatar,
+    nameWrapper,
+    nameText,
+    wrapperWide,
+    textInfo,
+    infoWrapper,
+    scrollView,
+  } = ProfileStyles;
+  const fetchUser = async () => {
+    setUserData({
+      isLoading: true,
+      error: null,
+      data: null,
+    });
+    try {
+      const { data } = await UserService.getUser(params?.login);
+
+      setUserData({
+        isLoading: false,
+        error: null,
+        data: data,
+      });
+    } catch (error: ErrorType | any) {
+      setUserData({
+        isLoading: false,
+        error,
+        data: null,
+      });
+    }
   };
+  useEffect(() => {
+    fetchUser();
+  }, []);
+
+  if (error) {
+    return <Error />;
+  }
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
+  const {
+    login,
+    email,
+    name,
+    country,
+    avatar,
+    registrationDate,
+    filesCapacity,
+    roles,
+    isBanned,
+  } = data!;
   return (
-    <View>
-      <Heading label="User info" />
-      <Button type="danger" title="Logout" onPress={logout} />
-      <Loading show={store.isLoading} />
-    </View>
+    <ScrollView
+      style={scrollView}
+      refreshControl={
+        <RefreshControl refreshing={isLoading} onRefresh={fetchUser} />
+      }
+    >
+      <View
+        style={{
+          ...wrapper,
+          ...conditionStyles(wrapperWide, isTabletOrMobileDevice),
+        }}
+      >
+        <Heading label="User info" />
+        {avatar ? (
+          <Image
+            style={userAvatar}
+            source={{
+              uri: avatar,
+            }}
+          />
+        ) : (
+          <FontAwesome name="user-circle-o" size={100} color="black" />
+        )}
+        <View style={nameWrapper}>
+          <Text style={nameText}>{name || login}</Text>
+          {roles.includes("MOD") && (
+            <MaterialIcons name="verified" size={24} color="#10B981" />
+          )}
+          {isBanned && <FontAwesome5 name="ban" size={24} color="#EF4444" />}
+        </View>
+        <View style={infoWrapper}>
+          {email && <Text style={textInfo}>Email: {email}</Text>}
+          {country && <Text style={textInfo}>Country: {flag(country)}</Text>}
+          <Text style={textInfo}>
+            Registration date:{" "}
+            {new Date(registrationDate).toLocaleDateString("ru-RU")}
+          </Text>
+          <Text style={textInfo}>
+            Files capacity: {filesCapacity * (9.537 * Math.pow(10, -7))} MB
+          </Text>
+        </View>
+        {roles.includes("MOD") && <BanButton login={login} />}
+      </View>
+    </ScrollView>
   );
 });

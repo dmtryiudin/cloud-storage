@@ -1,11 +1,10 @@
-import { PropsWithChildren, useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   TouchableOpacity,
   View,
   Text,
   FlatList,
   GestureResponderEvent,
-  ViewStyle,
   Animated,
 } from "react-native";
 import { conditionStyles } from "../../utils/conditionStyles";

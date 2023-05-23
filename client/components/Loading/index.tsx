@@ -1,16 +1,17 @@
-import { ActivityIndicator, Text } from "react-native";
-import Modal, { ModalContent } from "react-native-modals";
+import { ActivityIndicator, Modal, Text, View } from "react-native";
 import { LoadingStyles } from "./styles";
 
 export const Loading: React.FC<{ show: boolean }> = ({ show }) => {
-  const { loading, text } = LoadingStyles;
+  const { loading, text, modal } = LoadingStyles;
   return (
     <>
-      <Modal visible={show}>
-        <ModalContent style={loading}>
-          <ActivityIndicator size="large" />
-          <Text style={text}>Loading...</Text>
-        </ModalContent>
+      <Modal visible={show} transparent={true}>
+        <View style={modal}>
+          <View style={loading}>
+            <ActivityIndicator size="large" />
+            <Text style={text}>Loading...</Text>
+          </View>
+        </View>
       </Modal>
     </>
   );

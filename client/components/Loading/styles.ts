@@ -12,6 +12,14 @@ export const LoadingStyles = StyleSheet.create({
     fontStyle: "normal",
     fontSize: 14,
     lineHeight: 19,
-    color: "#191D23",
+    color: "white",
+  },
+  modal: {
+    backgroundColor: "rgba(0, 0, 0, 0.7)",
+    height: "100%",
+    width: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

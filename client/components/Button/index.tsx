@@ -1,10 +1,11 @@
-import { Text, TouchableOpacity } from "react-native";
+import { ActivityIndicator, Text, TouchableOpacity } from "react-native";
 import { ButtonStyles } from "./styles";
 import { IButtonProps } from "./types";
 
 export const Button: React.FC<IButtonProps> = ({
   title,
   type = "primary",
+  isLoading,
   ...rest
 }) => {
   const {
@@ -23,14 +24,18 @@ export const Button: React.FC<IButtonProps> = ({
       }}
       {...rest}
     >
-      <Text
-        style={{
-          ...buttonText,
-          ...(type === "secondary" ? buttonSecondaryText : {}),
-        }}
-      >
-        {title}
-      </Text>
+      {isLoading ? (
+        <ActivityIndicator color={type === "secondary" ? "black" : "white"} />
+      ) : (
+        <Text
+          style={{
+            ...buttonText,
+            ...(type === "secondary" ? buttonSecondaryText : {}),
+          }}
+        >
+          {title}
+        </Text>
+      )}
     </TouchableOpacity>
   );
 };

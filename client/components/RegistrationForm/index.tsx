@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { useContext, useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Modal } from "react-native";
 import { StoreContext } from "../../context/store";
 import { IValidationError } from "../../models/IValidationError";
 import { Button } from "../Button";
@@ -15,7 +15,6 @@ import { useMediaQuery } from "react-responsive";
 import { conditionStyles } from "../../utils/conditionStyles";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../screens/types";
-import Modal, { ModalContent, SlideAnimation } from "react-native-modals";
 
 export const RegistrationForm = observer(() => {
   const navigation = useNavigation<StackNavigation>();
@@ -164,18 +163,8 @@ export const RegistrationForm = observer(() => {
           <Button title="Submit" onPress={submitForm} />
         </View>
       </View>
-      <Modal
-        visible={showModal}
-        onTouchOutside={() => {
-          setShowModal(false);
-        }}
-        modalAnimation={
-          new SlideAnimation({
-            slideFrom: "top",
-          })
-        }
-      >
-        <ModalContent style={modalContentWrapper}>
+      <Modal visible={showModal}>
+        <View style={modalContentWrapper}>
           <View style={modalTextWrapper}>
             <Text style={modalText}>{errorText}</Text>
             <Button
@@ -184,7 +173,7 @@ export const RegistrationForm = observer(() => {
               onPress={() => setShowModal(false)}
             />
           </View>
-        </ModalContent>
+        </View>
       </Modal>
       <Loading show={store.isLoading} />
     </View>

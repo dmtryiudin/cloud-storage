@@ -1,11 +1,10 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text } from "react-native";
+import { View, Text, Modal } from "react-native";
 import { StoreContext } from "../../context/store";
 import { Button } from "../Button";
 import { Input } from "../Input";
 import { LoginFormStyles } from "./styles";
-import { Modal, ModalContent, SlideAnimation } from "react-native-modals";
 import { ILoginFormProps } from "./types";
 import { Link } from "../Link";
 import { Heading } from "../Heading";
@@ -116,18 +115,8 @@ export const LoginForm: React.FC<ILoginFormProps> = observer(
             </View>
           </View>
         </View>
-        <Modal
-          visible={showModal}
-          onTouchOutside={() => {
-            setShowModal(false);
-          }}
-          modalAnimation={
-            new SlideAnimation({
-              slideFrom: "top",
-            })
-          }
-        >
-          <ModalContent style={modalContentWrapper}>
+        <Modal visible={showModal}>
+          <View style={modalContentWrapper}>
             <View style={modalTextWrapper}>
               <Text style={modalText}>
                 Wrong credentials! If you don't have an account, you can create
@@ -135,7 +124,7 @@ export const LoginForm: React.FC<ILoginFormProps> = observer(
               </Text>
               <Link textLabel="Registrate" onPress={setSubPage} />
             </View>
-          </ModalContent>
+          </View>
         </Modal>
         <Loading show={store.isLoading} />
       </>

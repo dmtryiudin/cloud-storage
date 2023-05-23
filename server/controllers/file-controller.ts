@@ -15,17 +15,6 @@ class FileController {
     }
   }
 
-  async createFolder(req: IRequestAuth, res: Response, next: NextFunction) {
-    try {
-      const { name } = req.body;
-      const owner = req.user.id;
-      const newFolder = await fileService.createFolderSignature(owner, name);
-      res.json(newFolder).status(201);
-    } catch (e) {
-      next(e);
-    }
-  }
-
   async createFile(req: IRequestAuth, res: Response, next: NextFunction) {
     try {
       const owner = req.user.id;

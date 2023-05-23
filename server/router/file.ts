@@ -5,5 +5,4 @@ import authMiddleware from "../middlewares/auth-middleware";
 export const fileRouter = express.Router();
 
 fileRouter.get("/avatar/:file", fileController.getAvatar);
-fileRouter.post("/folder", authMiddleware, fileController.createFolder);
-fileRouter.post("/file", authMiddleware, fileController.createFile);
+fileRouter.post("/upload", authMiddleware, fileController.createFile);

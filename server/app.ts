@@ -12,6 +12,7 @@ import * as swaggerDocument from "./swagger/docs.json";
 import { fileRouter } from "./router/file";
 import notFoundMiddleware from "./middlewares/not-found-middleware";
 import { modRouter } from "./router/mod";
+import { folderRouter } from "./router/folder";
 
 const app: Express = express();
 const port = process.env.PORT;
@@ -23,6 +24,7 @@ app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 app.use("/api/v1/auth", authRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/file", fileRouter);
+app.use("/api/v1/folder", folderRouter);
 app.use("/api/v1/mod", modRouter);
 app.use("/", notFoundMiddleware);
 app.use(errorMiddleware);

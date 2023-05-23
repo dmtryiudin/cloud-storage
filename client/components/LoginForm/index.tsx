@@ -37,6 +37,7 @@ export const LoginForm: React.FC<ILoginFormProps> = observer(
       setWasModalShown(false);
       const { login, password } = formData;
       await store.login(login, password);
+      await store.getSettings();
       if (!store.error) {
         navigation.navigate("Profile", { login });
       }

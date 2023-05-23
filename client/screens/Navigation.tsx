@@ -7,6 +7,7 @@ import { Home } from "./Home";
 import { Profile } from "./Profile";
 import { RootStackParamList } from "./types";
 import { ProfileSettings } from "./ProfileSettings";
+import { ClientSettings } from "./ClientSettings";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 export const Navigation = () => {
@@ -23,6 +24,11 @@ export const Navigation = () => {
         <Stack.Screen
           name="ProfileSettings"
           component={ProfileSettings}
+          options={options}
+        />
+        <Stack.Screen
+          name="ClientSettings"
+          component={ClientSettings}
           options={options}
         />
       </Stack.Navigator>

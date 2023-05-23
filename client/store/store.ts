@@ -6,12 +6,15 @@ import { API_URL } from "@env";
 import axios, { AxiosError } from "axios";
 import { AuthResponse } from "../models/response/AuthResponse";
 import { Error } from "../models/IError";
+import { ISettings } from "../models/response/ISettings";
+import SettingsService from "../service/settingsService";
 
 export default class Store {
   user = {} as IUser;
   isAuth = false;
   isLoading = false;
   error = null as Error;
+  settings = {} as ISettings;
 
   constructor() {
     makeAutoObservable(this);
@@ -23,6 +26,10 @@ export default class Store {
 
   setUser(newUser: IUser) {
     this.user = newUser;
+  }
+
+  setSettings(settings: ISettings) {
+    this.settings = settings;
   }
 
   async login(login: string, password: string) {
@@ -82,6 +89,30 @@ export default class Store {
       this.setAuth(false);
       this.setUser({} as IUser);
       this.setError();
+    } catch (e: AxiosError | any) {
+      this.setError(e?.response?.status, e?.response?.data);
+    } finally {
+      this.setLoading(false);
+    }
+  }
+
+  async updateSettings(settings: ISettings) {
+    try {
+      this.setLoading(true);
+      await SettingsService.updateSettings(settings);
+      this.setSettings(settings);
+    } catch (e: AxiosError | any) {
+      this.setError(e?.response?.status, e?.response?.data);
+    } finally {
+      this.setLoading(false);
+    }
+  }
+
+  async getSettings() {
+    try {
+      this.setLoading(true);
+      const { data } = await SettingsService.getSettings();
+      this.setSettings(data);
     } catch (e: AxiosError | any) {
       this.setError(e?.response?.status, e?.response?.data);
     } finally {

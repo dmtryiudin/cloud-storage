@@ -73,6 +73,7 @@ export const RegistrationForm = observer(() => {
   const submitForm = async () => {
     const { login, password, name, country } = formData;
     await store.registration(login, password, name, country);
+    await store.getSettings();
     if (!store.error) {
       navigation.navigate("Profile", { login });
     }

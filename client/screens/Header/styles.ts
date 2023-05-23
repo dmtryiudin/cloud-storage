@@ -6,6 +6,6 @@ export const HeaderStyles = StyleSheet.create({
     backgroundColor: "#ECFDF5",
     display: "flex",
     alignItems: "center",
-    justifyContent: "space-between",
+    flexDirection: "row",
   },
 });

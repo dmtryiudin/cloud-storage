@@ -5,7 +5,6 @@ import { addQueryParams } from "../utils/addQueryParams";
 import { validateLogin } from "../utils/validateLogin";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as DocumentPicker from "expo-document-picker";
-import RNFetchBlob from "rn-fetch-blob";
 
 export default class UserService {
   static async getUsers(
@@ -52,12 +51,14 @@ export default class UserService {
 
     if (avatar) {
       if (avatar.type === "success") {
-        const response = await fetch(avatar.uri);
-        const blob = await response.blob();
-
         const data = new FormData();
-        data.append("avatar", blob, avatar.name);
 
+        const fileData = {
+          uri: avatar.uri,
+          name: avatar.name,
+          type: avatar.mimeType,
+        } as any;
+        data.append("avatar", fileData);
         await axiosInstance.put("/user/avatar", data, {
           headers: {
             Accept: "application/json",

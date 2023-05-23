@@ -55,4 +55,19 @@ export const ProfileStyles = StyleSheet.create({
   scrollView: {
     backgroundColor: "white",
   },
+  buttonsWrapper: {
+    justifyContent: "space-between",
+    display: "flex",
+    flexDirection: "row",
+  },
+  buttonsWrapperWide: {
+    justifyContent: "flex-start",
+    gap: 14,
+  },
+  buttonWrapper: {
+    width: "48%",
+  },
+  buttonWrapperWide: {
+    width: "20%",
+  },
 });

@@ -58,6 +58,10 @@ export const Profile = observer(() => {
     infoWrapper,
     scrollView,
     heading,
+    buttonsWrapper,
+    buttonWrapper,
+    buttonsWrapperWide,
+    buttonWrapperWide,
   } = ProfileStyles;
   const fetchUser = async () => {
     setUserData({
@@ -67,6 +71,7 @@ export const Profile = observer(() => {
     });
     try {
       const { data } = await UserService.getUser(params.login);
+
       setUserData({
         isLoading: false,
         error: null,
@@ -87,9 +92,8 @@ export const Profile = observer(() => {
   };
   useEffect(() => {
     fetchUser();
-  }, []);
+  }, [params.login]);
 
-  console.log(JSON.stringify(error));
   if (error) {
     return <Error />;
   }
@@ -164,12 +168,33 @@ export const Profile = observer(() => {
             Files capacity: {filesCapacity * (9.537 * Math.pow(10, -7))} MB
           </Text>
         </View>
-        {store.user.roles?.includes("MOD") && !store.user?.isBanned && (
-          <BanButton login={login} />
-        )}
-        {store.user.login === login && (
-          <Button type="danger" onPress={logoutHandler} title="Logout" />
-        )}
+        <View
+          style={{
+            ...buttonsWrapper,
+            ...conditionStyles(buttonsWrapperWide, isTabletOrMobileDevice),
+          }}
+        >
+          <View
+            style={{
+              ...buttonWrapper,
+              ...conditionStyles(buttonWrapperWide, isTabletOrMobileDevice),
+            }}
+          >
+            {store.user.roles?.includes("MOD") && !store.user?.isBanned && (
+              <BanButton login={login} />
+            )}
+          </View>
+          <View
+            style={{
+              ...buttonWrapper,
+              ...conditionStyles(buttonWrapperWide, isTabletOrMobileDevice),
+            }}
+          >
+            {store.user.login === login && (
+              <Button type="danger" onPress={logoutHandler} title="Logout" />
+            )}
+          </View>
+        </View>
       </View>
     </ScrollView>
   );

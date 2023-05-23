@@ -48,9 +48,8 @@ class UserController {
     try {
       const { id } = req.user;
       await userService.deleteOne(id);
-      const { refreshToken } = req.cookies;
+      const { refreshToken } = req.body;
       await authService.logout(refreshToken);
-      res.clearCookie("refreshToken");
       await fileService.deleteAllForUser(id);
       await folderService.deleteAllForUser(id);
       return res.json({ message: "Successfully deleted" });

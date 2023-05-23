@@ -19,10 +19,6 @@ class AuthController {
         name,
         country
       );
-      res.cookie("refreshToken", userData.refreshToken, {
-        httpOnly: true,
-        maxAge: 14 * 24 * 60 * 60 * 1000,
-      });
       return res.status(201).json(userData);
     } catch (e) {
       next(e);
@@ -33,10 +29,6 @@ class AuthController {
       const { login, password } = req.body;
       const userData = await authService.login(login, password);
 
-      res.cookie("refreshToken", userData.refreshToken, {
-        httpOnly: true,
-        maxAge: 14 * 24 * 60 * 60 * 1000,
-      });
       return res.json(userData);
     } catch (e) {
       next(e);
@@ -44,9 +36,8 @@ class AuthController {
   }
   async logout(req: Request, res: Response, next: NextFunction) {
     try {
-      const { refreshToken } = req.cookies;
+      const { refreshToken } = req.body;
       await authService.logout(refreshToken);
-      res.clearCookie("refreshToken");
       return res.json({ message: "Successfully logout" });
     } catch (e) {
       next(e);
@@ -55,13 +46,9 @@ class AuthController {
 
   async refresh(req: Request, res: Response, next: NextFunction) {
     try {
-      const { refreshToken } = req.cookies;
+      const { refreshToken } = req.body;
       const userData = await authService.refresh(refreshToken);
 
-      res.cookie("refreshToken", userData.refreshToken, {
-        httpOnly: true,
-        maxAge: 14 * 24 * 60 * 60 * 1000,
-      });
       return res.json(userData);
     } catch (e) {
       next(e);

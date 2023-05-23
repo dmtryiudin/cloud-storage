@@ -88,16 +88,15 @@
     },
 
     "/auth/refresh": {
-      "get": {
+      "post": {
         "tags": ["Auth"],
         "summary": "Get new token couple from old refresh token",
         "parameters": [
           {
-            "name": "cookie",
-            "in": "header",
+            "name": "refreshToken",
+            "in": "body",
             "description": "refresh token",
-            "type": "string",
-            "required": true
+            "type": "string"
           }
         ],
         "responses": {
@@ -127,11 +126,10 @@
         "summary": "Logout from your account",
         "parameters": [
           {
-            "name": "cookie",
-            "in": "header",
+            "name": "refreshToken",
+            "in": "body",
             "description": "refresh token",
-            "type": "string",
-            "required": true
+            "type": "string"
           }
         ],
         "responses": {
@@ -360,6 +358,12 @@
             "description": "bearer token",
             "type": "string",
             "required": true
+          },
+          {
+            "name": "refreshToken",
+            "in": "body",
+            "description": "refresh token",
+            "type": "string"
           }
         ],
         "responses": {

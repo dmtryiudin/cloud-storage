@@ -96,6 +96,9 @@ class AuthService {
 
   async setEmail(email: string, id: string) {
     const user = await userModel.findById(id);
+    if (user!.isActivated) {
+      throw ApiError.BadRequest("Email is already activated");
+    }
     user!.email = email;
     await user!.save();
     await mailService.sendActivationMail(

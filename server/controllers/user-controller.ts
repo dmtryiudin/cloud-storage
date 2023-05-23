@@ -4,6 +4,7 @@ import userService from "../service/user-service";
 import authService from "../service/auth-service";
 import { ApiError } from "../exceptions/api-error";
 import { ObjectId } from "mongodb";
+import { IRequestAuth } from "../types/express";
 
 class UserController {
   async getAll(req: Request, res: Response, next: NextFunction) {
@@ -21,11 +22,8 @@ class UserController {
 
   async getOne(req: Request, res: Response, next: NextFunction) {
     try {
-      const { id } = req.params;
-      if (!ObjectId.isValid(id)) {
-        throw ApiError.NotFound();
-      }
-      const user = await userService.getOne(id);
+      const { login } = req.params;
+      const user = await userService.getOne(login);
       if (!user) {
         throw ApiError.NotFound();
       }
@@ -35,9 +33,16 @@ class UserController {
     }
   }
 
-  async updateOne(req: Request, res: Response, next: NextFunction) {
+  async getOneById(req: Request, res: Response, next: NextFunction) {
     try {
-      const { id } = req.params;
+    } catch (e) {
+      next(e);
+    }
+  }
+
+  async updateOne(req: IRequestAuth, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.user;
       const userBody = { ...new UpdateUserDto(req.body) };
 
       const user = await userService.updateOne(id, userBody);
@@ -47,9 +52,9 @@ class UserController {
     }
   }
 
-  async deleteOne(req: Request, res: Response, next: NextFunction) {
+  async deleteOne(req: IRequestAuth, res: Response, next: NextFunction) {
     try {
-      const { id } = req.params;
+      const { id } = req.user;
       await userService.deleteOne(id);
       const { refreshToken } = req.cookies;
       await authService.logout(refreshToken);
@@ -60,10 +65,10 @@ class UserController {
     }
   }
 
-  async updateAvatar(req: Request, res: Response, next: NextFunction) {
+  async updateAvatar(req: IRequestAuth, res: Response, next: NextFunction) {
     try {
       const fileName = req.file?.filename;
-      const { id } = req.params;
+      const { id } = req.user;
       if (!fileName) {
         throw ApiError.BadRequest("No image");
       }

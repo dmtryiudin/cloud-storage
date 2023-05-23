@@ -7,7 +7,12 @@ import { unlink } from "fs";
 import path from "path";
 
 class UserService {
-  async getOne(id: string) {
+  async getOne(login: string) {
+    const user = await userModel.findOne({ login });
+    return { ...new UserDto(user) };
+  }
+
+  async getOneById(id: string) {
     const user = await userModel.findById(id);
     return { ...new UserDto(user) };
   }
@@ -33,7 +38,7 @@ class UserService {
     }
 
     await userModel.findByIdAndUpdate(id, body);
-    return this.getOne(id);
+    return this.getOneById(id);
   }
 
   async deleteOne(id: string) {
@@ -41,7 +46,7 @@ class UserService {
   }
 
   async updateAvatar(id: string, fileName: string) {
-    const currentUser = await this.getOne(id);
+    const currentUser = await this.getOneById(id);
     const currentAvatar = currentUser.avatar;
 
     if (currentAvatar) {
@@ -57,7 +62,7 @@ class UserService {
     await userModel.findByIdAndUpdate(id, {
       avatar: `/file/avatar/${fileName}`,
     });
-    return this.getOne(id);
+    return this.getOneById(id);
   }
 }
 

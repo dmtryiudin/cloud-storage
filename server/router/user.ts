@@ -19,11 +19,11 @@ const upload = multer({
 export const usersRouter = express.Router();
 
 usersRouter.get("/", userController.getAll);
-usersRouter.get("/:id", userController.getOne);
-usersRouter.put("/:id", authMiddleware, userController.updateOne);
-usersRouter.delete("/:id", authMiddleware, userController.deleteOne);
+usersRouter.get("/:login", userController.getOne);
+usersRouter.put("/", authMiddleware, userController.updateOne);
+usersRouter.delete("/", authMiddleware, userController.deleteOne);
 usersRouter.put(
-  "/avatar/:id",
+  "/avatar",
   upload.single("avatar"),
   authMiddleware,
   userController.updateAvatar

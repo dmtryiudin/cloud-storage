@@ -11,10 +11,16 @@ import folderService from "../service/folder-service";
 class UserController {
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const { page = "0", limit = "100" } = req.query;
+      let { page = "0", limit = "100", substr } = req.query;
+
+      if (typeof substr !== "string") {
+        substr = "";
+      }
+
       const users = await userService.getAll(
         parseInt(page?.toString()),
-        parseInt(limit?.toString())
+        parseInt(limit?.toString()),
+        substr
       );
       return res.json(users);
     } catch (e) {

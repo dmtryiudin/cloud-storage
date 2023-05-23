@@ -15,18 +15,25 @@ class UserService {
     return { ...new UserDto(user) };
   }
 
-  async getAll(page = 0, limit = 100) {
+  async getAll(page: number, limit: number, substr: string) {
     if (limit > 100) {
       limit = 100;
     }
     const users = await userModel.find();
+    let response = users.slice(page * limit, (page + 1) * limit).map((e) => {
+      return { ...new UserDto(e) };
+    });
+
+    if (substr) {
+      response = response.filter((item) =>
+        item.login.toLowerCase().includes(substr.toLocaleLowerCase())
+      );
+    }
     return {
       page,
       limit,
-      response: users.slice(page * limit, (page + 1) * limit).map((e) => {
-        return { ...new UserDto(e) };
-      }),
-      maxCount: users.length,
+      response,
+      maxCount: response.length,
     };
   }
 

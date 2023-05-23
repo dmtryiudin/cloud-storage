@@ -1,5 +1,4 @@
 import express from "express";
-import { body } from "express-validator";
 import userController from "../controllers/user-controller";
 import authMiddleware from "../middlewares/auth-middleware";
 import { avatarUpload } from "../middlewares/multer-middleware";

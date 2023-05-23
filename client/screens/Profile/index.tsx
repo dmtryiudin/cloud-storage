@@ -133,7 +133,9 @@ export const Profile = observer(() => {
           <TouchableOpacity
             onPress={() => navigation.navigate("ProfileSettings")}
           >
-            <Feather name="settings" size={30} color="black" />
+            {login === store.user.login ? (
+              <Feather name="settings" size={30} color="black" />
+            ) : null}
           </TouchableOpacity>
         </View>
 
@@ -174,26 +176,27 @@ export const Profile = observer(() => {
             ...conditionStyles(buttonsWrapperWide, isTabletOrMobileDevice),
           }}
         >
-          <View
-            style={{
-              ...buttonWrapper,
-              ...conditionStyles(buttonWrapperWide, isTabletOrMobileDevice),
-            }}
-          >
-            {store.user.login === login && (
+          {store.user.login === login && (
+            <View
+              style={{
+                ...buttonWrapper,
+                ...conditionStyles(buttonWrapperWide, isTabletOrMobileDevice),
+              }}
+            >
               <Button type="danger" onPress={logoutHandler} title="Logout" />
-            )}
-          </View>
-          <View
-            style={{
-              ...buttonWrapper,
-              ...conditionStyles(buttonWrapperWide, isTabletOrMobileDevice),
-            }}
-          >
-            {store.user.roles?.includes("MOD") && !store.user?.isBanned && (
+            </View>
+          )}
+
+          {store.user.roles?.includes("MOD") && !store.user?.isBanned && (
+            <View
+              style={{
+                ...buttonWrapper,
+                ...conditionStyles(buttonWrapperWide, isTabletOrMobileDevice),
+              }}
+            >
               <BanButton login={login} />
-            )}
-          </View>
+            </View>
+          )}
         </View>
       </View>
     </ScrollView>

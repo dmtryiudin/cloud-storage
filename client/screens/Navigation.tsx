@@ -11,6 +11,7 @@ import { ClientSettings } from "./ClientSettings";
 import { Loading } from "../components";
 import { StoreContext } from "../context/store";
 import { observer } from "mobx-react-lite";
+import { SearchUsers } from "./SearchUsers";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 export const Navigation = observer(() => {
@@ -35,6 +36,11 @@ export const Navigation = observer(() => {
           <Stack.Screen
             name="ClientSettings"
             component={ClientSettings}
+            options={options}
+          />
+          <Stack.Screen
+            name="SearchUsers"
+            component={SearchUsers}
             options={options}
           />
         </Stack.Navigator>

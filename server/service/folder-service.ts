@@ -113,7 +113,7 @@ class FolderService {
       limit = 100;
     }
     let folders = await folderModel.find({ isPublic: true });
-    const res = [];
+    let response = [];
     if (substr.trim()) {
       folders = folders.filter(
         (e) => e.name.toLowerCase().indexOf(substr.toLowerCase().trim()) >= 0
@@ -122,13 +122,14 @@ class FolderService {
     for (let folder of folders) {
       const folderData = { ...new FolderDto(folder) };
       folderData.files = await getFilesForFolder(folder._id.toString());
-      res.push(folderData);
+      response.push(folderData);
     }
+    response = response.slice(page * limit, (page + 1) * limit);
     return {
       page,
       limit,
-      response: res.slice(page * limit, (page + 1) * limit),
-      maxCount: res.length,
+      response,
+      maxCount: response.length,
     };
   }
 

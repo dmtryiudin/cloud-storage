@@ -12,6 +12,7 @@ export type RootStackParamList = {
   FileSettings: undefined;
   Folder: undefined;
   FolderSettings: undefined;
+  Trash: undefined;
 };
 
 export type StackNavigation = StackNavigationProp<StackParamList>;

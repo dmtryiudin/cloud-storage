@@ -587,7 +587,7 @@
     "/file/set-folder/:file": {
       "put": {
         "tags": ["File"],
-        "summary": "Set file public",
+        "summary": "Set file folder",
         "parameters": [
           {
             "name": "Authorization",
@@ -1621,10 +1621,13 @@
         "filesCapacity": {
           "type": "number"
         },
+        "id": {
+          "type": "string"
+        },
         "files": {
           "type": "array",
           "items": {
-            "type": "string"
+            "$ref": "#/definitions/File"
           }
         }
       }

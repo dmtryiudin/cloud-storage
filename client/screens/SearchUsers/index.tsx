@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useMediaQuery } from "react-responsive";
 import { IResponse } from "../../models/response/IResponse";
-import { IPaginatedUsers } from "../../models/IUser";
+import { IPaginated } from "../../models/IPaginated";
 import UserService from "../../service/userService";
 import {
   FlatList,
@@ -21,7 +21,7 @@ import { AxiosError } from "axios";
 import { conditionStyles } from "../../utils/conditionStyles";
 import { Dimensions } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
-import { API_URL } from "@env";
+import { IUser } from "../../models/IUser";
 
 export const SearchUsers = () => {
   const isTabletOrMobileDevice = useMediaQuery({
@@ -30,7 +30,7 @@ export const SearchUsers = () => {
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [maxItems, setMaxItems] = useState<number>(0);
   const [{ isLoading, data, error }, setUserData] = useState<
-    IResponse<IPaginatedUsers>
+    IResponse<IPaginated<IUser>>
   >({
     isLoading: true,
     error: null,

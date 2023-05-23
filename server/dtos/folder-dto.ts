@@ -8,9 +8,11 @@ export class FolderDto {
   isPublic: boolean;
   files: Array<FileDto>;
   filesCapacity: number;
+  id: string;
 
   constructor(model: any) {
-    const { owner, name, deleteDate, isPublic, files, filesCapacity } = model;
+    const { owner, name, deleteDate, isPublic, files, filesCapacity, _id } =
+      model;
 
     this.owner = owner;
     this.name = name;
@@ -18,5 +20,6 @@ export class FolderDto {
     this.isPublic = isPublic;
     this.files = files;
     this.filesCapacity = filesCapacity;
+    this.id = _id;
   }
 }

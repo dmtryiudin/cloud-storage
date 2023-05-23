@@ -39,6 +39,15 @@ export default class FoldersService {
     });
   }
 
+  static async getPublicFolder(id: string) {
+    return axiosInstance.get("/folder/public/" + id, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+    });
+  }
+
   static async renameFolder(id: string, newName: string) {
     const ACCESS_TOKEN = await AsyncStorage.getItem("accessToken");
     return axiosInstance.put(
@@ -72,6 +81,33 @@ export default class FoldersService {
         Accept: "application/json",
         "Content-Type": "application/json",
         Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+    });
+  }
+
+  static async getFoldersFromTrash() {
+    const ACCESS_TOKEN = await AsyncStorage.getItem("accessToken");
+    return await axiosInstance.get("/folder/trash", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+    });
+  }
+
+  static async getPublicFolders(
+    page?: string,
+    limit?: string,
+    substr?: string
+  ) {
+    return await axiosInstance.get("/file/public", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        page,
+        limit,
+        substr,
       },
     });
   }

@@ -9,12 +9,5 @@ export interface IUser {
   filesCapacity: number;
   roles: string[];
   isBanned: boolean;
-  isActivated: boolean
-}
-
-export interface IPaginatedUsers {
-  page: number;
-  limit: number;
-  maxCount: number;
-  response: IUser[];
+  isActivated: boolean;
 }

@@ -16,6 +16,7 @@ import { FilesAndFoldersForUser } from "./FilesAndFoldersForUser";
 import { FileSettings } from "./FileSettings";
 import { Folder } from "./Folder";
 import { FolderSettings } from "./FolderSettings";
+import { Trash } from "./Trash";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 export const Navigation = observer(() => {
@@ -63,6 +64,11 @@ export const Navigation = observer(() => {
             options={options}
           />
           <Stack.Screen name="Folder" component={Folder} options={options} />
+          <Stack.Screen
+            name="Trash"
+            component={store.isAuth ? Trash : Auth}
+            options={options}
+          />
         </Stack.Navigator>
       </NavigationContainer>
       <Loading show={store.isLoading} />

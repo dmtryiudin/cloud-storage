@@ -31,4 +31,26 @@ export const FolderStyles = StyleSheet.create({
     flexDirection: "row",
     gap: 4,
   },
+  moveFileFromFolderArea: {
+    width: 300,
+    height: 70,
+    borderRadius: 5,
+    backgroundColor: "#047857",
+    position: "absolute",
+    bottom: 70,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    opacity: 0.8,
+  },
+  moveFileDanger: {
+    backgroundColor: "#EF4444",
+  },
+  text: {
+    fontFamily: "Manrope-SemiBold",
+    fontStyle: "normal",
+    fontSize: 14,
+    lineHeight: 19,
+    color: "#fff",
+  },
 });

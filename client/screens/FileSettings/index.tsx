@@ -14,6 +14,7 @@ import { observer } from "mobx-react-lite";
 import { StackNavigation } from "../types";
 import { FontAwesome } from "@expo/vector-icons";
 import { fromBytesToMegabytes } from "../../utils/fromBytesToMegabytes";
+import { convertUnixDate } from "../../utils/convertUnixDate";
 
 export const FileSettings = observer(() => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -26,7 +27,8 @@ export const FileSettings = observer(() => {
   const [updatedNewName, setUpdatedNewName] = useState<string>("");
   const { params } = useRoute<RouteProp<ProfileParamList>>();
   const { store } = useContext(StoreContext);
-  const { isPublic, href, name, owner, capacity } = params.file as IFile;
+  const { isPublic, href, name, owner, capacity, deleteDate } =
+    params.file as IFile;
   const navigation = useNavigation<StackNavigation>();
 
   const {
@@ -115,7 +117,11 @@ export const FileSettings = observer(() => {
 
   const deleteFile = async () => {
     await FileService.deleteFile(href);
-    navigation.navigate("FilesAndFoldersForUser");
+    if (deleteDate) {
+      navigation.navigate("FilesAndFoldersForUser");
+    } else {
+      navigation.navigate("Trash");
+    }
   };
 
   return (
@@ -134,24 +140,36 @@ export const FileSettings = observer(() => {
             }`}
           />
         </View>
+        {deleteDate && (
+          <Text style={text}>Delete date: {convertUnixDate(deleteDate)}</Text>
+        )}
         <Button title="Download" onPress={downloadFile} isLoading={isLoading} />
         {owner === store.user.id && (
           <View style={settingsWrapper}>
             <Heading label="Settings" />
-            <Input
-              noError={true}
-              labelText="New file name"
-              onChangeText={(value: string) => setCurrentNewName(value)}
-              defaultValue={currentNewName}
-              onSubmitEditing={renameFile}
-            />
-            <View style={publicSwitchWrapper}>
-              <Text style={text}>Set public</Text>
-              <Switch onValueChange={setPublicHandler} value={isPublicSwitch} />
-            </View>
+            {deleteDate ? null : (
+              <>
+                <Input
+                  noError={true}
+                  labelText="New file name"
+                  onChangeText={(value: string) => setCurrentNewName(value)}
+                  defaultValue={currentNewName}
+                  onSubmitEditing={renameFile}
+                />
+                <View style={publicSwitchWrapper}>
+                  <Text style={text}>Set public</Text>
+                  <Switch
+                    onValueChange={setPublicHandler}
+                    value={isPublicSwitch}
+                  />
+                </View>
+              </>
+            )}
             <DeleteConfirmButton
               deleteFunction={deleteFile}
-              buttonTitle="Move file to trash"
+              buttonTitle={
+                deleteDate ? "Restore from trash" : "Move file to trash"
+              }
             />
           </View>
         )}

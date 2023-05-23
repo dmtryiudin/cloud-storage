@@ -128,4 +128,61 @@ export default class FileService {
       }
     );
   }
+
+  static async setFolder(href: string, folder?: string) {
+    const fileName = getFileName(href);
+    const ACCESS_TOKEN = await AsyncStorage.getItem("accessToken");
+
+    if (folder) {
+      return await axiosInstance.put(
+        `/file/set-folder/${fileName}`,
+        { folder },
+        {
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${ACCESS_TOKEN}`,
+          },
+        }
+      );
+    }
+
+    await axiosInstance.put(`/file/set-folder/${fileName}`, undefined, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+    });
+  }
+
+  static async getFilesFromTrash() {
+    const ACCESS_TOKEN = await AsyncStorage.getItem("accessToken");
+    return await axiosInstance.get("/file/trash", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+    });
+  }
+
+  static async getPublicFiles(
+    page?: string,
+    limit?: string,
+    extensions?: string[],
+    substr?: string
+  ) {
+    const extensionsStr = extensions?.join("~");
+    return await axiosInstance.get("/folder/public", {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        extensions: extensionsStr,
+        page,
+        limit,
+        substr,
+      },
+    });
+  }
 }

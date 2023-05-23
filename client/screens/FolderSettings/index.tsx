@@ -13,6 +13,7 @@ import { fromBytesToMegabytes } from "../../utils/fromBytesToMegabytes";
 import FoldersService from "../../service/folderService";
 import { AxiosError } from "axios";
 import { StackNavigation } from "../types";
+import { convertUnixDate } from "../../utils/convertUnixDate";
 
 export const FolderSettings = () => {
   const { params } = useRoute<RouteProp<ProfileParamList>>();
@@ -27,7 +28,8 @@ export const FolderSettings = () => {
 
   const navigation = useNavigation<StackNavigation>();
 
-  const { name, filesCapacity, owner, id, isPublic } = params.folder as IFolder;
+  const { name, filesCapacity, owner, id, isPublic, deleteDate } =
+    params.folder as IFolder;
   const {
     wrapper,
     wrapperWide,
@@ -83,7 +85,11 @@ export const FolderSettings = () => {
 
   const deleteFolder = async () => {
     await FoldersService.deleteFolder(id);
-    navigation.navigate("FilesAndFoldersForUser");
+    if (deleteDate) {
+      navigation.navigate("FilesAndFoldersForUser");
+    } else {
+      navigation.navigate("Trash");
+    }
   };
 
   useEffect(() => {
@@ -109,23 +115,35 @@ export const FolderSettings = () => {
         <Text style={text}>
           Capacity: {fromBytesToMegabytes(filesCapacity)}MB
         </Text>
+        {deleteDate && (
+          <Text style={text}>Delete date: {convertUnixDate(deleteDate)}</Text>
+        )}
         {owner === store.user.id && (
           <View style={settingsWrapper}>
             <Heading label="Settings" />
-            <Input
-              noError={true}
-              labelText="New folder name"
-              onChangeText={(value: string) => setCurrentNewName(value)}
-              defaultValue={currentNewName}
-              onSubmitEditing={renameFolder}
-            />
-            <View style={publicSwitchWrapper}>
-              <Text style={text}>Set public</Text>
-              <Switch onValueChange={setPublicHandler} value={isPublicSwitch} />
-            </View>
+            {deleteDate ? null : (
+              <>
+                <Input
+                  noError={true}
+                  labelText="New folder name"
+                  onChangeText={(value: string) => setCurrentNewName(value)}
+                  defaultValue={currentNewName}
+                  onSubmitEditing={renameFolder}
+                />
+                <View style={publicSwitchWrapper}>
+                  <Text style={text}>Set public</Text>
+                  <Switch
+                    onValueChange={setPublicHandler}
+                    value={isPublicSwitch}
+                  />
+                </View>
+              </>
+            )}
             <DeleteConfirmButton
               deleteFunction={deleteFolder}
-              buttonTitle="Move folder to trash"
+              buttonTitle={
+                deleteDate ? "Restore from trash" : "Move file to trash"
+              }
             />
           </View>
         )}

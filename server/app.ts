@@ -4,10 +4,12 @@ import cookieParser from "cookie-parser";
 require("dotenv").config();
 import mongoose, { ConnectOptions } from "mongoose";
 import { dbUrl } from "./consts";
-import { router } from "./router/auth";
+import { authRouter } from "./router/auth";
+import { usersRouter } from "./router/user";
 import errorMiddleware from "./middlewares/error-middleware";
 import swaggerUi from "swagger-ui-express";
 import * as swaggerDocument from "./swagger/docs.json";
+import { fileRouter } from "./router/file";
 
 const app: Express = express();
 const port = process.env.PORT;
@@ -16,7 +18,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-app.use("/auth", router);
+app.use("/auth", authRouter);
+app.use("/users", usersRouter);
+app.use("/file", fileRouter);
 app.use(errorMiddleware);
 
 const start = async () => {

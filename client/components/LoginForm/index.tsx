@@ -74,7 +74,7 @@ export const LoginForm: React.FC<ILoginFormProps> = observer(
             labelText="Login"
             placeholder="Your login"
             defaultValue={formData.login}
-            onChangeText={(value) => setFormDataHandler("login", value)}
+            onChangeText={(value: string) => setFormDataHandler("login", value)}
           />
           <Input
             required={true}
@@ -82,7 +82,9 @@ export const LoginForm: React.FC<ILoginFormProps> = observer(
             placeholder="Your password"
             defaultValue={formData.password}
             secureTextEntry={true}
-            onChangeText={(value) => setFormDataHandler("password", value)}
+            onChangeText={(value: string) =>
+              setFormDataHandler("password", value)
+            }
           />
           <View
             style={{

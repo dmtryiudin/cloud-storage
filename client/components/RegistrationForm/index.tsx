@@ -98,7 +98,7 @@ export const RegistrationForm = observer(() => {
         labelText="Login"
         placeholder="Your login"
         defaultValue={formData.login}
-        onChangeText={(value) => setFormDataHandler("login", value)}
+        onChangeText={(value: string) => setFormDataHandler("login", value)}
         error={formErrors.login}
       />
       <Input
@@ -107,14 +107,14 @@ export const RegistrationForm = observer(() => {
         placeholder="Your password"
         defaultValue={formData.password}
         secureTextEntry={true}
-        onChangeText={(value) => setFormDataHandler("password", value)}
+        onChangeText={(value: string) => setFormDataHandler("password", value)}
         error={formErrors.password}
       />
       <Input
         labelText="Name"
         placeholder="Your name"
         defaultValue={formData.name}
-        onChangeText={(value) => setFormDataHandler("name", value)}
+        onChangeText={(value: string) => setFormDataHandler("name", value)}
         error={formErrors.name}
       />
       <DropDown

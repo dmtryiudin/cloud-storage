@@ -14,6 +14,13 @@ export const InputStyles = StyleSheet.create({
     lineHeight: 19,
     color: "#191D23",
   },
+  errorText: {
+    fontFamily: "Manrope-Light",
+    fontStyle: "normal",
+    fontSize: 14,
+    lineHeight: 19,
+    color: "#DC2626",
+  },
   input: {
     fontFamily: "Manrope-Regular",
     height: 40,
@@ -31,5 +38,9 @@ export const InputStyles = StyleSheet.create({
 
   inputFocused: {
     borderColor: "#64748B",
+  },
+
+  inputError: {
+    borderColor: "#EF4444",
   },
 });

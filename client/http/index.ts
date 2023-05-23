@@ -32,8 +32,8 @@ axiosInstance.interceptors.response.use(
         return axiosInstance.request(originalRequest);
       }
       throw error;
-    } catch (e) {
-      return null;
+    } catch (error) {
+      throw error;
     }
   }
 );

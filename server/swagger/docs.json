@@ -470,10 +470,10 @@
           },
           {
             "in": "formData",
-            "name": "avatar",
+            "name": "file",
             "type": "file",
             "required": true,
-            "description": "New avatar"
+            "description": "New file"
           },
           {
             "name": "name",
@@ -600,8 +600,7 @@
             "name": "folder",
             "in": "body",
             "description": "folder id",
-            "type": "string",
-            "required": true
+            "type": "string"
           }
         ],
         "responses": {

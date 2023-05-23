@@ -16,11 +16,15 @@ export default class AuthService {
 
   static async registration(
     login: string,
-    password: string
+    password: string,
+    name: string,
+    country: string
   ): Promise<AxiosResponse<AuthResponse>> {
     return await axiosInstance.post<AuthResponse>("/auth/registration", {
       login,
       password,
+      name,
+      country,
     });
   }
 

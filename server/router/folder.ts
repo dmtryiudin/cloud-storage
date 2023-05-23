@@ -2,6 +2,7 @@ import express from "express";
 import { body } from "express-validator";
 import folderController from "../controllers/folder-controller";
 import authMiddleware from "../middlewares/auth-middleware";
+import banMiddleware from "../middlewares/ban-middleware";
 import confirmMailMiddleware from "../middlewares/confirm-mail-middleware";
 
 export const folderRouter = express.Router();
@@ -9,6 +10,7 @@ folderRouter.post(
   "/",
   body("name").notEmpty().withMessage("Folder name is required"),
   authMiddleware,
+  banMiddleware,
   folderController.createFolder
 );
 folderRouter.put(

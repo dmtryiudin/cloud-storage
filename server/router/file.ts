@@ -1,6 +1,7 @@
 import express from "express";
 import fileController from "../controllers/file-controller";
 import authMiddleware from "../middlewares/auth-middleware";
+import banMiddleware from "../middlewares/ban-middleware";
 import confirmMailMiddleware from "../middlewares/confirm-mail-middleware";
 import { fileUpload } from "../middlewares/multer-middleware";
 
@@ -11,17 +12,18 @@ fileRouter.get("/download/:file", fileController.downloadFile);
 fileRouter.get(
   "/download-protected/:id",
   authMiddleware,
+  banMiddleware,
   fileController.downloadFileProtected
 );
 fileRouter.post(
   "/upload",
   authMiddleware,
+  banMiddleware,
   fileUpload.single("file"),
   fileController.createFile
 );
 fileRouter.put(
   "/set-public/:file",
-  authMiddleware,
   confirmMailMiddleware,
   fileController.setPublic
 );

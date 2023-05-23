@@ -7,6 +7,7 @@ import { AntDesign } from "@expo/vector-icons";
 import { observer } from "mobx-react-lite";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../../screens/types";
+import { API_URL } from "@env";
 
 export const UserIcon = observer(() => {
   const navigation = useNavigation<StackNavigation>();
@@ -23,7 +24,7 @@ export const UserIcon = observer(() => {
         <Image
           style={avatar}
           source={{
-            uri: store.user.avatar,
+            uri: `${API_URL}${store.user.avatar}`,
           }}
         />
       </TouchableOpacity>

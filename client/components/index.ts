@@ -11,3 +11,4 @@ export * from "./Loading";
 export * from "./Error";
 export * from "./LoadingScreen";
 export * from "./BanButton";
+export * from "./ImagePicker";

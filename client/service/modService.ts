@@ -14,6 +14,8 @@ export default class ModService {
       { reason },
       {
         headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
           Authorization: `Bearer ${ACCESS_TOKEN}`,
         },
       }

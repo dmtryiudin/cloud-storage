@@ -5,6 +5,7 @@ export type RootStackParamList = {
   Home: undefined;
   Profile: undefined;
   Auth: undefined;
+  ProfileSettings: undefined;
 };
 
 export type StackNavigation = StackNavigationProp<StackParamList>;

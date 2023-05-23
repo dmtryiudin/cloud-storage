@@ -5,7 +5,7 @@ import AuthService from "../service/authService";
 import { API_URL } from "@env";
 import axios, { AxiosError } from "axios";
 import { AuthResponse } from "../models/response/AuthResponse";
-import { Error, IError } from "../models/IError";
+import { Error } from "../models/IError";
 
 export default class Store {
   user = {} as IUser;
@@ -36,7 +36,7 @@ export default class Store {
       this.setUser(user);
       this.setError();
     } catch (e: AxiosError | any) {
-      this.setError(e.response.status, e.response.data);
+      this.setError(e?.response?.status, e?.response?.data);
     } finally {
       this.setLoading(false);
     }
@@ -63,8 +63,7 @@ export default class Store {
       this.setUser(user);
       this.setError();
     } catch (e: AxiosError | any) {
-      console.log(e);
-      this.setError(e.response.status, e.response.data);
+      this.setError(e?.response?.status, e?.response?.data);
     } finally {
       this.setLoading(false);
     }
@@ -84,7 +83,7 @@ export default class Store {
       this.setUser({} as IUser);
       this.setError();
     } catch (e: AxiosError | any) {
-      this.setError(e.response.status, e.response.data);
+      this.setError(e?.response?.status, e?.response?.data);
     } finally {
       this.setLoading(false);
     }
@@ -112,7 +111,7 @@ export default class Store {
       await AsyncStorage.setItem("refreshToken", refreshToken);
       this.setError();
     } catch (e: AxiosError | any) {
-      this.setError(e.response.status, e.response.data);
+      this.setError(e?.response?.status, e?.response?.data);
     } finally {
       this.setLoading(false);
     }

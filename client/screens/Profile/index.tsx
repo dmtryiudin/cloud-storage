@@ -1,4 +1,11 @@
-import { Image, View, Text, ScrollView, RefreshControl } from "react-native";
+import {
+  Image,
+  View,
+  Text,
+  ScrollView,
+  RefreshControl,
+  TouchableOpacity,
+} from "react-native";
 import {
   BanButton,
   Button,
@@ -14,13 +21,19 @@ import { ProfileParamList } from "./types";
 import { IUser } from "../../models/IUser";
 import UserService from "../../service/userService";
 import { IResponse } from "../../models/response/IResponse";
-import { FontAwesome, MaterialIcons, FontAwesome5 } from "@expo/vector-icons";
+import {
+  FontAwesome,
+  MaterialIcons,
+  FontAwesome5,
+  Feather,
+} from "@expo/vector-icons";
 import { ProfileStyles } from "./styles";
 import { useMediaQuery } from "react-responsive";
 import { conditionStyles } from "../../utils/conditionStyles";
 import { flag } from "country-emoji";
 import { Error as ErrorType } from "../../models/IError";
 import { StackNavigation } from "../types";
+import { API_URL } from "@env";
 
 export const Profile = observer(() => {
   const isTabletOrMobileDevice = useMediaQuery({
@@ -44,6 +57,7 @@ export const Profile = observer(() => {
     textInfo,
     infoWrapper,
     scrollView,
+    heading,
   } = ProfileStyles;
   const fetchUser = async () => {
     setUserData({
@@ -53,7 +67,6 @@ export const Profile = observer(() => {
     });
     try {
       const { data } = await UserService.getUser(params.login);
-
       setUserData({
         isLoading: false,
         error: null,
@@ -76,6 +89,7 @@ export const Profile = observer(() => {
     fetchUser();
   }, []);
 
+  console.log(JSON.stringify(error));
   if (error) {
     return <Error />;
   }
@@ -110,12 +124,20 @@ export const Profile = observer(() => {
           ...conditionStyles(wrapperWide, isTabletOrMobileDevice),
         }}
       >
-        <Heading label="User info" />
+        <View style={heading}>
+          <Heading label="User info" />
+          <TouchableOpacity
+            onPress={() => navigation.navigate("ProfileSettings")}
+          >
+            <Feather name="settings" size={30} color="black" />
+          </TouchableOpacity>
+        </View>
+
         {avatar ? (
           <Image
             style={userAvatar}
             source={{
-              uri: avatar,
+              uri: `${API_URL}${avatar}`,
             }}
           />
         ) : (
@@ -142,7 +164,9 @@ export const Profile = observer(() => {
             Files capacity: {filesCapacity * (9.537 * Math.pow(10, -7))} MB
           </Text>
         </View>
-        {store.user.roles?.includes("MOD") && <BanButton login={login} />}
+        {store.user.roles?.includes("MOD") && !store.user?.isBanned && (
+          <BanButton login={login} />
+        )}
         {store.user.login === login && (
           <Button type="danger" onPress={logoutHandler} title="Logout" />
         )}

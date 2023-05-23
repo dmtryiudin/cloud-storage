@@ -45,6 +45,6 @@ export const DropDownStyles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: "#A0ABBB",
     paddingHorizontal: 10,
-    overflow: "hidden",
+    overflow: "scroll",
   },
 });

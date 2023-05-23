@@ -13,6 +13,13 @@ export const ProfileStyles = StyleSheet.create({
     padding: 50,
   },
 
+  heading: {
+    display: "flex",
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+
   userAvatar: {
     width: 100,
     height: 100,

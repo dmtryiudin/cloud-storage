@@ -5,7 +5,6 @@ import { AuthResponse } from "../models/response/AuthResponse";
 
 const axiosInstance = axios.create({
   baseURL: API_URL,
-  headers: { Accept: "application/json", "Content-Type": "application/json" },
 });
 
 axiosInstance.interceptors.response.use(
@@ -16,7 +15,7 @@ axiosInstance.interceptors.response.use(
     try {
       const originalRequest = error.config;
       if (
-        error.response.status == 401 &&
+        error?.response?.status == 401 &&
         error.config &&
         !error.config._isRepeat
       ) {

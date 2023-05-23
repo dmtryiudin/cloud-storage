@@ -6,35 +6,24 @@ import { Header } from "./Header";
 import { Home } from "./Home";
 import { Profile } from "./Profile";
 import { RootStackParamList } from "./types";
+import { ProfileSettings } from "./ProfileSettings";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 export const Navigation = () => {
+  const options = {
+    headerTitle: () => null,
+    header: () => <Header />,
+  };
   return (
     <NavigationContainer>
       <Stack.Navigator>
+        <Stack.Screen name="Home" component={Home} options={options} />
+        <Stack.Screen name="Auth" component={Auth} options={options} />
+        <Stack.Screen name="Profile" component={Profile} options={options} />
         <Stack.Screen
-          name="Home"
-          component={Home}
-          options={{
-            headerTitle: () => null,
-            header: () => <Header />,
-          }}
-        />
-        <Stack.Screen
-          name="Auth"
-          component={Auth}
-          options={{
-            headerTitle: () => null,
-            header: () => <Header />,
-          }}
-        />
-        <Stack.Screen
-          name="Profile"
-          component={Profile}
-          options={{
-            headerTitle: () => null,
-            header: () => <Header />,
-          }}
+          name="ProfileSettings"
+          component={ProfileSettings}
+          options={options}
         />
       </Stack.Navigator>
     </NavigationContainer>

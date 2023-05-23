@@ -8,8 +8,11 @@ import { ObjectId } from "mongodb";
 class UserController {
   async getAll(req: Request, res: Response, next: NextFunction) {
     try {
-      const { page, limit } = req.query;
-      const users = await userService.getAll(page, limit);
+      const { page = "0", limit = "100" } = req.query;
+      const users = await userService.getAll(
+        parseInt(page?.toString()),
+        parseInt(limit?.toString())
+      );
       return res.json(users);
     } catch (e) {
       next(e);

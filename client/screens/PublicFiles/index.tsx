@@ -13,6 +13,7 @@ import {
   FileButton,
   Input,
 } from "../../components";
+import { AntDesign } from "@expo/vector-icons";
 import { IPaginated } from "../../models/IPaginated";
 import { PublicFilesStyles } from "./styles";
 import {
@@ -23,9 +24,11 @@ import {
   Text,
   TouchableOpacity,
   ActivityIndicator,
+  Animated,
 } from "react-native";
 import { conditionStyles } from "../../utils/conditionStyles";
 import { StackNavigation } from "../types";
+import OutsidePressHandler from "react-native-outside-press";
 
 export const PublicFiles = observer(() => {
   const navigation = useNavigation<StackNavigation>();
@@ -33,12 +36,16 @@ export const PublicFiles = observer(() => {
     minDeviceWidth: 600,
   });
 
+  const [isDropDownOpened, setIsDropDownOpened] = useState<boolean>(false);
+  const [availableFilters, setAvailableFilters] = useState<string[]>([]);
+  const [chosenFilters, setChosenFilters] = useState<string[]>([]);
   const [currentPage, setCurrentPage] = useState<number>(0);
   const [maxItems, setMaxItems] = useState<number>(0);
   const isFocused = useIsFocused();
-  const [currentLogin, setCurrentLogin] = useState<string>("");
+  const [height] = useState(new Animated.Value(0));
+  const [currentName, setCurrentName] = useState<string>("");
   const [{ isLoading, data, error }, setFiles] = useState<
-    IResponse<IPaginated<IFile>>
+    IResponse<IPaginated<IFile> & { fileExtensions: string[] }>
   >({
     data: null,
     isLoading: true,
@@ -62,8 +69,10 @@ export const PublicFiles = observer(() => {
         const responseData = await FileService.getPublicFiles(
           currentPage.toString(),
           "18",
-          currentLogin
+          currentName,
+          chosenFilters
         );
+        setAvailableFilters(responseData.data.fileExtensions);
         setFiles({
           isLoading: false,
           error: null,
@@ -101,8 +110,21 @@ export const PublicFiles = observer(() => {
     setCurrentPage((prev) => prev + 1);
   };
 
-  const { wrapper, wrapperWide, header, fileItem, linkText, loader } =
-    PublicFilesStyles;
+  const {
+    wrapper,
+    wrapperWide,
+    header,
+    fileItem,
+    linkText,
+    loader,
+    animatedFilter,
+    animatedFilterList,
+    text,
+    textChosen,
+    filterTitleText,
+    filterSeparator,
+    filterItem,
+  } = PublicFilesStyles;
 
   const windowHeight = Dimensions.get("window").height;
 
@@ -115,6 +137,37 @@ export const PublicFiles = observer(() => {
       );
     }
     return null;
+  };
+
+  useEffect(() => {
+    if (isDropDownOpened) {
+      Animated.timing(height, {
+        toValue: 1,
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
+    } else {
+      Animated.timing(height, {
+        toValue: 0,
+        duration: 300,
+        useNativeDriver: false,
+      }).start();
+    }
+  }, [isDropDownOpened]);
+
+  const maxHeight = height.interpolate({
+    inputRange: [0, 1],
+    outputRange: [0, 200],
+  });
+
+  const setFilter = (filter: string) => {
+    if (chosenFilters.includes(filter)) {
+      setChosenFilters(
+        chosenFilters.filter((filterItem) => filterItem !== filter)
+      );
+    } else {
+      setChosenFilters([...chosenFilters, filter]);
+    }
   };
 
   if (error) {
@@ -136,12 +189,71 @@ export const PublicFiles = observer(() => {
         >
           <View style={header}>
             <Heading label="Public files" />
+            <TouchableOpacity
+              onPress={() => {
+                if (!isDropDownOpened) {
+                  setIsDropDownOpened(true);
+                }
+              }}
+            >
+              <AntDesign name="filter" size={30} color="black" />
+            </TouchableOpacity>
           </View>
+          <Animated.View
+            style={{
+              maxHeight,
+              ...animatedFilter,
+            }}
+          >
+            <OutsidePressHandler
+              onOutsidePress={() => setIsDropDownOpened(false)}
+              disabled={!isDropDownOpened}
+            >
+              <View
+                style={{
+                  ...animatedFilterList,
+                  ...conditionStyles(
+                    { borderColor: "transparent" },
+                    !isDropDownOpened
+                  ),
+                }}
+              >
+                <Text style={filterTitleText}>Shown files extensions</Text>
+                <View style={filterSeparator} />
+                <FlatList
+                  data={availableFilters}
+                  renderItem={({ item }) => {
+                    return (
+                      <TouchableOpacity
+                        style={filterItem}
+                        onPress={() => {
+                          setFilter(item);
+                          refresh();
+                        }}
+                      >
+                        <Text
+                          style={{
+                            ...text,
+                            ...conditionStyles(
+                              textChosen,
+                              chosenFilters.includes(item)
+                            ),
+                          }}
+                        >
+                          {item}
+                        </Text>
+                      </TouchableOpacity>
+                    );
+                  }}
+                />
+              </View>
+            </OutsidePressHandler>
+          </Animated.View>
           <Input
             noError={true}
             labelText="Search file by name"
-            defaultValue={currentLogin}
-            onChangeText={(value: string) => setCurrentLogin(value)}
+            defaultValue={currentName}
+            onChangeText={(value: string) => setCurrentName(value)}
             onSubmitEditing={refresh}
           />
           <FlatList

@@ -22,7 +22,7 @@ export const DropDown: React.FC<IDropDown> = ({
   labelText,
 }) => {
   const [isDropDownOpened, setIsDropDownOpened] = useState<boolean>(false);
-  const [height, setHeight] = useState(new Animated.Value(0));
+  const [height] = useState(new Animated.Value(0));
   const { fieldText, field, fieldFocused, wrapper, label, list } =
     DropDownStyles;
 
@@ -74,7 +74,10 @@ export const DropDown: React.FC<IDropDown> = ({
           <FlatList
             style={{
               ...list,
-              ...conditionStyles({ borderWidth: 0 }, !isDropDownOpened),
+              ...conditionStyles(
+                { borderColor: "transparent" },
+                !isDropDownOpened
+              ),
             }}
             data={variants}
             renderItem={({ item }) => {

@@ -1,5 +1,5 @@
 import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
-import { Switch, Text, View } from "react-native";
+import { Modal, Pressable, Switch, Text, View } from "react-native";
 import { ProfileParamList } from "../Profile/types";
 import { Button, DeleteConfirmButton, Heading, Input } from "../../components";
 import FileService from "../../service/fileService";
@@ -13,10 +13,11 @@ import { AxiosError } from "axios";
 import { observer } from "mobx-react-lite";
 import { StackNavigation } from "../types";
 import { FontAwesome } from "@expo/vector-icons";
+import { fromBytesToMegabytes } from "../../utils/fromBytesToMegabytes";
 
 export const FileSettings = observer(() => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isError, setIsError] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
   const [isPublicSwitch, setIsPublicSwitch] = useState<boolean>(false);
   const isTabletOrMobileDevice = useMediaQuery({
     minDeviceWidth: 600,
@@ -25,7 +26,7 @@ export const FileSettings = observer(() => {
   const [updatedNewName, setUpdatedNewName] = useState<string>("");
   const { params } = useRoute<RouteProp<ProfileParamList>>();
   const { store } = useContext(StoreContext);
-  const { isPublic, href, name, owner } = params.file as IFile;
+  const { isPublic, href, name, owner, capacity } = params.file as IFile;
   const navigation = useNavigation<StackNavigation>();
 
   const {
@@ -35,6 +36,10 @@ export const FileSettings = observer(() => {
     publicSwitchWrapper,
     headerWrapper,
     settingsWrapper,
+    modal,
+    modalContentWrapper,
+    modalText,
+    modalTextWrapper,
   } = FileSettingsStyles;
 
   useEffect(() => {
@@ -50,8 +55,16 @@ export const FileSettings = observer(() => {
     try {
       store.setLoading(true);
       await FileService.setFilePublic(href);
-    } catch (error: any | AxiosError) {
-      setIsError(true);
+    } catch (e: any | AxiosError) {
+      if (e?.response?.data) {
+        setError(
+          (e.response.data?.errors && e.response.data?.errors[0]?.msg) ||
+            e.response.data.message ||
+            "Something went wrong"
+        );
+      } else {
+        setError("Something went wrong");
+      }
     } finally {
       store.setLoading(false);
     }
@@ -62,8 +75,16 @@ export const FileSettings = observer(() => {
       store.setLoading(true);
       await FileService.renameFile(href, currentNewName);
       setUpdatedNewName(currentNewName);
-    } catch (error: any | AxiosError) {
-      setIsError(true);
+    } catch (e: any | AxiosError) {
+      if (e?.response?.data) {
+        setError(
+          (e.response.data?.errors && e.response.data?.errors[0]?.msg) ||
+            e.response.data.message ||
+            "Something went wrong"
+        );
+      } else {
+        setError("Something went wrong");
+      }
     } finally {
       store.setLoading(false);
     }
@@ -77,8 +98,16 @@ export const FileSettings = observer(() => {
       } else {
         await FileService.downloadProtectedFile(href);
       }
-    } catch {
-      setIsError(true);
+    } catch (e: any | AxiosError) {
+      if (e?.response?.data) {
+        setError(
+          (e.response.data?.errors && e.response.data?.errors[0]?.msg) ||
+            e.response.data.message ||
+            "Something went wrong"
+        );
+      } else {
+        setError("Something went wrong");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -90,37 +119,65 @@ export const FileSettings = observer(() => {
   };
 
   return (
-    <View
-      style={{
-        ...wrapper,
-        ...conditionStyles(wrapperWide, isTabletOrMobileDevice),
-      }}
-    >
-      <View style={headerWrapper}>
-        <FontAwesome name="file" size={70} color="#047857" />
-        <Heading label={`${updatedNewName || name} file`} />
-      </View>
-      <Button title="Download" onPress={downloadFile} isLoading={isLoading} />
-      {owner === store.user.id && (
-        <View style={settingsWrapper}>
-          <Heading label="Settings" />
-          <Input
-            noError={true}
-            labelText="New file name"
-            onChangeText={(value: string) => setCurrentNewName(value)}
-            defaultValue={currentNewName}
-            onSubmitEditing={renameFile}
-          />
-          <View style={publicSwitchWrapper}>
-            <Text style={text}>Set public</Text>
-            <Switch onValueChange={setPublicHandler} value={isPublicSwitch} />
-          </View>
-          <DeleteConfirmButton
-            deleteFunction={deleteFile}
-            buttonTitle="Delete file"
+    <>
+      <View
+        style={{
+          ...wrapper,
+          ...conditionStyles(wrapperWide, isTabletOrMobileDevice),
+        }}
+      >
+        <View style={headerWrapper}>
+          <FontAwesome name="file" size={70} color="#047857" />
+          <Heading
+            label={`${
+              updatedNewName || name + ` (${fromBytesToMegabytes(capacity)})MB`
+            }`}
           />
         </View>
-      )}
-    </View>
+        <Button title="Download" onPress={downloadFile} isLoading={isLoading} />
+        {owner === store.user.id && (
+          <View style={settingsWrapper}>
+            <Heading label="Settings" />
+            <Input
+              noError={true}
+              labelText="New file name"
+              onChangeText={(value: string) => setCurrentNewName(value)}
+              defaultValue={currentNewName}
+              onSubmitEditing={renameFile}
+            />
+            <View style={publicSwitchWrapper}>
+              <Text style={text}>Set public</Text>
+              <Switch onValueChange={setPublicHandler} value={isPublicSwitch} />
+            </View>
+            <DeleteConfirmButton
+              deleteFunction={deleteFile}
+              buttonTitle="Move file to trash"
+            />
+          </View>
+        )}
+      </View>
+      <Modal
+        visible={!!error}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => {
+          setError("");
+        }}
+      >
+        <Pressable
+          style={modal}
+          onPress={(event) =>
+            event.target == event.currentTarget && setError("")
+          }
+        >
+          <View style={modalContentWrapper}>
+            <View style={modalTextWrapper}>
+              <Text style={modalText}>{error}</Text>
+              <Button type="primary" title="OK" onPress={() => setError("")} />
+            </View>
+          </View>
+        </Pressable>
+      </Modal>
+    </>
   );
 });

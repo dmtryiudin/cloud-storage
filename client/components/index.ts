@@ -16,3 +16,6 @@ export * from "./DeleteConfirmButton";
 export * from "./UserPreview";
 export * from "./FileButton";
 export * from "./UploadFileModal";
+export * from "./FolderButton";
+export * from "./UploadFileModal";
+export * from "./UploadFolderModal";

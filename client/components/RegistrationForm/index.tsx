@@ -9,7 +9,6 @@ import { Input } from "../Input";
 import { RegistrationFormStyles } from "./styles";
 import countryList from "country-list";
 import { Heading } from "../Heading";
-import { Loading } from "../Loading";
 import "@expo/match-media";
 import { useMediaQuery } from "react-responsive";
 import { conditionStyles } from "../../utils/conditionStyles";

@@ -13,8 +13,12 @@ import {
   LoadingScreen,
   UploadFileModal,
   Error,
+  FolderButton,
+  UploadFolderModal,
 } from "../../components";
 import { useIsFocused } from "@react-navigation/native";
+import { IFolder } from "../../models/IFolder";
+import FoldersService from "../../service/folderService";
 
 export const FilesAndFoldersForUser = () => {
   const { wrapper, wrapperWide, header, fileItem } =
@@ -24,11 +28,23 @@ export const FilesAndFoldersForUser = () => {
     minDeviceWidth: 600,
   });
 
-  const [showModal, setShowModal] = useState<boolean>(false);
+  const [showFileModal, setShowFileModal] = useState<boolean>(false);
+  const [showFolderModal, setShowFolderModal] = useState<boolean>(false);
+
   const isFocused = useIsFocused();
-  const [{ isLoading, data, error }, setFilesForUser] = useState<
-    IResponse<IFile[]>
-  >({
+  const [
+    { isLoading: isFilesLoading, data: filesData, error: filesError },
+    setFilesForUser,
+  ] = useState<IResponse<IFile[]>>({
+    data: null,
+    isLoading: true,
+    error: null,
+  });
+
+  const [
+    { isLoading: isFoldersLoading, data: foldersData, error: foldersError },
+    setFoldersForUser,
+  ] = useState<IResponse<IFolder[]>>({
     data: null,
     isLoading: true,
     error: null,
@@ -56,61 +72,103 @@ export const FilesAndFoldersForUser = () => {
     }
   };
 
+  const loadFoldersForUser = async () => {
+    setFoldersForUser({
+      data: null,
+      isLoading: true,
+      error: null,
+    });
+    try {
+      const { data } = await FoldersService.getFoldersForUser();
+      setFoldersForUser({
+        data,
+        isLoading: false,
+        error: null,
+      });
+    } catch (error: ErrorType | any) {
+      setFoldersForUser({
+        isLoading: false,
+        error,
+        data: null,
+      });
+    }
+  };
+
   useEffect(() => {
     loadFilesForUser();
+    loadFoldersForUser();
   }, [isFocused]);
 
-  if (error) {
+  if (filesError || foldersError) {
     return <Error />;
   }
 
-  if (isLoading) {
+  if (isFilesLoading || isFoldersLoading) {
     return <LoadingScreen />;
   }
 
-  return (
-    <>
-      <View
-        style={{
-          ...wrapper,
-          ...conditionStyles(wrapperWide, isTabletOrMobileDevice),
-        }}
-      >
-        <View style={header}>
-          <TouchableOpacity onPress={() => setShowModal(true)}>
-            <MaterialIcons name="file-upload" size={40} color="black" />
-          </TouchableOpacity>
-          <TouchableOpacity>
-            <MaterialCommunityIcons
-              name="folder-plus"
-              size={40}
-              color="black"
-            />
-          </TouchableOpacity>
-        </View>
-
-        <FlatList
-          numColumns={3}
-          data={data}
-          renderItem={({ item }) => (
-            <TouchableOpacity style={fileItem}>
-              <FileButton {...item} />
+  if (foldersData && filesData) {
+    const filesAndFoldersData: any = [...filesData, ...foldersData];
+    return (
+      <>
+        <View
+          style={{
+            ...wrapper,
+            ...conditionStyles(wrapperWide, isTabletOrMobileDevice),
+          }}
+        >
+          <View style={header}>
+            <TouchableOpacity onPress={() => setShowFileModal(true)}>
+              <MaterialIcons name="file-upload" size={40} color="black" />
             </TouchableOpacity>
-          )}
-          keyExtractor={(item) => item.name}
-          refreshControl={
-            <RefreshControl
-              refreshing={isLoading}
-              onRefresh={loadFilesForUser}
-            />
-          }
+            <TouchableOpacity onPress={() => setShowFolderModal(true)}>
+              <MaterialCommunityIcons
+                name="folder-plus"
+                size={40}
+                color="black"
+              />
+            </TouchableOpacity>
+          </View>
+
+          <FlatList
+            numColumns={3}
+            data={filesAndFoldersData}
+            renderItem={({ item }) => (
+              <TouchableOpacity style={fileItem}>
+                {item.files ? (
+                  <FolderButton {...item} />
+                ) : (
+                  <FileButton {...item} />
+                )}
+              </TouchableOpacity>
+            )}
+            keyExtractor={(item) =>
+              item.files ? item.name + item.owner : item.name
+            }
+            refreshControl={
+              <RefreshControl
+                refreshing={isFilesLoading}
+                onRefresh={() => {
+                  loadFilesForUser();
+                  loadFoldersForUser();
+                }}
+              />
+            }
+          />
+        </View>
+        <UploadFileModal
+          showModal={showFileModal}
+          setShowModal={setShowFileModal}
+          finishedLoading={loadFilesForUser}
         />
-      </View>
-      <UploadFileModal
-        showModal={showModal}
-        setShowModal={setShowModal}
-        finishedLoading={loadFilesForUser}
-      />
-    </>
-  );
+        <UploadFolderModal
+          showModal={showFolderModal}
+          setShowModal={setShowFolderModal}
+          finishedLoading={loadFoldersForUser}
+        />
+      </>
+    );
+  }
+
+  return null;
 };

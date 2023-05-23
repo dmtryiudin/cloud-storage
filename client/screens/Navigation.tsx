@@ -14,6 +14,7 @@ import { observer } from "mobx-react-lite";
 import { SearchUsers } from "./SearchUsers";
 import { FilesAndFoldersForUser } from "./FilesAndFoldersForUser";
 import { FileSettings } from "./FileSettings";
+import { Folder } from "./Folder";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 export const Navigation = observer(() => {
@@ -55,6 +56,7 @@ export const Navigation = observer(() => {
             component={FileSettings}
             options={options}
           />
+          <Stack.Screen name="Folder" component={Folder} options={options} />
         </Stack.Navigator>
       </NavigationContainer>
       <Loading show={store.isLoading} />

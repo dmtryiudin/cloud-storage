@@ -1,7 +1,7 @@
 import { TouchableOpacity, View } from "react-native";
 import { HeaderStyles } from "./styles";
 import { UserIcon } from "../../components";
-import { Feather, MaterialIcons } from "@expo/vector-icons";
+import { Feather, MaterialIcons, Ionicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigation } from "../types";
 
@@ -17,6 +17,11 @@ export const Header = () => {
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate("SearchUsers")}>
         <MaterialIcons name="person-search" size={40} color="black" />
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("FilesAndFoldersForUser")}
+      >
+        <Ionicons name="md-file-tray-stacked-sharp" size={40} color="black" />
       </TouchableOpacity>
     </View>
   );

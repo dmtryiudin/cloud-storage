@@ -145,4 +145,6 @@ export const SearchUsers = () => {
       </View>
     );
   }
+
+  return null;
 };

@@ -8,6 +8,8 @@ export type RootStackParamList = {
   ProfileSettings: undefined;
   ClientSettings: undefined;
   SearchUsers: undefined;
+  FilesAndFoldersForUser: undefined;
+  FileSettings: undefined;
 };
 
 export type StackNavigation = StackNavigationProp<StackParamList>;

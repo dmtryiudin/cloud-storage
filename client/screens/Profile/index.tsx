@@ -34,6 +34,7 @@ import { flag } from "country-emoji";
 import { Error as ErrorType } from "../../models/IError";
 import { StackNavigation } from "../types";
 import { API_URL } from "@env";
+import { fromBytesToMegabytes } from "../../utils/fromBytesToMegabytes";
 
 export const Profile = observer(() => {
   const isTabletOrMobileDevice = useMediaQuery({
@@ -167,7 +168,7 @@ export const Profile = observer(() => {
             {new Date(registrationDate).toLocaleDateString("ru-RU")}
           </Text>
           <Text style={textInfo}>
-            Files capacity: {filesCapacity * (9.537 * Math.pow(10, -7))} MB
+            Files capacity: {fromBytesToMegabytes(filesCapacity)} MB
           </Text>
         </View>
         <View

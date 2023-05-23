@@ -12,6 +12,8 @@ import { Loading } from "../components";
 import { StoreContext } from "../context/store";
 import { observer } from "mobx-react-lite";
 import { SearchUsers } from "./SearchUsers";
+import { FilesAndFoldersForUser } from "./FilesAndFoldersForUser";
+import { FileSettings } from "./FileSettings";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 export const Navigation = observer(() => {
@@ -41,6 +43,16 @@ export const Navigation = observer(() => {
           <Stack.Screen
             name="SearchUsers"
             component={SearchUsers}
+            options={options}
+          />
+          <Stack.Screen
+            name="FilesAndFoldersForUser"
+            component={store.isAuth ? FilesAndFoldersForUser : Auth}
+            options={options}
+          />
+          <Stack.Screen
+            name="FileSettings"
+            component={FileSettings}
             options={options}
           />
         </Stack.Navigator>

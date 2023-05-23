@@ -14,3 +14,5 @@ export * from "./BanButton";
 export * from "./ImagePicker";
 export * from "./DeleteAccountButton";
 export * from "./UserPreview";
+export * from "./FileButton";
+export * from "./UploadFileModal";

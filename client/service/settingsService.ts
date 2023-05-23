@@ -17,7 +17,7 @@ export default class SettingsService {
 
   static async getSettings(): Promise<AxiosResponse<ISettings>> {
     const ACCESS_TOKEN = await AsyncStorage.getItem("accessToken");
-    return await axiosInstance.get("/settings", {
+    return await axiosInstance.get<ISettings>("/settings", {
       headers: {
         Accept: "application/json",
         "Content-Type": "application/json",

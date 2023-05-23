@@ -27,4 +27,52 @@ export default class FoldersService {
       }
     );
   }
+
+  static async getPrivateFolder(id: string) {
+    const ACCESS_TOKEN = await AsyncStorage.getItem("accessToken");
+    return axiosInstance.get("/folder/private/" + id, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+    });
+  }
+
+  static async renameFolder(id: string, newName: string) {
+    const ACCESS_TOKEN = await AsyncStorage.getItem("accessToken");
+    return axiosInstance.put(
+      "/folder/rename/" + id,
+      { newName },
+      {
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${ACCESS_TOKEN}`,
+        },
+      }
+    );
+  }
+
+  static async setFolderPublic(id: string) {
+    const ACCESS_TOKEN = await AsyncStorage.getItem("accessToken");
+    return axiosInstance.put("/folder/set-public/" + id, undefined, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+    });
+  }
+
+  static async deleteFolder(id: string) {
+    const ACCESS_TOKEN = await AsyncStorage.getItem("accessToken");
+    return axiosInstance.delete("/folder/" + id, {
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${ACCESS_TOKEN}`,
+      },
+    });
+  }
 }

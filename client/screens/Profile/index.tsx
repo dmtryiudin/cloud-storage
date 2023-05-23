@@ -15,7 +15,12 @@ import {
 } from "../../components";
 import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "../../context/store";
-import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import {
+  RouteProp,
+  useIsFocused,
+  useNavigation,
+  useRoute,
+} from "@react-navigation/native";
 import { observer } from "mobx-react-lite";
 import { ProfileParamList } from "./types";
 import { IUser } from "../../models/IUser";
@@ -48,6 +53,7 @@ export const Profile = observer(() => {
   const { params } = useRoute<RouteProp<ProfileParamList>>();
   const navigation = useNavigation<StackNavigation>();
   const { store } = useContext(StoreContext);
+  const isFocused = useIsFocused();
 
   const {
     wrapper,
@@ -93,7 +99,7 @@ export const Profile = observer(() => {
   };
   useEffect(() => {
     fetchUser();
-  }, [params.login]);
+  }, [params.login, isFocused]);
 
   if (error) {
     return <Error />;

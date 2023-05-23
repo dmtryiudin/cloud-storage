@@ -9,8 +9,6 @@ export const FolderButton: React.FC<IFolder> = (folder) => {
   const { wrapper, text } = FolderButtonStyles;
   const { name, id } = folder;
   const navigation = useNavigation<StackNavigation>();
-
-  console.log(folder);
   return (
     <TouchableOpacity
       style={wrapper}

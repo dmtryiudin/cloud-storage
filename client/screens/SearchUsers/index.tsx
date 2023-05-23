@@ -21,6 +21,7 @@ import { AxiosError } from "axios";
 import { conditionStyles } from "../../utils/conditionStyles";
 import { Dimensions } from "react-native";
 import { useIsFocused } from "@react-navigation/native";
+import { API_URL } from "@env";
 
 export const SearchUsers = () => {
   const isTabletOrMobileDevice = useMediaQuery({

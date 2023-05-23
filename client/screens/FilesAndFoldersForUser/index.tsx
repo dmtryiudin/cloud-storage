@@ -15,13 +15,14 @@ import {
   Error,
   FolderButton,
   UploadFolderModal,
+  Heading,
 } from "../../components";
 import { useIsFocused } from "@react-navigation/native";
 import { IFolder } from "../../models/IFolder";
 import FoldersService from "../../service/folderService";
 
 export const FilesAndFoldersForUser = () => {
-  const { wrapper, wrapperWide, header, fileItem } =
+  const { wrapper, wrapperWide, header, fileItem, headerButtonsWrapper } =
     FilesAndFoldersForUserStyles;
 
   const isTabletOrMobileDevice = useMediaQuery({
@@ -118,16 +119,19 @@ export const FilesAndFoldersForUser = () => {
           }}
         >
           <View style={header}>
-            <TouchableOpacity onPress={() => setShowFileModal(true)}>
-              <MaterialIcons name="file-upload" size={40} color="black" />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => setShowFolderModal(true)}>
-              <MaterialCommunityIcons
-                name="folder-plus"
-                size={40}
-                color="black"
-              />
-            </TouchableOpacity>
+            <Heading label="User's files and folders" />
+            <View style={headerButtonsWrapper}>
+              <TouchableOpacity onPress={() => setShowFileModal(true)}>
+                <MaterialIcons name="file-upload" size={40} color="black" />
+              </TouchableOpacity>
+              <TouchableOpacity onPress={() => setShowFolderModal(true)}>
+                <MaterialCommunityIcons
+                  name="folder-plus"
+                  size={40}
+                  color="black"
+                />
+              </TouchableOpacity>
+            </View>
           </View>
 
           <FlatList

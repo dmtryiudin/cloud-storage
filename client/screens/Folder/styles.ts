@@ -1,6 +1,6 @@
 import { StyleSheet } from "react-native";
 
-export const FilesAndFoldersForUserStyles = StyleSheet.create({
+export const FolderStyles = StyleSheet.create({
   wrapper: {
     minHeight: "100%",
     display: "flex",
@@ -14,17 +14,17 @@ export const FilesAndFoldersForUserStyles = StyleSheet.create({
   wrapperWide: {
     padding: 50,
   },
+
   header: {
+    width: "100%",
     display: "flex",
     alignItems: "center",
-    width: "100%",
     justifyContent: "space-between",
     flexDirection: "row",
   },
   fileItem: {
     margin: 4,
   },
-
   headerButtonsWrapper: {
     display: "flex",
     alignItems: "center",

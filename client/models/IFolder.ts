@@ -1,9 +1,11 @@
+import { IFile } from "./IFile";
+
 export interface IFolder {
   owner: string;
   name: string;
   deleteDate: number;
   isPublic: boolean;
   filesCapacity: number;
-  files: string[];
+  files: IFile[];
   id: string;
 }

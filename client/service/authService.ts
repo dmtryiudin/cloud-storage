@@ -2,6 +2,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { AxiosResponse } from "axios";
 import axiosInstance from "../http";
 import { AuthResponse } from "../models/response/AuthResponse";
+import { API_URL } from "@env";
 
 export default class AuthService {
   static async login(

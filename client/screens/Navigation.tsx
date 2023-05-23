@@ -15,6 +15,7 @@ import { SearchUsers } from "./SearchUsers";
 import { FilesAndFoldersForUser } from "./FilesAndFoldersForUser";
 import { FileSettings } from "./FileSettings";
 import { Folder } from "./Folder";
+import { FolderSettings } from "./FolderSettings";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 export const Navigation = observer(() => {
@@ -38,7 +39,7 @@ export const Navigation = observer(() => {
           />
           <Stack.Screen
             name="ClientSettings"
-            component={ClientSettings}
+            component={store.isAuth ? ClientSettings : Auth}
             options={options}
           />
           <Stack.Screen
@@ -54,6 +55,11 @@ export const Navigation = observer(() => {
           <Stack.Screen
             name="FileSettings"
             component={FileSettings}
+            options={options}
+          />
+          <Stack.Screen
+            name="FolderSettings"
+            component={FolderSettings}
             options={options}
           />
           <Stack.Screen name="Folder" component={Folder} options={options} />

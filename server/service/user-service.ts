@@ -12,11 +12,19 @@ class UserService {
     return { ...new UserDto(user) };
   }
 
-  async getAll() {
+  async getAll(page = 0, limit = 100) {
+    if (limit > 100) {
+      limit = 100;
+    }
     const users = await userModel.find();
-    return users.map((e) => {
-      return { ...new UserDto(e) };
-    });
+    return {
+      page,
+      limit,
+      response: users.slice(page * limit, (page + 1) * limit).map((e) => {
+        return { ...new UserDto(e) };
+      }),
+      maxCount: users.length,
+    };
   }
 
   async updateOne(id: string, body: UpdateUserDto) {

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import React, { useContext, useEffect, useState } from "react";
-import { View, Text, Modal } from "react-native";
+import { View, Text, Modal, Pressable } from "react-native";
 import { StoreContext } from "../../context/store";
 import { Button } from "../Button";
 import { Input } from "../Input";
@@ -38,7 +38,7 @@ export const LoginForm: React.FC<ILoginFormProps> = observer(
       const { login, password } = formData;
       await store.login(login, password);
       if (!store.error) {
-        navigation.navigate("Profile");
+        navigation.navigate("Profile", { login });
       }
     };
     const resetForm = () => {
@@ -66,6 +66,7 @@ export const LoginForm: React.FC<ILoginFormProps> = observer(
       headingWrapper,
       buttonWrapperWide,
       buttonsWrapperWide,
+      modal,
     } = LoginFormStyles;
     return (
       <>
@@ -115,16 +116,30 @@ export const LoginForm: React.FC<ILoginFormProps> = observer(
             </View>
           </View>
         </View>
-        <Modal visible={showModal}>
-          <View style={modalContentWrapper}>
-            <View style={modalTextWrapper}>
-              <Text style={modalText}>
-                Wrong credentials! If you don't have an account, you can create
-                it.
-              </Text>
-              <Link textLabel="Registrate" onPress={setSubPage} />
+        <Modal
+          visible={showModal}
+          transparent={true}
+          animationType="slide"
+          onRequestClose={() => {
+            setShowModal((prev) => !prev);
+          }}
+        >
+          <Pressable
+            style={modal}
+            onPress={(event) =>
+              event.target == event.currentTarget && setShowModal(false)
+            }
+          >
+            <View style={modalContentWrapper}>
+              <View style={modalTextWrapper}>
+                <Text style={modalText}>
+                  Wrong credentials! If you don't have an account, you can
+                  create it.
+                </Text>
+                <Link textLabel="Registrate" onPress={setSubPage} />
+              </View>
             </View>
-          </View>
+          </Pressable>
         </Modal>
         <Loading show={store.isLoading} />
       </>

@@ -203,7 +203,7 @@
         }
       }
     },
-    "/ban/:login": {
+    "/mod/ban/:login": {
       "put": {
         "tags": ["Mod"],
         "summary": "Ban user",
@@ -1395,9 +1395,6 @@
             "description": "Updated settings",
             "schema": {
               "properties": {
-                "isDarkTheme": {
-                  "type": "boolean"
-                },
                 "tableFiles": {
                   "type": "boolean"
                 }
@@ -1471,6 +1468,9 @@
           }
         },
         "isBanned": {
+          "type": "boolean"
+        },
+        "isActivated": {
           "type": "boolean"
         }
       }
@@ -1634,9 +1634,6 @@
       "properties": {
         "user": {
           "type": "string"
-        },
-        "isDarkTheme": {
-          "type": "boolean"
         },
         "tableFiles": {
           "type": "boolean"

@@ -1,4 +1,4 @@
-import { Modal, Pressable, TouchableWithoutFeedback, View } from "react-native";
+import { Modal, Pressable, View } from "react-native";
 import { IBanButtonProps } from "./types";
 import { Button } from "../Button";
 import { useState } from "react";
@@ -19,7 +19,7 @@ export const BanButton: React.FC<IBanButtonProps> = ({ login }) => {
       await ModService.banUser(login, reason);
       setShowModal(false);
     } catch (e: AxiosError | any) {
-      setErrorText(e.response.data.errors[0].msg);
+      setErrorText(e.response.data?.errors[0]?.msg || e.response.data?.message);
     } finally {
       setIsLoading(false);
     }

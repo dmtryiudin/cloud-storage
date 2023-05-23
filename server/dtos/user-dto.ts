@@ -9,6 +9,7 @@ export class UserDto {
   roles: string[];
   isBanned: boolean;
   filesCapacity: number;
+  isActivated: boolean;
   constructor(model: any) {
     const {
       login,
@@ -21,6 +22,7 @@ export class UserDto {
       roles,
       isBanned,
       filesCapacity,
+      isActivated,
     } = model;
     this.login = login;
     this.id = _id;
@@ -32,5 +34,6 @@ export class UserDto {
     this.roles = roles;
     this.isBanned = isBanned;
     this.filesCapacity = filesCapacity;
+    this.isActivated = isActivated;
   }
 }

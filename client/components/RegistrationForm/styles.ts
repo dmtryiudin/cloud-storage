@@ -50,5 +50,15 @@ export const RegistrationFormStyles = StyleSheet.create({
     width: 300,
     height: 200,
     padding: 10,
+    backgroundColor: "white",
+    borderRadius: 5,
+  },
+  modal: {
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

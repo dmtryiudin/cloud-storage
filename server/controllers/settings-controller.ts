@@ -23,12 +23,8 @@ class SettingsController {
       }
 
       const { id } = req.user;
-      const { isDarkTheme, tableFiles } = req.body;
-      const settings = await settingsService.updateForUser(
-        id,
-        isDarkTheme,
-        tableFiles
-      );
+      const { tableFiles } = req.body;
+      const settings = await settingsService.updateForUser(id, tableFiles);
 
       res.json(settings);
     } catch (e) {

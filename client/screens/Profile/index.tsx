@@ -1,8 +1,14 @@
 import { Image, View, Text, ScrollView, RefreshControl } from "react-native";
-import { BanButton, Error, Heading, LoadingScreen } from "../../components";
+import {
+  BanButton,
+  Button,
+  Error,
+  Heading,
+  LoadingScreen,
+} from "../../components";
 import { useContext, useEffect, useState } from "react";
 import { StoreContext } from "../../context/store";
-import { RouteProp, useRoute } from "@react-navigation/native";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
 import { observer } from "mobx-react-lite";
 import { ProfileParamList } from "./types";
 import { IUser } from "../../models/IUser";
@@ -14,6 +20,7 @@ import { useMediaQuery } from "react-responsive";
 import { conditionStyles } from "../../utils/conditionStyles";
 import { flag } from "country-emoji";
 import { Error as ErrorType } from "../../models/IError";
+import { StackNavigation } from "../types";
 
 export const Profile = observer(() => {
   const isTabletOrMobileDevice = useMediaQuery({
@@ -25,6 +32,7 @@ export const Profile = observer(() => {
     data: null,
   });
   const { params } = useRoute<RouteProp<ProfileParamList>>();
+  const navigation = useNavigation<StackNavigation>();
   const { store } = useContext(StoreContext);
 
   const {
@@ -44,7 +52,7 @@ export const Profile = observer(() => {
       data: null,
     });
     try {
-      const { data } = await UserService.getUser(params?.login);
+      const { data } = await UserService.getUser(params.login);
 
       setUserData({
         isLoading: false,
@@ -58,6 +66,11 @@ export const Profile = observer(() => {
         data: null,
       });
     }
+  };
+
+  const logoutHandler = async () => {
+    await store.logout();
+    navigation.navigate("Auth");
   };
   useEffect(() => {
     fetchUser();
@@ -81,7 +94,9 @@ export const Profile = observer(() => {
     filesCapacity,
     roles,
     isBanned,
+    isActivated,
   } = data!;
+
   return (
     <ScrollView
       style={scrollView}
@@ -108,8 +123,11 @@ export const Profile = observer(() => {
         )}
         <View style={nameWrapper}>
           <Text style={nameText}>{name || login}</Text>
-          {roles.includes("MOD") && (
+          {isActivated && (
             <MaterialIcons name="verified" size={24} color="#10B981" />
+          )}
+          {roles.includes("MOD") && (
+            <FontAwesome5 name="crown" size={24} color="#F7CE46" />
           )}
           {isBanned && <FontAwesome5 name="ban" size={24} color="#EF4444" />}
         </View>
@@ -124,7 +142,10 @@ export const Profile = observer(() => {
             Files capacity: {filesCapacity * (9.537 * Math.pow(10, -7))} MB
           </Text>
         </View>
-        {roles.includes("MOD") && <BanButton login={login} />}
+        {store.user.roles?.includes("MOD") && <BanButton login={login} />}
+        {store.user.login === login && (
+          <Button type="danger" onPress={logoutHandler} title="Logout" />
+        )}
       </View>
     </ScrollView>
   );

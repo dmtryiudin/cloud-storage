@@ -8,10 +8,6 @@ settingsRouter.get("/", authMiddleware, settingsController.getForUser);
 settingsRouter.put(
   "/",
   authMiddleware,
-  body("isDarkTheme")
-    .optional()
-    .isBoolean()
-    .withMessage("isDarkTheme should be boolean"),
   body("tableFiles")
     .optional()
     .isBoolean()

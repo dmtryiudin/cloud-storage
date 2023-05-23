@@ -12,20 +12,16 @@ export const LoginFormStyles = StyleSheet.create({
     display: "flex",
     flexDirection: "row",
   },
-
   buttonsWrapperWide: {
     justifyContent: "flex-end",
     gap: 14,
   },
-
   buttonWrapper: {
     width: "48%",
   },
-
   buttonWrapperWide: {
     width: "20%",
   },
-
   modalText: {
     fontFamily: "Manrope-Regular",
     fontSize: 14,
@@ -47,9 +43,19 @@ export const LoginFormStyles = StyleSheet.create({
     width: 300,
     height: 200,
     padding: 10,
+    backgroundColor: "white",
+    borderRadius: 5,
   },
 
   headingWrapper: {
     marginBottom: 24,
+  },
+  modal: {
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
+    width: "100%",
+    height: "100%",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

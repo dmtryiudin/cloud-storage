@@ -12,6 +12,7 @@ class ModService {
       throw ApiError.NotFound();
     }
     user.isBanned = true;
+    user.filesCapacity = 0;
     await user.save();
     const { email, name, isActivated, _id } = user;
     if (isActivated) {

@@ -1,6 +1,6 @@
 import { observer } from "mobx-react-lite";
 import { useContext, useEffect, useState } from "react";
-import { View, Text, Modal } from "react-native";
+import { View, Text, Modal, Pressable } from "react-native";
 import { StoreContext } from "../../context/store";
 import { IValidationError } from "../../models/IValidationError";
 import { Button } from "../Button";
@@ -74,7 +74,7 @@ export const RegistrationForm = observer(() => {
     const { login, password, name, country } = formData;
     await store.registration(login, password, name, country);
     if (!store.error) {
-      navigation.navigate("Profile");
+      navigation.navigate("Profile", { login });
     }
   };
 
@@ -103,6 +103,7 @@ export const RegistrationForm = observer(() => {
     modalContentWrapper,
     modalTextWrapper,
     modalText,
+    modal,
   } = RegistrationFormStyles;
 
   return (
@@ -163,17 +164,31 @@ export const RegistrationForm = observer(() => {
           <Button title="Submit" onPress={submitForm} />
         </View>
       </View>
-      <Modal visible={showModal}>
-        <View style={modalContentWrapper}>
-          <View style={modalTextWrapper}>
-            <Text style={modalText}>{errorText}</Text>
-            <Button
-              type="primary"
-              title="OK"
-              onPress={() => setShowModal(false)}
-            />
+      <Modal
+        visible={showModal}
+        transparent={true}
+        animationType="slide"
+        onRequestClose={() => {
+          setShowModal((prev) => !prev);
+        }}
+      >
+        <Pressable
+          style={modal}
+          onPress={(event) =>
+            event.target == event.currentTarget && setShowModal(false)
+          }
+        >
+          <View style={modalContentWrapper}>
+            <View style={modalTextWrapper}>
+              <Text style={modalText}>{errorText}</Text>
+              <Button
+                type="primary"
+                title="OK"
+                onPress={() => setShowModal(false)}
+              />
+            </View>
           </View>
-        </View>
+        </Pressable>
       </Modal>
       <Loading show={store.isLoading} />
     </View>

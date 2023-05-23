@@ -9,6 +9,7 @@ export interface IUser {
   filesCapacity: number;
   roles: string[];
   isBanned: boolean;
+  isActivated: boolean
 }
 
 export interface IPaginatedUsers {

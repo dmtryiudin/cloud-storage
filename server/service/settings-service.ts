@@ -6,9 +6,8 @@ class SettingsService {
     return settings;
   }
 
-  async updateForUser(id: string, isDarkTheme: boolean, tableFiles: boolean) {
+  async updateForUser(id: string, tableFiles: boolean) {
     const settings = await settingsModel.findOne({ user: id });
-    settings!.isDarkTheme = isDarkTheme;
     settings!.tableFiles = tableFiles;
     await settings!.save();
     return settings;

@@ -45,7 +45,11 @@ class FolderController {
 
   async getAllPublic(req: Request, res: Response, next: NextFunction) {
     try {
-      const folders = await folderService.getAllPublic();
+      const { page = "0", limit = "100" } = req.query;
+      const folders = await folderService.getAllPublic(
+        parseInt(page?.toString()),
+        parseInt(limit?.toString())
+      );
       res.json(folders);
     } catch (e) {
       next(e);

@@ -76,7 +76,10 @@ class FolderService {
     await folderModel.deleteMany({ owner });
   }
 
-  async getAllPublic() {
+  async getAllPublic(page: number, limit: number) {
+    if (limit > 100) {
+      limit = 100;
+    }
     const folders = await folderModel.find({ isPublic: true });
     const res = [];
     for (let folder of folders) {
@@ -84,7 +87,12 @@ class FolderService {
       folderData.files = await getFilesForFolder(folder._id.toString());
       res.push(folderData);
     }
-    return res;
+    return {
+      page,
+      limit,
+      response: res.slice(page * limit, (page + 1) * limit),
+      maxCount: res.length,
+    };
   }
 
   async getForUser(owner: string) {

@@ -108,7 +108,15 @@ class FileController {
 
   async getAllPublic(req: Request, res: Response, next: NextFunction) {
     try {
-      const files = await fileService.getAllPublic();
+      let { page = "0", limit = "100", extensions } = req.query;
+      if (typeof extensions !== "string") {
+        extensions = "";
+      }
+      const files = await fileService.getAllPublic(
+        parseInt(page?.toString()),
+        parseInt(limit?.toString()),
+        extensions
+      );
       res.json(files);
     } catch (e) {
       next(e);
@@ -118,7 +126,11 @@ class FileController {
   async getForUser(req: IRequestAuth, res: Response, next: NextFunction) {
     try {
       const { id } = req.user;
-      const files = await fileService.getForUser(id);
+      let { extensions } = req.query;
+      if (typeof extensions !== "string") {
+        extensions = "";
+      }
+      const files = await fileService.getForUser(id, extensions);
       res.json(files);
     } catch (e) {
       next(e);
@@ -128,7 +140,11 @@ class FileController {
   async getTrashForUser(req: IRequestAuth, res: Response, next: NextFunction) {
     try {
       const { id } = req.user;
-      const files = await fileService.getTrashForUser(id);
+      let { extensions } = req.query;
+      if (typeof extensions !== "string") {
+        extensions = "";
+      }
+      const files = await fileService.getTrashForUser(id, extensions);
       res.json(files);
     } catch (e) {
       next(e);

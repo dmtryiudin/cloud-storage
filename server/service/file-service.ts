@@ -151,29 +151,62 @@ class FileService {
     await fileModel.deleteMany({ owner });
   }
 
-  async getAllPublic() {
+  async getAllPublic(page: number, limit: number, extensions: string) {
+    if (limit > 100) {
+      limit = 100;
+    }
+    const extensionsArr = extensions.split("~").filter((e) => e);
     const allFiles = await fileModel.find({
       isPublic: true,
     });
-    return allFiles;
+
+    const allFilesPaginated = allFiles.slice(page * limit, (page + 1) * limit);
+    const response = extensionsArr.length
+      ? allFilesPaginated.filter((file) => {
+          const fileName = file.href.split("/")[3];
+          const extension = fileName.split(".")[fileName.split(".").length - 1];
+          return extensionsArr.includes(extension);
+        })
+      : allFilesPaginated;
+    return {
+      page,
+      limit,
+      response,
+      maxCount: response.length,
+    };
   }
 
-  async getForUser(owner: string) {
+  async getForUser(owner: string, extensions: string) {
+    const extensionsArr = extensions.split("~").filter((e) => e);
+
     const allFiles = await fileModel.find({
       owner,
       deleteDate: { $exists: false },
       folder: { $exists: false },
     });
-    return allFiles;
+    return extensionsArr.length
+      ? allFiles.filter((file) => {
+          const fileName = file.href.split("/")[3];
+          const extension = fileName.split(".")[fileName.split(".").length - 1];
+          return extensionsArr.includes(extension);
+        })
+      : allFiles;
   }
 
-  async getTrashForUser(owner: string) {
+  async getTrashForUser(owner: string, extensions: string) {
+    const extensionsArr = extensions.split("~").filter((e) => e);
     const allFiles = await fileModel.find({
       owner,
       deleteDate: { $exists: true },
       folder: { $exists: false },
     });
-    return allFiles;
+    return extensionsArr.length
+      ? allFiles.filter((file) => {
+          const fileName = file.href.split("/")[3];
+          const extension = fileName.split(".")[fileName.split(".").length - 1];
+          return extensionsArr.includes(extension);
+        })
+      : allFiles;
   }
 }
 

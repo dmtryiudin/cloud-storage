@@ -111,13 +111,19 @@ class FileController {
 
   async getAllPublic(req: Request, res: Response, next: NextFunction) {
     try {
-      let { page = "0", limit = "100", extensions } = req.query;
+      let { page = "0", limit = "100", substr, extensions } = req.query;
       if (typeof extensions !== "string") {
         extensions = "";
       }
+
+      if (typeof substr !== "string") {
+        substr = "";
+      }
+
       const files = await fileService.getAllPublic(
         parseInt(page?.toString()),
         parseInt(limit?.toString()),
+        substr,
         extensions
       );
       res.json(files);

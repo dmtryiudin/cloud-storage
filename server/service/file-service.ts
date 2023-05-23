@@ -191,7 +191,12 @@ class FileService {
     await fileModel.deleteMany({ owner });
   }
 
-  async getAllPublic(page: number, limit: number, extensions: string) {
+  async getAllPublic(
+    page: number,
+    limit: number,
+    substr: string,
+    extensions: string
+  ) {
     if (limit > 100) {
       limit = 100;
     }
@@ -200,14 +205,20 @@ class FileService {
       isPublic: true,
     });
 
-    const allFilesPaginated = allFiles.slice(page * limit, (page + 1) * limit);
-    const response = extensionsArr.length
-      ? allFilesPaginated.filter((file) => {
+    let allFilesFiltered: typeof allFiles = allFiles;
+    if (substr.trim()) {
+      allFilesFiltered = allFiles.filter(
+        (e) => e.name.toLowerCase().indexOf(substr.toLowerCase().trim()) >= 0
+      );
+    }
+    allFilesFiltered = extensionsArr.length
+      ? allFilesFiltered.filter((file) => {
           const fileName = file.href.split("/")[3];
           const extension = fileName.split(".")[fileName.split(".").length - 1];
           return extensionsArr.includes(extension);
         })
-      : allFilesPaginated;
+      : allFilesFiltered;
+    const response = allFilesFiltered.slice(page * limit, (page + 1) * limit);
     return {
       page,
       limit,

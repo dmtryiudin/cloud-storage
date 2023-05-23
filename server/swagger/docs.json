@@ -719,6 +719,12 @@
             "in": "header",
             "description": "filter for extensions (separated with \"~\")",
             "type": "string"
+          },
+          {
+            "name": "substr",
+            "in": "header",
+            "description": "Name of the file",
+            "type": "string"
           }
         ],
         "responses": {
@@ -1241,6 +1247,12 @@
             "name": "limit",
             "in": "header",
             "description": "limit of items per page",
+            "type": "string"
+          },
+          {
+            "name": "substr",
+            "in": "header",
+            "description": "Name of the folder",
             "type": "string"
           }
         ],

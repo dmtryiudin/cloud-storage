@@ -108,12 +108,17 @@ class FolderService {
     });
   }
 
-  async getAllPublic(page: number, limit: number) {
+  async getAllPublic(page: number, limit: number, substr: string) {
     if (limit > 100) {
       limit = 100;
     }
-    const folders = await folderModel.find({ isPublic: true });
+    let folders = await folderModel.find({ isPublic: true });
     const res = [];
+    if (substr.trim()) {
+      folders = folders.filter(
+        (e) => e.name.toLowerCase().indexOf(substr.toLowerCase().trim()) >= 0
+      );
+    }
     for (let folder of folders) {
       const folderData = { ...new FolderDto(folder) };
       folderData.files = await getFilesForFolder(folder._id.toString());

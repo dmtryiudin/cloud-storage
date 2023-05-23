@@ -13,8 +13,17 @@ export const LoginFormStyles = StyleSheet.create({
     flexDirection: "row",
   },
 
+  buttonsWrapperWide: {
+    justifyContent: "flex-end",
+    gap: 14,
+  },
+
   buttonWrapper: {
     width: "48%",
+  },
+
+  buttonWrapperWide: {
+    width: "20%",
   },
 
   modalText: {

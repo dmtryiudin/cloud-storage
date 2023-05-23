@@ -16,6 +16,10 @@ export const AuthStyles = StyleSheet.create({
     backgroundColor: "white",
   },
 
+  wrapperWide: {
+    padding: 50,
+  },
+
   text: {
     fontFamily: "Manrope-Regular",
     fontSize: 14,

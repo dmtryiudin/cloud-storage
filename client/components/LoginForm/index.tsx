@@ -10,6 +10,9 @@ import { ILoginFormProps } from "./types";
 import { Link } from "../Link";
 import { Heading } from "../Heading";
 import { Loading } from "../Loading";
+import "@expo/match-media";
+import { useMediaQuery } from "react-responsive";
+import { conditionStyles } from "../../utils/conditionStyles";
 
 export const LoginForm: React.FC<ILoginFormProps> = observer(
   ({ setSubPage }) => {
@@ -20,6 +23,9 @@ export const LoginForm: React.FC<ILoginFormProps> = observer(
     });
     const [showModal, setShowModal] = useState<boolean>(false);
     const [wasModalShown, setWasModalShown] = useState(true);
+    const isTabletOrMobileDevice = useMediaQuery({
+      minDeviceWidth: 600,
+    });
 
     const setFormDataHandler = (fieldName: string, value: string) => {
       setFormData({ ...formData, [fieldName]: value });
@@ -53,6 +59,8 @@ export const LoginForm: React.FC<ILoginFormProps> = observer(
       modalTextWrapper,
       modalText,
       headingWrapper,
+      buttonWrapperWide,
+      buttonsWrapperWide,
     } = LoginFormStyles;
     return (
       <>
@@ -60,6 +68,7 @@ export const LoginForm: React.FC<ILoginFormProps> = observer(
           <View style={headingWrapper}>
             <Heading label="Login" />
           </View>
+
           <Input
             required={true}
             labelText="Login"
@@ -75,11 +84,26 @@ export const LoginForm: React.FC<ILoginFormProps> = observer(
             secureTextEntry={true}
             onChangeText={(value) => setFormDataHandler("password", value)}
           />
-          <View style={buttonsWrapper}>
-            <View style={buttonWrapper}>
+          <View
+            style={{
+              ...buttonsWrapper,
+              ...conditionStyles(buttonsWrapperWide, isTabletOrMobileDevice),
+            }}
+          >
+            <View
+              style={{
+                ...buttonWrapper,
+                ...conditionStyles(buttonWrapperWide, isTabletOrMobileDevice),
+              }}
+            >
               <Button title="Reset" type="secondary" onPress={resetForm} />
             </View>
-            <View style={buttonWrapper}>
+            <View
+              style={{
+                ...buttonWrapper,
+                ...conditionStyles(buttonWrapperWide, isTabletOrMobileDevice),
+              }}
+            >
               <Button title="Submit" onPress={submitForm} />
             </View>
           </View>

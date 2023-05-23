@@ -10,6 +10,9 @@ import { RegistrationFormStyles } from "./styles";
 import countryList from "country-list";
 import { Heading } from "../Heading";
 import { Loading } from "../Loading";
+import "@expo/match-media";
+import { useMediaQuery } from "react-responsive";
+import { conditionStyles } from "../../utils/conditionStyles";
 
 export const RegistrationForm = observer(() => {
   const { store } = useContext(StoreContext);
@@ -48,6 +51,10 @@ export const RegistrationForm = observer(() => {
     }
   }, [store.error]);
 
+  const isTabletOrMobileDevice = useMediaQuery({
+    minDeviceWidth: 600,
+  });
+
   const setFormDataHandler = (fieldName: string, value: string) => {
     setFormData({ ...formData, [fieldName]: value });
   };
@@ -72,8 +79,14 @@ export const RegistrationForm = observer(() => {
     }
     setFormDataHandler("country", "");
   };
-  const { wrapper, buttonWrapper, buttonsWrapper, headingWrapper } =
-    RegistrationFormStyles;
+  const {
+    wrapper,
+    buttonWrapper,
+    buttonsWrapper,
+    headingWrapper,
+    buttonWrapperWide,
+    buttonsWrapperWide,
+  } = RegistrationFormStyles;
 
   return (
     <View style={wrapper}>
@@ -110,11 +123,26 @@ export const RegistrationForm = observer(() => {
         currentValue={countryList.getName(formData.country) || ""}
         setCurrentValue={setCountry}
       />
-      <View style={buttonsWrapper}>
-        <View style={buttonWrapper}>
+      <View
+        style={{
+          ...buttonsWrapper,
+          ...conditionStyles(buttonsWrapperWide, isTabletOrMobileDevice),
+        }}
+      >
+        <View
+          style={{
+            ...buttonWrapper,
+            ...conditionStyles(buttonWrapperWide, isTabletOrMobileDevice),
+          }}
+        >
           <Button title="Reset" type="secondary" onPress={resetForm} />
         </View>
-        <View style={buttonWrapper}>
+        <View
+          style={{
+            ...buttonWrapper,
+            ...conditionStyles(buttonWrapperWide, isTabletOrMobileDevice),
+          }}
+        >
           <Button title="Submit" onPress={submitForm} />
         </View>
       </View>

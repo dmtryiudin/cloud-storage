@@ -40,16 +40,6 @@
                 }
               }
             }
-          },
-          "500": {
-            "description": "Server error",
-            "schema": {
-              "properties": {
-                "message": {
-                  "type": "string"
-                }
-              }
-            }
           }
         }
       }
@@ -91,16 +81,6 @@
                 }
               }
             }
-          },
-          "500": {
-            "description": "Server error",
-            "schema": {
-              "properties": {
-                "message": {
-                  "type": "string"
-                }
-              }
-            }
           }
         }
       }
@@ -128,16 +108,6 @@
           },
           "401": {
             "description": "Wrong refresh token",
-            "schema": {
-              "properties": {
-                "message": {
-                  "type": "string"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Server error",
             "schema": {
               "properties": {
                 "message": {
@@ -213,6 +183,212 @@
           }
         }
       }
+    },
+    "/ban/:login": {
+      "put": {
+        "tags": ["Mod"],
+        "summary": "Ban user",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Ban reason",
+            "required": true,
+            "schema": {
+              "properties": {
+                "reason": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully banned",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Invalid ban reason",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get all users",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "page",
+            "description": "Page number",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "in": "path",
+            "name": "limit",
+            "description": "Count elements shown",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Users",
+            "schema": {
+              "$ref": "#/definitions/PaginatedUsers"
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["User"],
+        "summary": "Update user",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "New data",
+            "required": true,
+            "schema": {
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "country": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully updated",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Invalid data",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      },
+
+      "delete": {
+        "tags": ["User"],
+        "summary": "Delete user",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "users/:login": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Get user by login",
+        "responses": {
+          "200": {
+            "description": "User",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        }
+      }
+    },
+    "/users/avatar": {
+      "put": {
+        "tags": ["User"],
+        "summary": "Update avatar",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "description": "bearer token",
+            "type": "string",
+            "required": true
+          },
+          {
+            "in": "formData",
+            "name": "avatar",
+            "type": "file",
+            "required": true,
+            "description": "New avatar"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully updated",
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          },
+          "400": {
+            "description": "Invalid image",
+            "schema": {
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "definitions": {
@@ -248,6 +424,26 @@
         },
         "isBanned": {
           "type": "boolean"
+        }
+      }
+    },
+    "PaginatedUsers": {
+      "type": "object",
+      "properties": {
+        "page": {
+          "type": "number"
+        },
+        "limit": {
+          "type": "number"
+        },
+        "maxCount": {
+          "type": "number"
+        },
+        "response": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/User"
+          }
         }
       }
     },
